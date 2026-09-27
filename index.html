@@ -139,7 +139,7 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
       <tr><th>Indicateur</th><th>Attendu (lent → vite)</th><th>Constaté</th><th></th></tr>
       <tr><td>Temps</td><td>≥ 3s d'écart</td><td id="chkTempsV"></td><td id="chkTempsOk"></td></tr>
       <tr><td>Fréquence</td><td>+10 cy/min mini</td><td id="chkFreqV"></td><td id="chkFreqOk"></td></tr>
-      <tr><td>CB</td><td>maintenus ou ↓</td><td id="chkCBV"></td><td id="chkCBOk"></td></tr>
+      <tr><td>CB</td><td>-1 à +5 (vite vs lent)</td><td id="chkCBV"></td><td id="chkCBOk"></td></tr>
       <tr><td>Technique</td><td>reste stable</td><td>—</td><td></td></tr>
       <tr><td>Relance</td><td>efficace</td><td>—</td><td></td></tr>
     </table>
@@ -305,11 +305,12 @@ function majDerives(){
     noteTxt.textContent='Temps : '+pT+'/6 — CB : '+pC+'/6 — Total : '+(pT+pC).toFixed(2)+'/12 ('+(s==='G'?'garçons':'filles')+')';
   } else { noteTxt.textContent=modeDemi?"Non disponible en demi-épreuve (nécessite les 2 séries vite)":"Renseigne les CB des 2 vite pour voir ta note."; }
   // Tableau des attentes lent -> vite
-  const ecT=(T.lent1-T.vite1)/1000, okT=ecT>=3;
-  document.getElementById('chkTempsV').textContent='+'+ecT.toFixed(2)+'s'; document.getElementById('chkTempsOk').textContent=okT?'✓':'✗';
-  let okF=null, ecF=null, okCB=null, ecCB=null;
-  if(fqV1&&fqL1){ ecF=fqV1-fqL1; okF=ecF>=10; document.getElementById('chkFreqV').textContent=(ecF>=0?'+':'')+ecF.toFixed(0)+' cy/min'; document.getElementById('chkFreqOk').textContent=okF?'✓':'✗'; }
-  if(cbV1&&cbL1){ ecCB=parseFloat(cbV1)-parseFloat(cbL1); okCB=ecCB<=0; document.getElementById('chkCBV').textContent=(ecCB>=0?'+':'')+ecCB; document.getElementById('chkCBOk').textContent=okCB?'✓':'✗'; }
+  const setOk=(id,ok)=>{ const el=document.getElementById(id); el.textContent=ok?'✓':'✗'; el.className=ok?'ok':'ko'; };
+  const ecT=(T.lent1-T.vite1)/1000, okT2=ecT>=3;
+  document.getElementById('chkTempsV').textContent='+'+ecT.toFixed(2)+'s'; setOk('chkTempsOk',okT2);
+  let ecF=null, ecCB=null;
+  if(fqV1&&fqL1){ ecF=fqV1-fqL1; document.getElementById('chkFreqV').textContent=(ecF>=0?'+':'')+ecF.toFixed(0)+' cy/min'; setOk('chkFreqOk', ecF>=10); }
+  if(cbV1&&cbL1){ ecCB=parseFloat(cbV1)-parseFloat(cbL1); document.getElementById('chkCBV').textContent=(ecCB>=0?'+':'')+ecCB; setOk('chkCBOk', ecCB<=5 && ecCB>=-1); }
 }
 document.addEventListener('input', e=>{ if(['cbV1','cbL1','cbV2','cbL2'].includes(e.target.id)) majDerives(); });
 function fichePage(corpsHTML){
