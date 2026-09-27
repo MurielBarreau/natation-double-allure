@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CA1 - Natation Double Allure</title>
+<style>
+:root{
+  --bg:#F2F6FB; --card:#ffffff; --primary:#0B2942; --primary2:#12467A; --accent:#12B5C9;
+  --text:#0B1E33; --muted:#5C7089; --warn:#B0453A; --good:#1E8E5A; --border:#D7E3F0;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#0B1420; --card:#122132; --text:#EAF2FA; --muted:#93A9C0; --border:#233A54; }
+}
+:root[data-theme="dark"]{ --bg:#0B1420; --card:#122132; --text:#EAF2FA; --muted:#93A9C0; --border:#233A54; }
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+header{background:var(--primary);color:#fff;padding:18px 20px 14px;position:sticky;top:0;z-index:5;
+  padding-top:calc(18px + env(safe-area-inset-top,0px))}
+header h1{font-size:19px;margin:0 0 2px;font-weight:700}
+header p{margin:0;font-size:12px;color:#9FC3DE}
+nav{display:flex;gap:0;background:var(--primary2)}
+nav button{flex:1;border:none;background:none;color:#CDE3F2;padding:12px 6px;font-size:14px;font-weight:600;cursor:pointer}
+nav button.active{background:var(--accent);color:#052430}
+main{max-width:720px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px}
+h2{font-size:15px;margin:0 0 10px;color:var(--primary2)}
+:root[data-theme="dark"] h2, body:has(:root[data-theme="dark"]) h2{}
+@media (prefers-color-scheme: dark){ h2{color:var(--accent)} }
+:root[data-theme="dark"] ~ * h2{}
+.chronoBox{text-align:center;padding:10px 0}
+#disp{font-size:64px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:1px;color:var(--primary)}
+@media (prefers-color-scheme: dark){ #disp{color:var(--accent)} }
+#lbl{color:var(--muted);font-size:14px;min-height:20px;margin-bottom:14px}
+.btnrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.big{border:none;border-radius:10px;padding:18px 26px;font-size:17px;font-weight:700;min-width:140px;cursor:pointer;color:#fff}
+.big.chrono{background:var(--accent);color:#052430}
+.big.recup{background:var(--primary2)}
+.big:disabled{opacity:.4;cursor:not-allowed}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.chip{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+th,td{border:1px solid var(--border);padding:7px;text-align:center}
+th{background:var(--bg);font-weight:700;font-size:12px}
+input[type=number],input[type=text]{border:1px solid var(--border);border-radius:5px;padding:6px;font-size:14px;
+  width:100%;background:var(--card);color:var(--text)}
+.small{font-size:12px;color:var(--muted)}
+.grp{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+.grp:first-child{border-top:none;margin-top:0;padding-top:0}
+.obs{font-size:12.5px;color:var(--muted);font-style:italic;margin:2px 0 8px}
+.exrow{padding:6px 0}
+.exrow-main{display:flex;align-items:center;gap:8px}
+.exrow-main span.n{flex:1;font-size:14px}
+.exrow-main input[type=number]{width:64px}
+.exrow .obs{margin:2px 0 0 26px}
+.addrow{display:flex;gap:6px;margin-top:8px}
+.addrow input[type=text]{flex:1}
+.addrow input[type=number]{width:64px}
+.addrow button{border:none;background:var(--primary2);color:#fff;border-radius:5px;padding:0 12px;cursor:pointer}
+.rm{border:none;background:none;color:var(--warn);font-size:16px;cursor:pointer;padding:0 4px}
+.status{display:flex;flex-wrap:wrap;gap:10px;font-size:13px;margin-bottom:8px}
+.tag{padding:4px 10px;border-radius:14px;font-weight:600}
+.ok{background:#DEF3E6;color:var(--good)}
+.ko{background:#FBE6E2;color:var(--warn)}
+@media (prefers-color-scheme: dark){ .ok{background:#123723} .ko{background:#3A211D} }
+.printbtn{border:none;background:var(--primary);color:#fff;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer;width:100%;margin-top:10px}
+textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:14px;background:var(--card);color:var(--text);font-family:inherit}
+.hidden{display:none}
+.sheet{display:none;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-top:16px}
+.sheet.show{display:block}
+@media print{
+  body *{display:none !important}
+  .sheet.show, .sheet.show *{display:revert !important}
+  .sheet.show .no-print{display:none !important}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>CA1 - Natation Double Allure</h1>
+  <p>Lycée Théas</p>
+</header>
+<nav>
+  <button id="tabBtn1" class="active" onclick="showTab(1)">Prise de performances</button>
+  <button id="tabBtn2" onclick="showTab(2)">Construction d'entraînement</button>
+  <button id="tabBtn3" onclick="showTab(3)">Référentiel</button>
+</nav>
+<main>
+
+<!-- TAB 1 -->
+<div id="tab1">
+  <div class="card chronoBox">
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;font-size:13px">
+      <label><input type="radio" name="sexePerf" value="G" checked> Garçon</label>
+      <label><input type="radio" name="sexePerf" value="F"> Fille</label>
+      <label style="margin-left:10px"><input type="radio" name="modeEpreuve" value="complete" checked onchange="majMode()"> Épreuve complète (2x50m)</label>
+      <label><input type="radio" name="modeEpreuve" value="demi" onchange="majMode()"> Demi-épreuve (1x50m)</label>
+    </div>
+    <div id="disp">0.00</div>
+    <div id="lbl">Prêt — clique sur CHRONO</div>
+    <div class="btnrow">
+      <button class="big chrono" id="btnChrono" onclick="onChrono()">CHRONO</button>
+      <button class="big recup" id="btnRecup" onclick="onRecup()" disabled>RÉCUP</button>
+    </div>
+    <button class="printbtn" id="btnAnnule" style="background:var(--warn);max-width:260px;margin:10px auto 0" onclick="annulerSegment()" disabled>↺ Annuler ce segment</button>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <h2>Résultats</h2>
+    <table id="resTable">
+      <thead><tr><th></th><th>Vite 1</th><th class="c-lent1">Lent 1</th><th class="c-2">Vite 2</th><th class="c-2">Lent 2</th></tr></thead>
+      <tbody>
+        <tr><th>Temps (s)</th><td id="tV1"></td><td class="c-lent1" id="tL1"></td><td class="c-2" id="tV2"></td><td class="c-2" id="tL2"></td></tr>
+        <tr><th>CB</th>
+          <td><input type="number" id="cbV1"></td><td class="c-lent1"><input type="number" id="cbL1"></td>
+          <td class="c-2"><input type="number" id="cbV2"></td><td class="c-2"><input type="number" id="cbL2"></td></tr>
+        <tr><th>Fréquence (cy/min)</th><td id="fqV1"></td><td class="c-lent1" id="fqL1"></td><td class="c-2" id="fqV2"></td><td class="c-2" id="fqL2"></td></tr>
+        <tr><th>Ventilation</th>
+          <td><input type="number" id="vtV1"></td><td class="c-lent1"><input type="number" id="vtL1"></td>
+          <td class="c-2"><input type="number" id="vtV2"></td><td class="c-2"><input type="number" id="vtL2"></td></tr>
+      </tbody>
+    </table>
+    <p class="small" style="margin-top:10px">Écarts (secondes)</p>
+    <table id="ecartTable">
+      <tr><th class="c-2">Vite 2 − Vite 1</th><td class="c-2" id="eV2V1"></td></tr>
+      <tr><th>Lent 1 − Vite 1</th><td id="eL1V1"></td></tr>
+      <tr class="c-2"><th>Lent 1 − Vite 2</th><td id="eL1V2"></td></tr>
+      <tr class="c-2"><th>Lent 2 − Vite 2</th><td id="eL2V2"></td></tr>
+    </table>
+    <div id="noteBox" class="card" style="margin-top:12px;background:var(--bg)">
+      <p class="small" style="margin:0 0 6px">Note AFL1 en direct (cumul Vite, officielle — le lent n'est pas noté ici)</p>
+      <p id="noteTxt" style="margin:0;font-weight:700"></p>
+    </div>
+    <table style="margin-top:14px">
+      <tr><th>Indicateur</th><th>Attendu (lent → vite)</th><th>Constaté</th><th></th></tr>
+      <tr><td>Temps</td><td>≥ 3s d'écart</td><td id="chkTempsV"></td><td id="chkTempsOk"></td></tr>
+      <tr><td>Fréquence</td><td>+10 cy/min mini</td><td id="chkFreqV"></td><td id="chkFreqOk"></td></tr>
+      <tr><td>CB</td><td>maintenus ou ↓</td><td id="chkCBV"></td><td id="chkCBOk"></td></tr>
+      <tr><td>Technique</td><td>reste stable</td><td>—</td><td></td></tr>
+      <tr><td>Relance</td><td>efficace</td><td>—</td><td></td></tr>
+    </table>
+    <label class="small">Nom de l'élève</label>
+    <input type="text" id="eleveNom1" placeholder="Prénom Nom">
+    <button class="printbtn" onclick="printPerf()">Voir ma fiche</button>
+    <button class="printbtn" style="background:var(--primary2);margin-top:8px" onclick="resetChrono()">Nouvel essai</button>
+  </div>
+  <div id="sheet1" class="sheet"></div>
+</div>
+
+<!-- TAB 2 -->
+<div id="tab2" class="hidden">
+  <div class="card">
+    <h2>Mon diagnostic</h2>
+    <textarea id="diag" rows="2" placeholder="Mon problème / mon objectif pour cette séance…"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>Bloc de préparation <span class="small">(100m minimum d'échauffement)</span></h2>
+    <div class="obs">Ce que tu vas observer : ta perception de l'effort et la qualité de ta nage.</div>
+    <div id="prep"></div>
+  </div>
+
+  <div class="card">
+    <h2>Bloc de transformation <span class="small">(3 exercices minimum, au choix)</span></h2>
+    <div id="transfo"></div>
+  </div>
+
+  <div class="card">
+    <h2>Bloc de validation <span class="small">(1 exercice minimum)</span></h2>
+    <div class="obs">Ce que tu vas observer : la stabilité de ton temps entre Vite 1 et Vite 2.</div>
+    <div id="valid"></div>
+  </div>
+
+  <div class="card">
+    <label class="small">Nom de l'élève</label>
+    <input type="text" id="eleveNom2" placeholder="Prénom Nom">
+    <button class="printbtn" onclick="printPlan()">Voir ma séance</button>
+  </div>
+  <div id="sheet2" class="sheet"></div>
+</div>
+
+<!-- TAB 3 -->
+<div id="tab3" class="hidden">
+  <div class="card">
+    <h2>Barème AFL1 — Crawl (40m cumulés, 2x20m vite)</h2>
+    <button class="printbtn" style="margin-bottom:12px" onclick="chargerDepuisPerf()">Charger mes performances (onglet 1)</button>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+      <div style="flex:1;min-width:140px">
+        <label class="small">Temps cumulé (Vite1+Vite2, s)</label>
+        <input type="number" id="refTemps" step="0.1">
+      </div>
+      <div style="flex:1;min-width:140px">
+        <label class="small">CB cumulé (Vite1+Vite2)</label>
+        <input type="number" id="refCB" step="1">
+      </div>
+    </div>
+    <table>
+      <tr><th></th><th>Points Temps /6</th><th>Points CB /6</th><th>Total /12</th></tr>
+      <tr><th>Garçons</th><td id="rG_t"></td><td id="rG_cb"></td><td id="rG_tot"></td></tr>
+      <tr><th>Filles</th><td id="rF_t"></td><td id="rF_cb"></td><td id="rF_tot"></td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">Hors barème : en dessous du seuil le plus bas = 0 point, au-dessus du seuil le plus haut = 6 points.</p>
+    <p id="effTxt" style="font-weight:600;margin-top:12px"></p>
+    <p id="freqTxt" style="font-weight:600;margin-top:6px"></p>
+  </div>
+  <div class="card">
+    <h2>Table de référence — Temps cumulé 40m Crawl</h2>
+    <div id="refTableTemps" style="overflow-x:auto"></div>
+  </div>
+  <div class="card">
+    <h2>Table de référence — CB cumulés</h2>
+    <div id="refTableCB" style="overflow-x:auto"></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+/* ---------- Navigation ---------- */
+function showTab(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('tab'+i).classList.toggle('hidden', n!==i);
+    document.getElementById('tabBtn'+i).classList.toggle('active', n===i);
+  });
+}
+
+/* ---------- Chrono ---------- */
+let phase='idle', segStart=0, timerId=null, modeDemi=false;
+let T={vite1:null,lent1:null,vite2:null,lent2:null};
+const disp=document.getElementById('disp'), lbl=document.getElementById('lbl');
+const btnC=document.getElementById('btnChrono'), btnR=document.getElementById('btnRecup'), btnA=document.getElementById('btnAnnule');
+
+function majMode(){ modeDemi = document.querySelector('input[name=modeEpreuve]:checked').value==='demi'; }
+function fmt(ms){return (ms/1000).toFixed(2);}
+function startTimer(){segStart=performance.now(); timerId=setInterval(()=>{disp.textContent=fmt(performance.now()-segStart);},50); btnA.disabled=false;}
+function stopTimer(){clearInterval(timerId); btnA.disabled=true;}
+function annulerSegment(){ if(timerId){ segStart=performance.now(); disp.textContent='0.00'; } }
+function renderChips(){
+  const c=document.getElementById('chips'); c.innerHTML='';
+  [['Vite 1','vite1'],['Lent 1','lent1'],['Vite 2','vite2'],['Lent 2','lent2']].forEach(([label,k])=>{
+    if(T[k]!==null){ const d=document.createElement('div'); d.className='chip'; d.textContent=label+' : '+fmt(T[k])+'s'; c.appendChild(d); }
+  });
+}
+function onChrono(){
+  if(phase==='idle'){ segStart=performance.now(); startTimer(); phase='run1a'; lbl.textContent='Vite 1 en cours…'; btnR.disabled=true; }
+  else if(phase==='run1a'){ T.vite1=performance.now()-segStart; segStart=performance.now(); phase='run1b'; lbl.textContent='Lent 1 en cours…'; renderChips(); }
+  else if(phase==='run1b'){
+    T.lent1=performance.now()-segStart; stopTimer(); renderChips();
+    if(modeDemi){ phase='done'; lbl.textContent='Terminé !'; showResults(); }
+    else { phase='afterCycle1'; lbl.textContent='Clique sur RÉCUP'; disp.textContent='0.00'; btnR.disabled=false; }
+  }
+  else if(phase==='readyFor2'){ segStart=performance.now(); startTimer(); phase='run2a'; lbl.textContent='Vite 2 en cours…'; }
+  else if(phase==='run2a'){ T.vite2=performance.now()-segStart; segStart=performance.now(); phase='run2b'; lbl.textContent='Lent 2 en cours…'; renderChips(); }
+  else if(phase==='run2b'){ T.lent2=performance.now()-segStart; stopTimer(); phase='done'; lbl.textContent='Terminé !'; renderChips(); showResults(); }
+}
+function beep(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain();
+  o.frequency.value=880; o.connect(g); g.connect(ctx.destination); g.gain.setValueAtTime(0.25,ctx.currentTime); o.start(); o.stop(ctx.currentTime+0.35);}catch(e){} }
+function onRecup(){
+  if(phase!=='afterCycle1') return;
+  phase='recup'; btnR.disabled=true; let n=15; disp.textContent=n; lbl.textContent='Récupération…';
+  const iv=setInterval(()=>{ n--; if(n>0){disp.textContent=n;} else { clearInterval(iv); beep(); disp.textContent='0.00'; phase='readyFor2'; lbl.textContent="Clique sur CHRONO pour repartir"; } },1000);
+}
+function resetChrono(){
+  phase='idle'; T={vite1:null,lent1:null,vite2:null,lent2:null}; disp.textContent='0.00'; lbl.textContent='Prêt — clique sur CHRONO';
+  btnR.disabled=true; btnA.disabled=true; document.getElementById('resultCard').style.display='none'; renderChips();
+}
+function sexePerf(){ return document.querySelector('input[name=sexePerf]:checked').value; }
+function showResults(){
+  document.getElementById('resultCard').style.display='block';
+  document.querySelectorAll('.c-2').forEach(el=>el.style.display=modeDemi?'none':'');
+  document.querySelectorAll('.c-lent1').forEach(el=>el.style.display='');
+  document.getElementById('tV1').textContent=fmt(T.vite1); document.getElementById('tL1').textContent=fmt(T.lent1);
+  if(!modeDemi){ document.getElementById('tV2').textContent=fmt(T.vite2); document.getElementById('tL2').textContent=fmt(T.lent2); }
+  if(!modeDemi){
+    const ecarts=[['eV2V1',T.vite2-T.vite1],['eL1V1',T.lent1-T.vite1],['eL1V2',T.lent1-T.vite2],['eL2V2',T.lent2-T.vite2]];
+    ecarts.forEach(([id,v])=>{ document.getElementById(id).textContent=(v>=0?'+':'')+(v/1000).toFixed(2)+'s'; });
+  } else {
+    document.getElementById('eL1V1').textContent=((T.lent1-T.vite1)/1000>=0?'+':'')+((T.lent1-T.vite1)/1000).toFixed(2)+'s';
+    document.getElementById('ecartTable').querySelector('tr').style.display='none';
+  }
+  majDerives();
+}
+function freqCalc(cb, ms){ if(!cb||!ms) return null; return (parseFloat(cb)/2)/(ms/60000); }
+function majDerives(){
+  const cbV1=document.getElementById('cbV1').value, cbL1=document.getElementById('cbL1').value;
+  const cbV2=document.getElementById('cbV2').value, cbL2=document.getElementById('cbL2').value;
+  const fqV1=freqCalc(cbV1,T.vite1), fqL1=freqCalc(cbL1,T.lent1);
+  const fqV2=modeDemi?null:freqCalc(cbV2,T.vite2), fqL2=modeDemi?null:freqCalc(cbL2,T.lent2);
+  document.getElementById('fqV1').textContent=fqV1?fqV1.toFixed(0):'';
+  document.getElementById('fqL1').textContent=fqL1?fqL1.toFixed(0):'';
+  if(!modeDemi){ document.getElementById('fqV2').textContent=fqV2?fqV2.toFixed(0):''; document.getElementById('fqL2').textContent=fqL2?fqL2.toFixed(0):''; }
+  // Note AFL1 en direct (vite uniquement, épreuve complète requise)
+  const noteTxt=document.getElementById('noteTxt');
+  if(!modeDemi && T.vite1 && T.vite2 && cbV1 && cbV2){
+    const s=sexePerf(); const tCum=(T.vite1+T.vite2)/1000, cbCum=parseFloat(cbV1)+parseFloat(cbV2);
+    const pT=ptsOf(tCum, s==='G'?T_G:T_F), pC=ptsOf(cbCum, s==='G'?CB_G:CB_F);
+    noteTxt.textContent='Temps : '+pT+'/6 — CB : '+pC+'/6 — Total : '+(pT+pC).toFixed(2)+'/12 ('+(s==='G'?'garçons':'filles')+')';
+  } else { noteTxt.textContent=modeDemi?"Non disponible en demi-épreuve (nécessite les 2 séries vite)":"Renseigne les CB des 2 vite pour voir ta note."; }
+  // Tableau des attentes lent -> vite
+  const ecT=(T.lent1-T.vite1)/1000, okT=ecT>=3;
+  document.getElementById('chkTempsV').textContent='+'+ecT.toFixed(2)+'s'; document.getElementById('chkTempsOk').textContent=okT?'✓':'✗';
+  let okF=null, ecF=null, okCB=null, ecCB=null;
+  if(fqV1&&fqL1){ ecF=fqV1-fqL1; okF=ecF>=10; document.getElementById('chkFreqV').textContent=(ecF>=0?'+':'')+ecF.toFixed(0)+' cy/min'; document.getElementById('chkFreqOk').textContent=okF?'✓':'✗'; }
+  if(cbV1&&cbL1){ ecCB=parseFloat(cbV1)-parseFloat(cbL1); okCB=ecCB<=0; document.getElementById('chkCBV').textContent=(ecCB>=0?'+':'')+ecCB; document.getElementById('chkCBOk').textContent=okCB?'✓':'✗'; }
+}
+document.addEventListener('input', e=>{ if(['cbV1','cbL1','cbV2','cbL2'].includes(e.target.id)) majDerives(); });
+function fichePage(corpsHTML){
+  return corpsHTML+'<div class="no-print" style="margin-top:14px;display:flex;gap:8px">'+
+    '<button class="printbtn" onclick="window.print()">Imprimer / enregistrer en PDF</button>'+
+    '</div>';
+}
+function openSheet(id, titre, nom, corpsHTML){
+  const el=document.getElementById(id);
+  el.innerHTML='<h2>'+titre+'</h2><p><strong>'+nom+'</strong> — '+new Date().toLocaleDateString('fr-FR')+'</p>'+fichePage(corpsHTML);
+  document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('show'));
+  el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function printPerf(){
+  const nom=document.getElementById('eleveNom1').value||'Élève';
+  const rows=[['Vite 1',T.vite1,'cbV1','vtV1'],['Lent 1',T.lent1,'cbL1','vtL1'],['Vite 2',T.vite2,'cbV2','vtV2'],['Lent 2',T.lent2,'cbL2','vtL2']];
+  let h='<table><tr><th></th><th>Temps</th><th>CB</th><th>Ventilation</th></tr>';
+  rows.forEach(([label,t,cbId,vtId])=>{ h+='<tr><th>'+label+'</th><td>'+fmt(t)+'s</td><td>'+(document.getElementById(cbId).value||'—')+'</td><td>'+(document.getElementById(vtId).value||'—')+'</td></tr>'; });
+  h+='</table><p>Vite2-Vite1 : '+document.getElementById('eV2V1').textContent+' • Lent1-Vite1 : '+document.getElementById('eL1V1').textContent+
+     ' • Lent1-Vite2 : '+document.getElementById('eL1V2').textContent+' • Lent2-Vite2 : '+document.getElementById('eL2V2').textContent+'</p>';
+  openSheet('sheet1','Fiche de performance',nom,h);
+}
+
+/* ---------- Référentiel AFL1 (barème crawl) ---------- */
+const T_G=[49.5,48,47,46,45,44,43,42,41,40,39,38,37,36.5,36,35.5,35,34.5,34,33.5,33,32.5,32,31.5,31];
+const T_F=[63,61,59.5,58,57,56,55,54,53,52,51,50,49,48,47,46.2,45.4,44.7,43.9,43,42,41,40,39,38];
+const CB_G=[67,65,63,61,59,57,55,53,51,49,47,45,44,43,42,41,40,39,38,37,36,35,34,33,32];
+const CB_F=[74,72,70,68,66,64,62,60,58,56,54,52,51,50,49,48,47,46,45,44,43,42,41,40,39];
+function ptsOf(v,table){
+  if(v===''||v===null||isNaN(v))return null;
+  const n=table.length;
+  if(v>=table[0])return 0; if(v<=table[n-1])return 6;
+  for(let i=0;i<n-1;i++){ const hi=table[i],lo=table[i+1];
+    if(v<=hi&&v>=lo){ return +((i*0.25)+((hi-v)/(hi-lo))*0.25).toFixed(2); } }
+  return 0;
+}
+function refTable(title,table){
+  let h='<table><tr><th>Points</th>';
+  for(let i=0;i<=24;i+=2) h+='<th>'+(i*0.25)+'</th>';
+  h+='</tr><tr><th>'+title+'</th>';
+  for(let i=0;i<=24;i+=2) h+='<td>'+table[i]+'</td>';
+  return h+'</tr></table>';
+}
+function updateRef(){
+  const t=parseFloat(document.getElementById('refTemps').value);
+  const cb=parseFloat(document.getElementById('refCB').value);
+  const s=sexePerf(); const pT=ptsOf(t,s==='G'?T_G:T_F), pC=ptsOf(cb,s==='G'?CB_G:CB_F);
+  const pTG=ptsOf(t,T_G), pTF=ptsOf(t,T_F), pCG=ptsOf(cb,CB_G), pCF=ptsOf(cb,CB_F);
+  document.getElementById('rG_t').textContent=pTG===null?'—':pTG;
+  document.getElementById('rG_cb').textContent=pCG===null?'—':pCG;
+  document.getElementById('rG_tot').textContent=(pTG===null||pCG===null)?'—':(pTG+pCG).toFixed(2);
+  document.getElementById('rF_t').textContent=pTF===null?'—':pTF;
+  document.getElementById('rF_cb').textContent=pCF===null?'—':pCF;
+  document.getElementById('rF_tot').textContent=(pTF===null||pCF===null)?'—':(pTF+pCF).toFixed(2);
+  const effTxt=document.getElementById('effTxt');
+  if(pT!==null && pC!==null){
+    if(pC<pT-0.25) effTxt.textContent="CB pas assez efficients pour cette vitesse : augmente l'amplitude / réduis la fréquence.";
+    else if(pC>pT+0.25) effTxt.textContent="Tu as de la marge sur les CB : tu peux augmenter la fréquence pour gagner en vitesse.";
+    else effTxt.textContent="CB cohérents avec ta vitesse.";
+  } else effTxt.textContent='';
+}
+function chargerDepuisPerf(){
+  if(T.vite1 && T.vite2){ document.getElementById('refTemps').value=((T.vite1+T.vite2)/1000).toFixed(2); }
+  const cbV1=parseFloat(document.getElementById('cbV1').value)||0, cbV2=parseFloat(document.getElementById('cbV2').value)||0;
+  if(cbV1&&cbV2){ document.getElementById('refCB').value=cbV1+cbV2; }
+  const s=sexePerf(); document.querySelector('input[name=sexePerf][value="'+s+'"]').checked=true;
+  updateRef();
+  const cbL1=parseFloat(document.getElementById('cbL1').value)||0, cbL2=parseFloat(document.getElementById('cbL2').value)||0;
+  const fqV=freqCalc(cbV1+cbV2, (T.vite1||0)+(T.vite2||0)), fqL=freqCalc(cbL1+cbL2, (T.lent1||0)+(T.lent2||0));
+  const freqTxt=document.getElementById('freqTxt');
+  if(fqV&&fqL){ const d=fqV-fqL; freqTxt.textContent=d>=10?"Fréquence cohérente (+"+d.toFixed(0)+" cy/min en vite).":"Augmente la fréquence en vite et/ou diminue-la en lent (écart actuel : "+(d>=0?'+':'')+d.toFixed(0)+" cy/min, cible ≥ +10).";}
+  else freqTxt.textContent='';
+}
+document.getElementById('refTemps').addEventListener('input',updateRef);
+document.getElementById('refCB').addEventListener('input',updateRef);
+document.querySelectorAll('input[name=sexePerf]').forEach(r=>r.addEventListener('change',updateRef));
+document.getElementById('refTableTemps').innerHTML=refTable('Garçons (s)',T_G)+'<br>'+refTable('Filles (s)',T_F);
+document.getElementById('refTableCB').innerHTML=refTable('Garçons',CB_G)+'<br>'+refTable('Filles',CB_F);
+
+/* ---------- Construction d'entraînement ---------- */
+const PREP=[
+ {n:"Crawl",d:50,c:"Nage libre, échauffement général"},
+ {n:"Crawl amplitude",d:50,c:"Nager grand et profond"},
+ {n:"Crawl fréquence",d:50,c:"Nager grand, profond et très appuyé"},
+ {n:"Crawl rattrapé",d:50,c:"Faire glisser la main, bras tendu devant, profond coude haut"},
+ {n:"Crawl accélération progressive",d:50,c:"Augmenter la vitesse progressivement par 25m"},
+ {n:"Papillon",d:50,c:"Nage complète, tenir l'ondulation"},
+ {n:"Dos",d:50,c:"Nage complète, gainage et rotation des épaules"},
+ {n:"Brasse",d:50,c:"Nage complète, temps de glisse marqué"},
+ {n:"4 Nages",d:100,c:"Enchaînement des 4 nages"},
+];
+const TRANSFO=[
+ {theme:"Amplitude / Fréquence", obs:"l'écart de temps et de CB entre le lent et le vite",
+  ex:[{n:"Amplitude maxi",d:50,c:"25m NC amplitude maxi, compte CB / 25m libre"},
+      {n:"Fréquence maxi contrôlée",d:50,c:"25m NC fréquence maxi, sans perte du trajet moteur / 25m libre"},
+      {n:"Contraste A/F",d:50,c:"12,5m amplitude / 12,5m fréquence x2"},
+      {n:"Contraste vite/lent 50",d:50,c:"12,5m vite / 12,5m lent x2"},
+      {n:"Contraste vite/lent 100",d:100,c:"25m vite / 25m lent x2"}]},
+ {theme:"Départ - Coulée - Reprise", obs:"ton temps sur les 20 premiers mètres vite",
+  ex:[{n:"Poussée au mur",d:25,c:"Pousser très fort, jambes tendues, corps gainé, regard placé, bras tendus qui bouchent les oreilles"},
+      {n:"Coulée profilée",d:25,c:"Coulée longue, bras tendus devant, tête rentrée, ondulations ou battements dynamiques"},
+      {n:"Reprise de nage 1",d:25,c:"Départ au mur, pousser très fort, ondulations/battements puis 2 CB puis inspirer"},
+      {n:"Reprise de nage 2",d:25,c:"Sortie de coulée, 5 CB à fréquence maximale sans inspirer"},
+      {n:"Zoom épreuve 2x25m",d:50,c:"Départ + coulée 5m + 20m vite crawl, viser le meilleur temps (zone de mesure 5-25m)"}]},
+ {theme:"Technique - trajet moteur", obs:"la qualité de ton trajet moteur",
+  ex:[{n:"Orientation des surfaces propulsives",d:50,c:"Rattrapé avec/sans planche, main glissée bras tendu devant, profond coude haut"},
+      {n:"Rythme des surfaces propulsives",d:50,c:"Enfoncer main coude haut, accélération progressive jusqu'à la cuisse"},
+      {n:"Roulis",d:50,c:"Crawl pull buoy, trajet complet amplitude maximale, glisse marquée avant l'attaque suivante"},
+      {n:"Quantité des surfaces propulsives",d:100,c:"Poings fermés puis mains ouvertes, ressentir la surface propulsive utile"},
+      {n:"Nage contrastée",d:100,c:"25m vite crawl fréquence/amplitude + 25m lent crawl amplitude/fréquence"}]},
+ {theme:"Ventilation", obs:"ta structure ventilatoire entre le lent et le vite",
+  ex:[{n:"Ventilation contrôlée lent",d:50,c:"Crawl lent, ventilation régulière, grande amplitude, maintien de la propulsion"},
+      {n:"Ventilation contrôlée vite",d:25,c:"Crawl vite, ventilation adaptée à l'intensité, appuyer pour augmenter la fréquence"},
+      {n:"Contraste rythme/distance",d:100,c:"Alterner 25 lent (souffle 4 temps) / 25 vite (2 temps)"},
+      {n:"Varier la distance",d:100,c:"Minimum 3 changements de rythme ventilatoire imposés lent/vite"},
+      {n:"Contrôle ventilation",d:50,c:"Avec un coach : la structure change-t-elle réellement entre lent et vite ?"}]},
+ {theme:"Récupération", obs:"l'écart de temps entre Vite 2 et Vite 1",
+  ex:[{n:"Dosage de l'effort (2x50m)",d:100,c:"25m vite intensité 80% (effort 8/10) puis 25m lent régulier intensité 30% (effort 3/10) x2"},
+      {n:"Récupération active (crawl)",d:50,c:"Crawl lent : amplitude élevée, viser une baisse nette de la fréquence de nage (effort 3/10)"},
+      {n:"Anticipation fatigue",d:50,c:"25m vite / 15'' récup / 25m vite, comparer et identifier la perte de vitesse"}]},
+];
+const VALID=[
+ {n:"Demi contrôle épreuve 2x25m",d:50,c:"25m vite/25m lent, 15'' récup, 25m vite/25m lent — temps et CB, zones 5-25m et 25-45m, comparer"},
+ {n:"Contrôle épreuve complète 2x50m",d:100,c:"25m vite/25m lent, 15'' récup, x2 — temps et CB sur les 4 zones de mesure, comparer"}];
+
+function exRow(item){
+  const row=document.createElement('div'); row.className='exrow';
+  row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk"><span class="n">'+item.n+'</span><input type="number" class="dist" step="12.5" value="'+item.d+'"> m</div>'+(item.c?'<div class="obs">'+item.c+'</div>':'');
+  return row;
+}
+function addRow(container){
+  const wrap=document.createElement('div'); wrap.className='addrow';
+  wrap.innerHTML='<input type="text" class="cname" placeholder="Exercice libre"><input type="number" class="cdist" step="12.5" placeholder="m"><button type="button">Ajouter</button>';
+  wrap.querySelector('button').onclick=()=>{
+    const name=wrap.querySelector('.cname').value.trim(), dist=parseFloat(wrap.querySelector('.cdist').value)||50;
+    if(!name) return;
+    const row=document.createElement('div'); row.className='exrow';
+    row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk" checked><input type="text" class="n2" value="'+name+'" style="flex:1;border:1px solid var(--border);border-radius:5px;padding:4px"><input type="number" class="dist" step="12.5" value="'+dist+'"> m<button class="rm">×</button></div>';
+    row.querySelector('.rm').onclick=()=>{row.remove(); recompute();};
+    wrap.parentElement.insertBefore(row, wrap);
+    wrap.querySelector('.cname').value=''; wrap.querySelector('.cdist').value='';
+    recompute();
+  };
+  return wrap;
+}
+function buildPrep(){
+  const c=document.getElementById('prep');
+  PREP.forEach(it=>c.appendChild(exRow(it)));
+  c.appendChild(addRow(c));
+}
+function buildTransfo(){
+  const c=document.getElementById('transfo');
+  TRANSFO.forEach(g=>{
+    const grp=document.createElement('div'); grp.className='grp';
+    grp.innerHTML='<strong>'+g.theme+'</strong><div class="obs">Ce que tu vas observer : '+g.obs+'.</div>';
+    g.ex.forEach(it=>grp.appendChild(exRow(it)));
+    grp.appendChild(addRow(grp));
+    c.appendChild(grp);
+  });
+}
+function buildValid(){
+  const c=document.getElementById('valid');
+  VALID.forEach(it=>c.appendChild(exRow(it)));
+  c.appendChild(addRow(c));
+}
+function countChecked(container){
+  let n=0,dist=0;
+  container.querySelectorAll('.exrow').forEach(r=>{
+    const chk=r.querySelector('.chk');
+    if(chk && chk.checked){ n++; dist+=parseInt(r.querySelector('.dist').value)||0; }
+  });
+  return {n,dist};
+}
+function recompute(){
+  const p=countChecked(document.getElementById('prep'));
+  const t=countChecked(document.getElementById('transfo'));
+  const v=countChecked(document.getElementById('valid'));
+  const total=p.dist+t.dist+v.dist;
+  const okP=p.dist>=100, okT=t.n>=3, okV=v.n>=1, okD=total>=600;
+  const tag=(ok,text)=>'<span class="tag '+(ok?'ok':'ko')+'">'+text+'</span>';
+  document.getElementById('status').innerHTML=
+    tag(okP,'Échauffement : '+p.dist+'m / 100m min')+tag(okT,'Transformation : '+t.n+'/3')+tag(okV,'Validation : '+v.n+'/1')+tag(okD,'Distance : '+total+'m / 600m min');
+}
+document.addEventListener('change', e=>{ if(e.target.classList.contains('chk')||e.target.classList.contains('dist')) recompute(); });
+document.addEventListener('input', e=>{ if(e.target.classList.contains('dist')) recompute(); });
+
+function collectSection(container){
+  const out=[];
+  container.querySelectorAll('.exrow').forEach(r=>{
+    const chk=r.querySelector('.chk');
+    if(chk && chk.checked){
+      const nameEl=r.querySelector('.n')||r.querySelector('.n2');
+      const obsEl=r.querySelector('.obs');
+      out.push({n:nameEl.value!==undefined?nameEl.value:nameEl.textContent, d:parseInt(r.querySelector('.dist').value)||0, c:obsEl?obsEl.textContent:''});
+    }
+  });
+  return out;
+}
+function printPlan(){
+  const nom=document.getElementById('eleveNom2').value||'Élève';
+  const diag='<p>Diagnostic : '+(document.getElementById('diag').value||'—')+'</p>';
+  const prep=collectSection(document.getElementById('prep'));
+  const transfo=collectSection(document.getElementById('transfo'));
+  const valid=collectSection(document.getElementById('valid'));
+  let total=0, h=diag;
+  const section=(title,list)=>{
+    let s='<h3>'+title+'</h3><ul>';
+    list.forEach(it=>{ s+='<li><strong>'+it.n+'</strong> — '+it.d+'m'+(it.c?'<br><span style="color:#5C7089;font-size:13px">'+it.c+'</span>':'')+'</li>'; total+=it.d; });
+    return s+'</ul>';
+  };
+  h+=section('Préparation',prep)+section('Transformation',transfo)+section('Validation',valid);
+  h+='<p><strong>Distance totale : '+total+'m</strong></p>';
+  openSheet('sheet2',"Ma séance d'entraînement",nom,h);
+}
+
+buildPrep(); buildTransfo(); buildValid(); recompute();
+</script>
+</body>
+</html>
