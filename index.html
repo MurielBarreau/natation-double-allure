@@ -60,12 +60,22 @@ input[type=number],input[type=text]{border:1px solid var(--border);border-radius
 .addrow input[type=text]{flex:1}
 .addrow input[type=number]{width:64px}
 .addrow button{border:none;background:var(--primary2);color:#fff;border-radius:5px;padding:0 12px;cursor:pointer}
+.detail{margin:6px 0 10px 26px;padding:8px 10px;background:var(--bg);border-radius:6px}
+.detail label{margin-right:10px}
+.detail input[type=text]{width:100%;margin-top:6px}
+details summary{cursor:pointer;padding:4px 0}
+details[open] summary{margin-bottom:6px}
 .rm{border:none;background:none;color:var(--warn);font-size:16px;cursor:pointer;padding:0 4px}
 .status{display:flex;flex-wrap:wrap;gap:10px;font-size:13px;margin-bottom:8px}
 .tag{padding:4px 10px;border-radius:14px;font-weight:600}
 .ok{background:#DEF3E6;color:var(--good)}
 .ko{background:#FBE6E2;color:var(--warn)}
-@media (prefers-color-scheme: dark){ .ok{background:#123723} .ko{background:#3A211D} }
+tr.ok td,tr.ok th{background:#DEF3E6}
+tr.ko td,tr.ko th{background:#FBE6E2}
+.msgbox{padding:12px 14px;border-radius:8px;margin:8px 0;font-weight:600}
+.msgbox.ok{background:#DEF3E6;color:var(--good)}
+.msgbox.ko{background:#FBE6E2;color:var(--warn)}
+@media (prefers-color-scheme: dark){ .ok{background:#123723} .ko{background:#3A211D} tr.ok td,tr.ok th{background:#123723} tr.ko td,tr.ko th{background:#3A211D} .msgbox.ok{background:#123723} .msgbox.ko{background:#3A211D} }
 .printbtn{border:none;background:var(--primary);color:#fff;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer;width:100%;margin-top:10px}
 textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:14px;background:var(--card);color:var(--text);font-family:inherit}
 .hidden{display:none}
@@ -84,9 +94,9 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
   <p>Lycée Théas</p>
 </header>
 <nav>
-  <button id="tabBtn1" class="active" onclick="showTab(1)">Prise de performances</button>
-  <button id="tabBtn2" onclick="showTab(2)">Construction d'entraînement</button>
-  <button id="tabBtn3" onclick="showTab(3)">Référentiel</button>
+  <button id="tabBtn1" class="active" onclick="showTab(1)">Performance</button>
+  <button id="tabBtn2" onclick="showTab(2)">Plan d'entraînement</button>
+  <button id="tabBtn3" onclick="showTab(3)">Épreuve</button>
 </nav>
 <main>
 
@@ -105,12 +115,12 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
       <button class="big chrono" id="btnChrono" onclick="onChrono()">CHRONO</button>
       <button class="big recup" id="btnRecup" onclick="onRecup()" disabled>RÉCUP</button>
     </div>
-    <button class="printbtn" id="btnAnnule" style="background:var(--warn);max-width:260px;margin:10px auto 0" onclick="annulerSegment()" disabled>↺ Annuler ce segment</button>
     <div class="chips" id="chips"></div>
   </div>
 
   <div class="card" id="resultCard" style="display:none">
     <h2>Résultats</h2>
+    <p class="small">Tu renseignes les CB des Vite 1, Lent 1, Vite 2, Lent 2.</p>
     <table id="resTable">
       <thead><tr><th></th><th>Vite 1</th><th class="c-lent1">Lent 1</th><th class="c-2">Vite 2</th><th class="c-2">Lent 2</th></tr></thead>
       <tbody>
@@ -119,47 +129,54 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
           <td><input type="number" id="cbV1"></td><td class="c-lent1"><input type="number" id="cbL1"></td>
           <td class="c-2"><input type="number" id="cbV2"></td><td class="c-2"><input type="number" id="cbL2"></td></tr>
         <tr><th>Fréquence (cy/min)</th><td id="fqV1"></td><td class="c-lent1" id="fqL1"></td><td class="c-2" id="fqV2"></td><td class="c-2" id="fqL2"></td></tr>
-        <tr><th>Ventilation</th>
-          <td><input type="number" id="vtV1"></td><td class="c-lent1"><input type="number" id="vtL1"></td>
-          <td class="c-2"><input type="number" id="vtV2"></td><td class="c-2"><input type="number" id="vtL2"></td></tr>
       </tbody>
     </table>
-    <p class="small" style="margin-top:10px">Écarts (secondes)</p>
-    <table id="ecartTable">
-      <tr><th class="c-2">Vite 2 − Vite 1</th><td class="c-2" id="eV2V1"></td></tr>
-      <tr><th>Lent 1 − Vite 1</th><td id="eL1V1"></td></tr>
-      <tr class="c-2"><th>Lent 1 − Vite 2</th><td id="eL1V2"></td></tr>
-      <tr class="c-2"><th>Lent 2 − Vite 2</th><td id="eL2V2"></td></tr>
-    </table>
-    <div id="noteBox" class="card" style="margin-top:12px;background:var(--bg)">
-      <p class="small" style="margin:0 0 6px">Note AFL1 en direct (cumul Vite, officielle — le lent n'est pas noté ici)</p>
-      <p id="noteTxt" style="margin:0;font-weight:700"></p>
+
+    <div id="epreuveBlock">
+      <h2 style="margin-top:18px">Indicateurs écarts Lent 1 − Vite 2</h2>
+      <table id="tabLV">
+        <tr><th>Indicateur</th><th>Résultat</th><th>Cible</th><th>Bloc conseillé</th></tr>
+        <tr id="lv_t"><td>Écart de temps (s)</td><td id="lv_t_v"></td><td>Entre 3 et 6 s d'écart</td><td id="lv_t_c" class="small"></td></tr>
+        <tr id="lv_cb"><td>Écart de CB</td><td id="lv_cb_v"></td><td>Entre -2 et +2 CB</td><td id="lv_cb_c" class="small"></td></tr>
+        <tr id="lv_f"><td>Écart de fréquence</td><td id="lv_f_v"></td><td>Vite 2 : +10 cy/min mini vs Lent 1</td><td id="lv_f_c" class="small"></td></tr>
+      </table>
+      <div id="synth_lv" class="msgbox"></div>
+
+      <h2 style="margin-top:18px">Indicateurs écarts Vite 2 − Vite 1</h2>
+      <table id="tabVV">
+        <tr><th>Indicateur</th><th>Résultat</th><th>Cible</th><th>Bloc conseillé</th></tr>
+        <tr id="vv_t"><td>Écart de temps (s)</td><td id="vv_t_v"></td><td>Entre -1 et +3 s</td><td id="vv_t_c" class="small"></td></tr>
+        <tr id="vv_cb"><td>Écart de CB</td><td id="vv_cb_v"></td><td>Entre -2 et +2 CB</td><td id="vv_cb_c" class="small"></td></tr>
+        <tr id="vv_f"><td>Écart de fréquence</td><td id="vv_f_v"></td><td>± 2 cy/min</td><td id="vv_f_c" class="small"></td></tr>
+      </table>
+      <div id="synth_vv" class="msgbox"></div>
     </div>
-    <table style="margin-top:14px">
-      <tr><th>Indicateur</th><th>Attendu (lent → vite)</th><th>Constaté</th><th></th></tr>
-      <tr><td>Temps</td><td>≥ 3s d'écart</td><td id="chkTempsV"></td><td id="chkTempsOk"></td></tr>
-      <tr><td>Fréquence</td><td>+10 cy/min mini</td><td id="chkFreqV"></td><td id="chkFreqOk"></td></tr>
-      <tr><td>CB</td><td>-1 à +5 (vite vs lent)</td><td id="chkCBV"></td><td id="chkCBOk"></td></tr>
-      <tr><td>Technique</td><td>reste stable</td><td>—</td><td></td></tr>
-      <tr><td>Relance</td><td>efficace</td><td>—</td><td></td></tr>
-    </table>
+
     <label class="small">Nom de l'élève</label>
     <input type="text" id="eleveNom1" placeholder="Prénom Nom">
     <button class="printbtn" onclick="printPerf()">Voir ma fiche</button>
-    <button class="printbtn" style="background:var(--primary2);margin-top:8px" onclick="resetChrono()">Nouvel essai</button>
+    <button class="printbtn" onclick="partagerPerf()">Partager</button>
+    <button class="printbtn" style="background:var(--primary2)" onclick="resetChrono()">Nouvel essai</button>
   </div>
-  <div id="sheet1" class="sheet"></div>
 </div>
+<!-- /TAB 1 -->
 
 <!-- TAB 2 -->
 <div id="tab2" class="hidden">
   <div class="card">
     <h2>Mon diagnostic</h2>
-    <textarea id="diag" rows="2" placeholder="Mon problème / mon objectif pour cette séance…"></textarea>
+    <label class="small">Mon problème</label>
+    <textarea id="diag" rows="2" placeholder="Quand j'accélère, ma nage se dégrade…"></textarea>
+    <label class="small" style="margin-top:8px;display:block">Mon objectif pour cette séance</label>
+    <textarea id="objSeance" rows="2" placeholder="Garder une nage efficace quand j'augmente ma fréquence…"></textarea>
+    <p class="small" style="margin-top:10px"><strong>Comment saurai-je que j'ai progressé ?</strong><br>
+    1. Je repère mon problème.<br>2. Je choisis le bloc qui correspond à mon problème.<br>3. Je réalise les exercices.<br>
+    4. Je ressens et je mesure les effets.<br>5. Je garde le bloc s'il m'aide à progresser ; sinon, j'en choisis un autre.</p>
   </div>
 
   <div class="card">
     <div class="status" id="status"></div>
+    <p id="planWarn" class="hidden" style="color:var(--warn);font-weight:600;margin-top:8px"></p>
   </div>
 
   <div class="card">
@@ -169,23 +186,34 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
   </div>
 
   <div class="card">
-    <h2>Bloc de transformation <span class="small">(3 exercices minimum, au choix)</span></h2>
+    <h2>Bloc de transformation <span class="small">(2 blocs différents minimum, au choix)</span></h2>
     <div id="transfo"></div>
   </div>
 
   <div class="card">
-    <h2>Bloc de validation <span class="small">(1 exercice minimum)</span></h2>
-    <div class="obs">Ce que tu vas observer : la stabilité de ton temps entre Vite 1 et Vite 2.</div>
+    <h2>Bloc de validation <span class="small">(obligatoire)</span></h2>
     <div id="valid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Les raisons de mes choix</h2>
+    <label class="small">Mes difficultés rencontrées</label><textarea id="r1" rows="2"></textarea>
+    <label class="small" style="margin-top:6px;display:block">Mon (mes) objectif(s)</label><textarea id="r2" rows="2"></textarea>
+    <p class="small" style="margin:10px 0 2px">Blocs choisis : <span id="rBlocs">—</span></p>
+    <label class="small">Pourquoi ces blocs ?</label><textarea id="r3" rows="2"></textarea>
+    <p class="small" style="margin:10px 0 2px">Indicateurs que je vais observer : <span id="rInd">—</span></p>
+    <label class="small" style="margin-top:6px;display:block">Résultat</label><textarea id="r4" rows="2"></textarea>
+    <label class="small" style="margin-top:6px;display:block">Ce que je modifie la prochaine fois</label><textarea id="r5" rows="2"></textarea>
   </div>
 
   <div class="card">
     <label class="small">Nom de l'élève</label>
     <input type="text" id="eleveNom2" placeholder="Prénom Nom">
-    <button class="printbtn" onclick="printPlan()">Voir ma séance</button>
+    <button class="printbtn" onclick="onVoirFiche('entrainement')">Voir ma fiche d'entraînement</button>
+    <button class="printbtn" style="background:var(--primary2);margin-top:8px" onclick="onVoirFiche('bilan')">Voir ma fiche bilan</button>
   </div>
-  <div id="sheet2" class="sheet"></div>
 </div>
+<!-- /TAB 2 -->
 
 <!-- TAB 3 -->
 <div id="tab3" class="hidden">
@@ -219,9 +247,62 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
     <h2>Table de référence — CB cumulés</h2>
     <div id="refTableCB" style="overflow-x:auto"></div>
   </div>
+
+  <div class="card">
+    <h2>🏊 Conseils pour réussir mon épreuve</h2>
+    <p><strong>1. Sur le 25 m VITE : je cherche la vitesse sans perdre mon efficacité</strong></p>
+    <ul>
+      <li>Je pousse fort au mur et je profite de ma coulée.</li>
+      <li>Je reprends rapidement ma nage.</li>
+      <li>J'augmente nettement ma fréquence.</li>
+      <li>Je garde des appuis efficaces et une nage organisée.</li>
+      <li>Je ne multiplie pas inutilement les coups de bras.</li>
+    </ul>
+    <p><strong>2. Sur le 25 m LENT : je récupère pour mieux relancer</strong></p>
+    <ul>
+      <li>Je baisse nettement ma fréquence.</li>
+      <li>Je conserve une nage ample et efficace.</li>
+      <li>Je contrôle ma respiration.</li>
+      <li>Je cherche une récupération active : je récupère sans arrêter de nager.</li>
+      <li>Je garde suffisamment de ressources pour le prochain 25 m vite.</li>
+    </ul>
+    <p><strong>3. Après les 15 secondes : je suis prêt à repartir</strong></p>
+    <ul>
+      <li>Je profite des 15 secondes pour récupérer et me préparer.</li>
+      <li>Je repars avec une intention claire : retrouver rapidement mon allure vite.</li>
+      <li>Je cherche à reproduire ma première performance.</li>
+    </ul>
+    <p><strong>4. Je contrôle ma nage grâce à mes repères</strong></p>
+    <ul>
+      <li>Mon temps</li><li>Mes coups de bras (CB)</li><li>Ma fréquence</li><li>Ma distance par cycle</li>
+      <li>L'écart entre mon allure lente et mon allure rapide</li>
+      <li>L'écart entre mon 1er et mon 2e 25 m vite</li>
+    </ul>
+    <p><strong>5. Mon objectif pendant l'épreuve</strong></p>
+    <p>Je différencie clairement mes deux allures, je reste efficace et j'utilise le 25 m lent pour être capable de relancer et de reproduire ma performance.</p>
+    <div class="msgbox ok" style="color:var(--text);background:var(--bg)">
+      🧠 Mon repère essentiel<br>VITE = fréquence ↑ + efficacité conservée<br>LENT = fréquence ↓ + nage ample + récupération active<br>RELANCE = je retrouve rapidement mon organisation efficace
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧑‍🏫 Conseils pour le coach</h2>
+    <p><strong>Indicateurs à observer pendant l'épreuve :</strong></p>
+    <ul>
+      <li><strong>Temps</strong> de chaque 25m (Vite 1, Lent 1, Vite 2, Lent 2)</li>
+      <li><strong>CB</strong> de chaque 25m, pour calculer la fréquence. Les CB doivent se maintenir entre les 4 segments : un nombre trop important traduit une faiblesse dans la qualité technique.</li>
+      <li><strong>Fréquence</strong> : nettement plus haute sur le vite que sur le lent (+10 cy/min mini)</li>
+      <li><strong>Structure respiratoire</strong> : nombre et rythme des prises d'air, doit différer nettement entre lent et vite</li>
+      <li><strong>Qualité du trajet moteur</strong> sur le vite : la nage reste-t-elle organisée, ou se dégrade-t-elle ?</li>
+      <li><strong>Relance après le 25m lent</strong> : le 2e 25m vite est-il proche du 1er (temps, CB) ?</li>
+    </ul>
+    <p class="small">Ces indicateurs recoupent directement les tableaux d'écarts de l'onglet Performances : un coach qui les observe en direct peut confirmer ou nuancer ce que l'application calcule a posteriori.</p>
+  </div>
 </div>
 
 </main>
+<div id="sheet1" class="sheet"></div>
+<div id="sheet2" class="sheet"></div>
 
 <script>
 /* ---------- Navigation ---------- */
@@ -236,13 +317,17 @@ function showTab(n){
 let phase='idle', segStart=0, timerId=null, modeDemi=false;
 let T={vite1:null,lent1:null,vite2:null,lent2:null};
 const disp=document.getElementById('disp'), lbl=document.getElementById('lbl');
-const btnC=document.getElementById('btnChrono'), btnR=document.getElementById('btnRecup'), btnA=document.getElementById('btnAnnule');
+const btnC=document.getElementById('btnChrono'), btnR=document.getElementById('btnRecup');
 
-function majMode(){ modeDemi = document.querySelector('input[name=modeEpreuve]:checked').value==='demi'; }
+function setMode(isDemi){
+  modeDemi=isDemi;
+  document.querySelectorAll('input[name=modeEpreuve]').forEach(r=>{ r.checked=(r.value==='demi')===isDemi; });
+  if(typeof buildValid==='function'){ buildValid(); recompute(); }
+}
+function majMode(){ setMode(document.querySelector('input[name=modeEpreuve]:checked').value==='demi'); }
 function fmt(ms){return (ms/1000).toFixed(2);}
-function startTimer(){segStart=performance.now(); timerId=setInterval(()=>{disp.textContent=fmt(performance.now()-segStart);},50); btnA.disabled=false;}
-function stopTimer(){clearInterval(timerId); btnA.disabled=true;}
-function annulerSegment(){ if(timerId){ segStart=performance.now(); disp.textContent='0.00'; } }
+function startTimer(){segStart=performance.now(); timerId=setInterval(()=>{disp.textContent=fmt(performance.now()-segStart);},50);}
+function stopTimer(){clearInterval(timerId);}
 function renderChips(){
   const c=document.getElementById('chips'); c.innerHTML='';
   [['Vite 1','vite1'],['Lent 1','lent1'],['Vite 2','vite2'],['Lent 2','lent2']].forEach(([label,k])=>{
@@ -270,47 +355,97 @@ function onRecup(){
 }
 function resetChrono(){
   phase='idle'; T={vite1:null,lent1:null,vite2:null,lent2:null}; disp.textContent='0.00'; lbl.textContent='Prêt — clique sur CHRONO';
-  btnR.disabled=true; btnA.disabled=true; document.getElementById('resultCard').style.display='none'; renderChips();
+  btnR.disabled=true; document.getElementById('resultCard').style.display='none'; renderChips();
 }
 function sexePerf(){ return document.querySelector('input[name=sexePerf]:checked').value; }
 function showResults(){
   document.getElementById('resultCard').style.display='block';
+  document.getElementById('epreuveBlock').style.display=modeDemi?'none':'block';
   document.querySelectorAll('.c-2').forEach(el=>el.style.display=modeDemi?'none':'');
-  document.querySelectorAll('.c-lent1').forEach(el=>el.style.display='');
   document.getElementById('tV1').textContent=fmt(T.vite1); document.getElementById('tL1').textContent=fmt(T.lent1);
   if(!modeDemi){ document.getElementById('tV2').textContent=fmt(T.vite2); document.getElementById('tL2').textContent=fmt(T.lent2); }
-  if(!modeDemi){
-    const ecarts=[['eV2V1',T.vite2-T.vite1],['eL1V1',T.lent1-T.vite1],['eL1V2',T.lent1-T.vite2],['eL2V2',T.lent2-T.vite2]];
-    ecarts.forEach(([id,v])=>{ document.getElementById(id).textContent=(v>=0?'+':'')+(v/1000).toFixed(2)+'s'; });
-  } else {
-    document.getElementById('eL1V1').textContent=((T.lent1-T.vite1)/1000>=0?'+':'')+((T.lent1-T.vite1)/1000).toFixed(2)+'s';
-    document.getElementById('ecartTable').querySelector('tr').style.display='none';
-  }
   majDerives();
 }
 function freqCalc(cb, ms){ if(!cb||!ms) return null; return (parseFloat(cb)/2)/(ms/60000); }
+function rangeOk(v,lo,hi){ return v!==null && v>=lo && v<=hi; }
+function setRow(rowId, valId, text, ok, conseil){
+  document.getElementById(valId).textContent=text+(ok?'':' — hors cible');
+  document.getElementById(rowId).className=ok?'ok':'ko';
+  const c=document.getElementById(rowId+'_c'); if(c) c.textContent=ok?'':(conseil?'→ '+conseil:'→ à vérifier avec ton enseignant·e');
+}
+function flagCB(id){
+  const el=document.getElementById(id); const v=parseFloat(el.value);
+  if(v>24){ el.style.background='#FBE6E2'; el.title="Plus de 24 CB : la nage n'est pas efficiente"; }
+  else { el.style.background=''; el.title=''; }
+}
+function freqCell(id, val, isVite){
+  const el=document.getElementById(id);
+  const ineff = isVite && val!==null && val<30;
+  el.textContent=(val?val.toFixed(0):'')+(ineff?' ⚠':'');
+  el.style.color=ineff?'var(--warn)':'';
+  el.title=ineff?"Fréquence vite < 30 cy/min : pas efficiente":'';
+}
 function majDerives(){
   const cbV1=document.getElementById('cbV1').value, cbL1=document.getElementById('cbL1').value;
   const cbV2=document.getElementById('cbV2').value, cbL2=document.getElementById('cbL2').value;
   const fqV1=freqCalc(cbV1,T.vite1), fqL1=freqCalc(cbL1,T.lent1);
   const fqV2=modeDemi?null:freqCalc(cbV2,T.vite2), fqL2=modeDemi?null:freqCalc(cbL2,T.lent2);
-  document.getElementById('fqV1').textContent=fqV1?fqV1.toFixed(0):'';
-  document.getElementById('fqL1').textContent=fqL1?fqL1.toFixed(0):'';
-  if(!modeDemi){ document.getElementById('fqV2').textContent=fqV2?fqV2.toFixed(0):''; document.getElementById('fqL2').textContent=fqL2?fqL2.toFixed(0):''; }
-  // Note AFL1 en direct (vite uniquement, épreuve complète requise)
-  const noteTxt=document.getElementById('noteTxt');
-  if(!modeDemi && T.vite1 && T.vite2 && cbV1 && cbV2){
-    const s=sexePerf(); const tCum=(T.vite1+T.vite2)/1000, cbCum=parseFloat(cbV1)+parseFloat(cbV2);
-    const pT=ptsOf(tCum, s==='G'?T_G:T_F), pC=ptsOf(cbCum, s==='G'?CB_G:CB_F);
-    noteTxt.textContent='Temps : '+pT+'/6 — CB : '+pC+'/6 — Total : '+(pT+pC).toFixed(2)+'/12 ('+(s==='G'?'garçons':'filles')+')';
-  } else { noteTxt.textContent=modeDemi?"Non disponible en demi-épreuve (nécessite les 2 séries vite)":"Renseigne les CB des 2 vite pour voir ta note."; }
-  // Tableau des attentes lent -> vite
-  const setOk=(id,ok)=>{ const el=document.getElementById(id); el.textContent=ok?'✓':'✗'; el.className=ok?'ok':'ko'; };
-  const ecT=(T.lent1-T.vite1)/1000, okT2=ecT>=3;
-  document.getElementById('chkTempsV').textContent='+'+ecT.toFixed(2)+'s'; setOk('chkTempsOk',okT2);
-  let ecF=null, ecCB=null;
-  if(fqV1&&fqL1){ ecF=fqV1-fqL1; document.getElementById('chkFreqV').textContent=(ecF>=0?'+':'')+ecF.toFixed(0)+' cy/min'; setOk('chkFreqOk', ecF>=10); }
-  if(cbV1&&cbL1){ ecCB=parseFloat(cbV1)-parseFloat(cbL1); document.getElementById('chkCBV').textContent=(ecCB>=0?'+':'')+ecCB; setOk('chkCBOk', ecCB<=5 && ecCB>=-1); }
+  flagCB('cbV1'); flagCB('cbL1'); if(!modeDemi){ flagCB('cbV2'); flagCB('cbL2'); }
+  freqCell('fqV1',fqV1,true); freqCell('fqL1',fqL1,false);
+  if(!modeDemi){ freqCell('fqV2',fqV2,true); freqCell('fqL2',fqL2,false); }
+  if(modeDemi) return;
+  const BLOC_AF="Je nage presque pareil lent/vite", BLOC_DEG="Quand j'accélère, ma nage se dégrade", BLOC_REL="Mon 2e 25m vite est moins bon que le 1er";
+  // Écarts Lent1 - Vite2
+  let dt=null, dcb=null, df=null;
+  if(T.lent1!==null && T.vite2!==null){
+    dt=(T.lent1-T.vite2)/1000; const ok=rangeOk(dt,3,6); const txt=(dt>=0?'+':'')+dt.toFixed(2)+'s';
+    setRow('lv_t','lv_t_v',txt, ok, dt<3?txt+' (< 3s) : '+BLOC_AF:txt+' (> 6s) : '+BLOC_DEG);
+  }
+  if(cbL1 && cbV2){
+    dcb=parseFloat(cbV2)-parseFloat(cbL1); const ok=rangeOk(dcb,-2,2); const txt=(dcb>=0?'+':'')+dcb;
+    setRow('lv_cb','lv_cb_v',txt, ok, txt+' CB ('+(dcb>2?'> +2':'< -2')+') : '+BLOC_DEG);
+  }
+  if(fqV2!==null && fqL1!==null){
+    df=fqV2-fqL1; const ok=df>=10; const txt=(df>=0?'+':'')+df.toFixed(0)+' cy/min';
+    setRow('lv_f','lv_f_v',txt, ok, txt+' (< +10) : '+BLOC_AF);
+  }
+  const sLV=document.getElementById('synth_lv');
+  if(dt!==null && dcb!==null && df!==null){
+    let msg, bloc, ok;
+    if(dt<3 || df<10){ ok=false; bloc=BLOC_AF; msg="Tes résultats peuvent indiquer que tu ne différencies pas assez tes deux allures."; }
+    else if(dt>6 && dcb>2){ ok=false; bloc=BLOC_DEG; msg="Tes résultats peuvent indiquer que ton accélération te coûte cher en efficacité (tu multiplies tes coups de bras)."; }
+    else if(dcb<-2){ ok=false; bloc=BLOC_DEG; msg="Tes résultats peuvent indiquer une baisse importante de tes CB malgré l'accélération : ton organisation motrice est à vérifier."; }
+    else { ok=true; bloc=null; msg="Tu sembles différencier tes deux allures en conservant ton efficacité. 🟢"; }
+    sLV.className='msgbox '+(ok?'ok':'ko');
+    sLV.innerHTML=msg+(bloc?'<br>Problème à explorer : « '+bloc+' » — bloc conseillé : '+bloc:'');
+  } else sLV.innerHTML='';
+  // Écarts Vite2 - Vite1
+  let dt2=null, dcb2=null, df2=null;
+  if(T.vite1!==null && T.vite2!==null){
+    dt2=(T.vite2-T.vite1)/1000; const ok=rangeOk(dt2,-1,3); const txt=(dt2>=0?'+':'')+dt2.toFixed(2)+'s';
+    setRow('vv_t','vv_t_v',txt, ok, dt2<-1?null:txt+' (> +3s) : '+BLOC_REL);
+  }
+  if(cbV1 && cbV2){
+    dcb2=parseFloat(cbV2)-parseFloat(cbV1); const ok=rangeOk(dcb2,-2,2); const txt=(dcb2>=0?'+':'')+dcb2;
+    setRow('vv_cb','vv_cb_v',txt, ok, txt+' CB ('+(dcb2>2?'> +2':'< -2')+') : '+BLOC_REL);
+  }
+  if(fqV1!==null && fqV2!==null){
+    df2=fqV2-fqV1; const ok=rangeOk(df2,-2,2); const txt=(df2>=0?'+':'')+df2.toFixed(0)+' cy/min';
+    setRow('vv_f','vv_f_v',txt, ok, txt+' (hors ±2) : '+BLOC_REL);
+  }
+  const sVV=document.getElementById('synth_vv');
+  if(dt2!==null && dcb2!==null && df2!==null){
+    let msg, bloc, ok;
+    if(dt2<-1){ ok=true; bloc=null; msg="Ton 2e 25m vite est nettement plus rapide que le 1er : vérifie avec ton enseignant·e la répartition de ton effort plutôt que d'y voir un problème automatique."; }
+    else if(dt2>3){ ok=false; bloc=BLOC_REL;
+      msg = dcb2>2 ? "Tes résultats peuvent indiquer que tu compenses la fatigue en multipliant tes coups de bras."
+          : df2<-2 ? "Tes résultats peuvent indiquer que tu n'arrives pas à retrouver ton organisation de nage au 2e vite."
+          : "Tes résultats peuvent indiquer que ton 2e 25m vite est moins bon que le 1er."; }
+    else if(dcb2>2 || dcb2<-2 || df2<-2){ ok=false; bloc=BLOC_REL; msg="Ton temps se maintient, mais un indicateur (CB ou fréquence) sort de la cible : ta façon de reproduire la performance mérite d'être affinée."; }
+    else { ok=true; bloc=null; msg="Tu sembles récupérer efficacement sur le lent et reproduire ta performance au 2e vite. 🟢"; }
+    sVV.className='msgbox '+(ok?'ok':'ko');
+    sVV.innerHTML=msg+(bloc?'<br>Problème à explorer : « '+bloc+' » — bloc conseillé : '+bloc:'');
+  } else sVV.innerHTML='';
 }
 document.addEventListener('input', e=>{ if(['cbV1','cbL1','cbV2','cbL2'].includes(e.target.id)) majDerives(); });
 function fichePage(corpsHTML){
@@ -320,19 +455,31 @@ function fichePage(corpsHTML){
 }
 function openSheet(id, titre, nom, corpsHTML){
   const el=document.getElementById(id);
-  el.innerHTML='<h2>'+titre+'</h2><p><strong>'+nom+'</strong> — '+new Date().toLocaleDateString('fr-FR')+'</p>'+fichePage(corpsHTML);
+  el.innerHTML='<h2>'+titre+'</h2><p><strong>'+nom+'</strong> — '+new Date().toLocaleDateString('fr-FR')+' à '+new Date().toLocaleTimeString('fr-FR').slice(0,5)+'</p>'+fichePage(corpsHTML);
   document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('show'));
   el.classList.add('show');
   el.scrollIntoView({behavior:'smooth', block:'start'});
 }
+function ficheCorpsPerf(){
+  const rows=[['Vite 1',T.vite1,'cbV1'],['Lent 1',T.lent1,'cbL1'],['Vite 2',T.vite2,'cbV2'],['Lent 2',T.lent2,'cbL2']];
+  let h='<table><tr><th></th><th>Temps</th><th>CB</th></tr>';
+  rows.forEach(([label,t,cbId])=>{ if(t!==null) h+='<tr><th>'+label+'</th><td>'+fmt(t)+'s</td><td>'+(document.getElementById(cbId).value||'—')+'</td></tr>'; });
+  h+='</table>';
+  if(!modeDemi){
+    h+='<h3>Écarts Lent 1 − Vite 2</h3><p>Temps : '+document.getElementById('lv_t_v').textContent+' • CB : '+document.getElementById('lv_cb_v').textContent+' • Fréquence : '+document.getElementById('lv_f_v').textContent+'</p>';
+    h+='<h3>Écarts Vite 2 − Vite 1</h3><p>Temps : '+document.getElementById('vv_t_v').textContent+' • CB : '+document.getElementById('vv_cb_v').textContent+' • Fréquence : '+document.getElementById('vv_f_v').textContent+'</p>';
+    h+='<p>'+document.getElementById('lecture_lv').textContent+'</p><p>'+document.getElementById('lecture_vv').textContent+'</p>';
+  }
+  return h;
+}
 function printPerf(){
+  openSheet('sheet1','Fiche de performance',document.getElementById('eleveNom1').value||'Élève',ficheCorpsPerf());
+}
+async function partagerPerf(){
   const nom=document.getElementById('eleveNom1').value||'Élève';
-  const rows=[['Vite 1',T.vite1,'cbV1','vtV1'],['Lent 1',T.lent1,'cbL1','vtL1'],['Vite 2',T.vite2,'cbV2','vtV2'],['Lent 2',T.lent2,'cbL2','vtL2']];
-  let h='<table><tr><th></th><th>Temps</th><th>CB</th><th>Ventilation</th></tr>';
-  rows.forEach(([label,t,cbId,vtId])=>{ h+='<tr><th>'+label+'</th><td>'+fmt(t)+'s</td><td>'+(document.getElementById(cbId).value||'—')+'</td><td>'+(document.getElementById(vtId).value||'—')+'</td></tr>'; });
-  h+='</table><p>Vite2-Vite1 : '+document.getElementById('eV2V1').textContent+' • Lent1-Vite1 : '+document.getElementById('eL1V1').textContent+
-     ' • Lent1-Vite2 : '+document.getElementById('eL1V2').textContent+' • Lent2-Vite2 : '+document.getElementById('eL2V2').textContent+'</p>';
-  openSheet('sheet1','Fiche de performance',nom,h);
+  const txt='Fiche de performance — '+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+document.getElementById('sheet1').innerText;
+  if(navigator.share){ try{ await navigator.share({title:'Fiche de performance',text:txt}); return; }catch(e){} }
+  printPerf();
 }
 
 /* ---------- Référentiel AFL1 (barème crawl) ---------- */
@@ -393,53 +540,55 @@ document.getElementById('refTableCB').innerHTML=refTable('Garçons',CB_G)+'<br>'
 
 /* ---------- Construction d'entraînement ---------- */
 const PREP=[
- {n:"Crawl",d:50,c:"Nage libre, échauffement général"},
- {n:"Crawl amplitude",d:50,c:"Nager grand et profond"},
- {n:"Crawl fréquence",d:50,c:"Nager grand, profond et très appuyé"},
- {n:"Crawl rattrapé",d:50,c:"Faire glisser la main, bras tendu devant, profond coude haut"},
+ {n:"Crawl",d:50,c:""},
+ {n:"Crawl amplitude +",d:50,c:"Nager grand : loin devant, profond, pousser l'eau jusqu'aux cuisses"},
+ {n:"Crawl fréquence +",d:50,c:"Nager grand, très appuyé et accéléré"},
+ {n:"Crawl rattrapé",d:50,c:"Rattraper la main par devant, nager grand, inspiration quand le pouce touche la cuisse"},
  {n:"Crawl accélération progressive",d:50,c:"Augmenter la vitesse progressivement par 25m"},
- {n:"Papillon",d:50,c:"Nage complète, tenir l'ondulation"},
- {n:"Dos",d:50,c:"Nage complète, gainage et rotation des épaules"},
- {n:"Brasse",d:50,c:"Nage complète, temps de glisse marqué"},
- {n:"4 Nages",d:100,c:"Enchaînement des 4 nages"},
 ];
 const TRANSFO=[
- {theme:"Amplitude / Fréquence", obs:"l'écart de temps et de CB entre le lent et le vite",
-  ex:[{n:"Amplitude maxi",d:50,c:"25m NC amplitude maxi, compte CB / 25m libre"},
-      {n:"Fréquence maxi contrôlée",d:50,c:"25m NC fréquence maxi, sans perte du trajet moteur / 25m libre"},
-      {n:"Contraste A/F",d:50,c:"12,5m amplitude / 12,5m fréquence x2"},
-      {n:"Contraste vite/lent 50",d:50,c:"12,5m vite / 12,5m lent x2"},
-      {n:"Contraste vite/lent 100",d:100,c:"25m vite / 25m lent x2"}]},
- {theme:"Départ - Coulée - Reprise", obs:"ton temps sur les 20 premiers mètres vite",
-  ex:[{n:"Poussée au mur",d:25,c:"Pousser très fort, jambes tendues, corps gainé, regard placé, bras tendus qui bouchent les oreilles"},
-      {n:"Coulée profilée",d:25,c:"Coulée longue, bras tendus devant, tête rentrée, ondulations ou battements dynamiques"},
-      {n:"Reprise de nage 1",d:25,c:"Départ au mur, pousser très fort, ondulations/battements puis 2 CB puis inspirer"},
-      {n:"Reprise de nage 2",d:25,c:"Sortie de coulée, 5 CB à fréquence maximale sans inspirer"},
-      {n:"Zoom épreuve 2x25m",d:50,c:"Départ + coulée 5m + 20m vite crawl, viser le meilleur temps (zone de mesure 5-25m)"}]},
- {theme:"Technique - trajet moteur", obs:"la qualité de ton trajet moteur",
-  ex:[{n:"Orientation des surfaces propulsives",d:50,c:"Rattrapé avec/sans planche, main glissée bras tendu devant, profond coude haut"},
-      {n:"Rythme des surfaces propulsives",d:50,c:"Enfoncer main coude haut, accélération progressive jusqu'à la cuisse"},
-      {n:"Roulis",d:50,c:"Crawl pull buoy, trajet complet amplitude maximale, glisse marquée avant l'attaque suivante"},
-      {n:"Quantité des surfaces propulsives",d:100,c:"Poings fermés puis mains ouvertes, ressentir la surface propulsive utile"},
-      {n:"Nage contrastée",d:100,c:"25m vite crawl fréquence/amplitude + 25m lent crawl amplitude/fréquence"}]},
- {theme:"Ventilation", obs:"ta structure ventilatoire entre le lent et le vite",
-  ex:[{n:"Ventilation contrôlée lent",d:50,c:"Crawl lent, ventilation régulière, grande amplitude, maintien de la propulsion"},
-      {n:"Ventilation contrôlée vite",d:25,c:"Crawl vite, ventilation adaptée à l'intensité, appuyer pour augmenter la fréquence"},
-      {n:"Contraste rythme/distance",d:100,c:"Alterner 25 lent (souffle 4 temps) / 25 vite (2 temps)"},
-      {n:"Varier la distance",d:100,c:"Minimum 3 changements de rythme ventilatoire imposés lent/vite"},
-      {n:"Contrôle ventilation",d:50,c:"Avec un coach : la structure change-t-elle réellement entre lent et vite ?"}]},
- {theme:"Récupération", obs:"l'écart de temps entre Vite 2 et Vite 1",
-  ex:[{n:"Dosage de l'effort (2x50m)",d:100,c:"25m vite intensité 80% (effort 8/10) puis 25m lent régulier intensité 30% (effort 3/10) x2"},
-      {n:"Récupération active (crawl)",d:50,c:"Crawl lent : amplitude élevée, viser une baisse nette de la fréquence de nage (effort 3/10)"},
-      {n:"Anticipation fatigue",d:50,c:"25m vite / 15'' récup / 25m vite, comparer et identifier la perte de vitesse"}]},
+ {theme:"Quand j'accélère, ma nage se dégrade", cible:"Écart temps lent/vite > 6s avec CB hors cible (> +2 ou < -2)", obj:"Garder une nage efficace quand j'augmente ma fréquence", ind:"Qualité du trajet moteur, CB, Temps",
+  ex:[{n:"Rattrapé (avec/sans planche)",d:50,c:"Une main glisse devant pendant que l'autre réalise un trajet ample et complet : appui profond puis poussée jusqu'à la cuisse."},
+      {n:"Poings fermés / mains ouvertes",d:50,c:"25m poings fermés puis 25m mains ouvertes pour ressentir l'efficacité des surfaces propulsives."},
+      {n:"Crawl Pull Buoy",d:50,c:"Grande amplitude, glisser, enfoncer la main coude haut (appui profond), recherche de roulis."}]},
+ {theme:"Je ne sais pas à quel moment inspirer / ma respiration perturbe ma nage", obj:"Adapter ma ventilation sans perturber ma propulsion, puis l'adapter à mon allure", ind:"Rythme des inspirations, CB",
+  ex:[{n:"Rattrapé + respiration",d:50,c:"Inspirer rapidement quand le pouce touche la cuisse, souffler complètement et progressivement en regardant le fond."},
+      {n:"25m lent / 25m vite (ventilation)",d:50,c:"Ventilation régulière sur le lent puis adaptée à l'intensité sur le vite. Le partenaire observe la stabilité de la nage aux inspirations."}]},
+ {theme:"Je nage presque pareil lent/vite", cible:"Écart temps lent/vite < 3s ou fréquence < +10 cy/min", obj:"Créer un vrai écart d'allure en jouant sur la fréquence", ind:"Écart de temps, Fréquence, CB",
+  ex:[{n:"25m lent → 25m vite ×2",d:100,c:"Sur le lent : fréquence basse, nage ample. Sur le vite : fréquence nettement plus élevée sans perdre la distance par cycle."},
+      {n:"12,5m lent / 12,5m vite ×2",d:50,c:"Pour ressentir rapidement le changement de rythme."}]},
+ {theme:"Je perds de la vitesse à la poussée ou à la reprise de nage", obj:"Produire rapidement de la vitesse et reprendre ma nage sans temps mort", ind:"Temps sur 20m, Distance de coulée",
+  ex:[{n:"Poussée → coulée",d:25,c:"Pousser très fort sur le mur, corps tonique et profilé, tête rentrée dans les bras puis ondulations/battements dynamiques."},
+      {n:"Poussée → coulée → reprise (insp. après 2 CB) → 20m vite",d:25,c:"Poussée forte et profilée, coulée ≤5m, expirer complètement sous l'eau puis reprise rapide, inspiration après 2 CB."}]},
+ {theme:"Mon 2e 25m vite est moins bon que le 1er", cible:"Écart Vite2-Vite1 hors cible (temps > +3s, CB ou fréquence hors norme)", obj:"Utiliser le 25m lent pour récupérer et préparer ma relance", ind:"Écart Temps/CB Vite2-Vite1, Fréquence, RPE",
+  ex:[{n:"25m vite→25m lent→25m lent→25m vite",d:100,c:"Sur le lent : baisse nettement ta fréquence, garde une nage ample, cherche une récupération active ; relance ensuite."},
+      {n:"25m vite→25m lent→25m vite→25m lent",d:100,c:"Même consigne de récupération active sur chaque lent."}]},
 ];
-const VALID=[
- {n:"Demi contrôle épreuve 2x25m",d:50,c:"25m vite/25m lent, 15'' récup, 25m vite/25m lent — temps et CB, zones 5-25m et 25-45m, comparer"},
- {n:"Contrôle épreuve complète 2x50m",d:100,c:"25m vite/25m lent, 15'' récup, x2 — temps et CB sur les 4 zones de mesure, comparer"}];
 
+function repOptions(){
+  let o=''; for(let i=1;i<=8;i++) o+='<option value="'+i+'"'+(i===1?' selected':'')+'>'+i+'×</option>';
+  return o;
+}
+function updateTotal(row){
+  const reps=parseFloat(row.querySelector('.rep').value)||1;
+  const dpr=parseFloat(row.querySelector('.distpr').value)||0;
+  row.querySelector('.tot').textContent=(reps*dpr)+'m';
+  recompute();
+}
 function exRow(item){
   const row=document.createElement('div'); row.className='exrow';
-  row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk"><span class="n">'+item.n+'</span><input type="number" class="dist" step="12.5" value="'+item.d+'"> m</div>'+(item.c?'<div class="obs">'+item.c+'</div>':'');
+  row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk"><span class="n">'+item.n+'</span><span class="tot small" style="font-weight:600">'+item.d+'m</span></div>'+
+    (item.c?'<div class="obs">'+item.c+'</div>':'')+
+    '<div class="detail hidden">'+
+      '<label class="small">Répétitions <select class="rep">'+repOptions()+'</select></label>'+
+      '<label class="small">Distance <input type="number" class="distpr" step="12.5" value="'+item.d+'" style="width:70px"> m</label>'+
+      '<label class="small">Récup <select class="rec"><option>0s</option><option selected>15s</option><option>30s</option><option>45s</option><option>1min</option></select></label>'+
+      '<input type="text" class="res" placeholder="Résultat obtenu (après réalisation)">'+
+    '</div>';
+  const chk=row.querySelector('.chk'), det=row.querySelector('.detail');
+  chk.addEventListener('change',()=>{ det.classList.toggle('hidden', !chk.checked); recompute(); });
+  row.querySelector('.rep').addEventListener('change',()=>updateTotal(row));
+  row.querySelector('.distpr').addEventListener('input',()=>updateTotal(row));
   return row;
 }
 function addRow(container){
@@ -448,9 +597,11 @@ function addRow(container){
   wrap.querySelector('button').onclick=()=>{
     const name=wrap.querySelector('.cname').value.trim(), dist=parseFloat(wrap.querySelector('.cdist').value)||50;
     if(!name) return;
-    const row=document.createElement('div'); row.className='exrow';
-    row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk" checked><input type="text" class="n2" value="'+name+'" style="flex:1;border:1px solid var(--border);border-radius:5px;padding:4px"><input type="number" class="dist" step="12.5" value="'+dist+'"> m<button class="rm">×</button></div>';
-    row.querySelector('.rm').onclick=()=>{row.remove(); recompute();};
+    const row=exRow({n:name,d:dist,c:''});
+    row.querySelector('.chk').checked=true; row.querySelector('.detail').classList.remove('hidden');
+    const rm=document.createElement('button'); rm.className='rm'; rm.textContent='×';
+    rm.onclick=()=>{row.remove(); recompute();};
+    row.querySelector('.exrow-main').appendChild(rm);
     wrap.parentElement.insertBefore(row, wrap);
     wrap.querySelector('.cname').value=''; wrap.querySelector('.cdist').value='';
     recompute();
@@ -458,73 +609,146 @@ function addRow(container){
   return wrap;
 }
 function buildPrep(){
-  const c=document.getElementById('prep');
+  const c=document.getElementById('prep'); c.innerHTML='';
   PREP.forEach(it=>c.appendChild(exRow(it)));
   c.appendChild(addRow(c));
 }
 function buildTransfo(){
-  const c=document.getElementById('transfo');
+  const c=document.getElementById('transfo'); c.innerHTML='';
   TRANSFO.forEach(g=>{
     const grp=document.createElement('div'); grp.className='grp';
-    grp.innerHTML='<strong>'+g.theme+'</strong><div class="obs">Ce que tu vas observer : '+g.obs+'.</div>';
-    g.ex.forEach(it=>grp.appendChild(exRow(it)));
-    grp.appendChild(addRow(grp));
+    const det=document.createElement('details');
+    det.innerHTML='<summary>'+(g.cible?'<div class="small" style="color:var(--muted)">'+g.cible+'</div>':'')+'<strong>'+g.theme+'</strong></summary><div class="obs">Objectif : '+g.obj+'.</div><div class="obs">Indicateurs à observer : '+g.ind+'.</div>';
+    g.ex.forEach(it=>det.appendChild(exRow(it)));
+    det.appendChild(addRow(det));
+    grp.appendChild(det);
     c.appendChild(grp);
   });
 }
 function buildValid(){
-  const c=document.getElementById('valid');
-  VALID.forEach(it=>c.appendChild(exRow(it)));
-  c.appendChild(addRow(c));
+  const c=document.getElementById('valid'); c.innerHTML='';
+  const sel=document.createElement('div');
+  sel.innerHTML='<label style="margin-right:16px"><input type="radio" name="validMode" value="demi"> ½ épreuve (2x25m)</label>'+
+                '<label><input type="radio" name="validMode" value="complete"> Épreuve complète (2x50m)</label>';
+  c.appendChild(sel);
+  sel.querySelectorAll('input').forEach(r=>{
+    r.checked=(r.value==='demi')===modeDemi;
+    r.addEventListener('change',()=>setMode(r.value==='demi'));
+  });
+  const modeTxt=modeDemi?"25m vite / 25m lent":"25m vite → 25m lent → 15s → 25m vite → 25m lent";
+  const dist=modeDemi?50:100;
+  const row=document.createElement('div'); row.className='exrow'; row.style.marginTop='10px';
+  row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk" checked disabled><span class="n">'+modeTxt+'</span><input type="number" class="distpr" step="12.5" value="'+dist+'" disabled style="display:none"></div>'+
+    '<div class="obs">Je vérifie si je peux reproduire ma performance malgré la fatigue et une récupération courte.</div>'+
+    '<div class="obs">Indicateurs à observer : Temps et CB des 4 segments, stabilité Vite 1/Vite 2.</div>'+
+    '<input type="text" class="res" placeholder="Résultat obtenu (après réalisation)" style="margin-top:6px">';
+  c.appendChild(row);
+}
+function exDist(r){
+  const reps=parseFloat(r.querySelector('.rep')?.value)||1;
+  const dpr=parseFloat(r.querySelector('.distpr')?.value)||0;
+  return reps*dpr;
 }
 function countChecked(container){
   let n=0,dist=0;
   container.querySelectorAll('.exrow').forEach(r=>{
     const chk=r.querySelector('.chk');
-    if(chk && chk.checked){ n++; dist+=parseInt(r.querySelector('.dist').value)||0; }
+    if(chk && chk.checked){ n++; dist+=exDist(r); }
   });
   return {n,dist};
 }
+function groupsChecked(){
+  let groups=0,n=0,dist=0;
+  document.querySelectorAll('#transfo .grp').forEach(grp=>{
+    let any=false;
+    grp.querySelectorAll('.exrow .chk').forEach(chk=>{
+      if(chk.checked){ any=true; n++; dist+=exDist(chk.closest('.exrow')); }
+    });
+    if(any) groups++;
+  });
+  return {groups,n,dist};
+}
 function recompute(){
   const p=countChecked(document.getElementById('prep'));
-  const t=countChecked(document.getElementById('transfo'));
+  const t=groupsChecked();
   const v=countChecked(document.getElementById('valid'));
   const total=p.dist+t.dist+v.dist;
-  const okP=p.dist>=100, okT=t.n>=3, okV=v.n>=1, okD=total>=600;
+  const okP=p.dist>=100, okT=t.groups>=2, okV=v.n>=1, okD=total>=600;
   const tag=(ok,text)=>'<span class="tag '+(ok?'ok':'ko')+'">'+text+'</span>';
   document.getElementById('status').innerHTML=
-    tag(okP,'Échauffement : '+p.dist+'m / 100m min')+tag(okT,'Transformation : '+t.n+'/3')+tag(okV,'Validation : '+v.n+'/1')+tag(okD,'Distance : '+total+'m / 600m min');
+    tag(okP,'Échauffement : '+p.dist+'m / 100m min')+tag(okT,'Transformation : '+t.groups+'/2 blocs différents')+tag(okV,'Validation : '+v.n+'/1')+tag(okD,'Distance : '+total+'m / 600m min');
+  updateRaisons();
+  return {okP,okT,okV,okD,total};
 }
-document.addEventListener('change', e=>{ if(e.target.classList.contains('chk')||e.target.classList.contains('dist')) recompute(); });
-document.addEventListener('input', e=>{ if(e.target.classList.contains('dist')) recompute(); });
+function updateRaisons(){
+  const blocs=[], inds=[];
+  document.querySelectorAll('#transfo .grp').forEach((grp,i)=>{
+    if([...grp.querySelectorAll('.exrow .chk')].some(c=>c.checked)){ blocs.push(TRANSFO[i].theme); inds.push(TRANSFO[i].ind); }
+  });
+  document.getElementById('rBlocs').textContent=blocs.length?blocs.join(' • '):'—';
+  document.getElementById('rInd').textContent=inds.length?inds.join(' ; '):'—';
+}
+
 
 function collectSection(container){
   const out=[];
   container.querySelectorAll('.exrow').forEach(r=>{
     const chk=r.querySelector('.chk');
     if(chk && chk.checked){
-      const nameEl=r.querySelector('.n')||r.querySelector('.n2');
+      const nameEl=r.querySelector('.n');
       const obsEl=r.querySelector('.obs');
-      out.push({n:nameEl.value!==undefined?nameEl.value:nameEl.textContent, d:parseInt(r.querySelector('.dist').value)||0, c:obsEl?obsEl.textContent:''});
+      const rep=r.querySelector('.rep'), distpr=r.querySelector('.distpr'), rec=r.querySelector('.rec'), res=r.querySelector('.res');
+      out.push({n:nameEl.textContent, d:exDist(r), dpr:distpr?parseFloat(distpr.value)||0:0, c:obsEl?obsEl.textContent:'',
+        rep:rep?parseInt(rep.value):1, rec:rec?rec.value:'', res:res?res.value:''});
     }
   });
   return out;
 }
-function printPlan(){
+function onVoirFiche(mode){
+  const r=recompute();
+  const probs=[];
+  if(!r.okP) probs.push('le bloc préparation (100m minimum)');
+  if(!r.okT) probs.push('au moins 2 blocs de transformation différents');
+  if(!r.okV) probs.push('le bloc de validation');
+  if(!r.okD) probs.push('la distance totale (600m minimum)');
+  const warn=document.getElementById('planWarn');
+  if(probs.length){ warn.textContent='Il manque : '+probs.join(', ')+'.'; warn.classList.remove('hidden'); return; }
+  warn.classList.add('hidden');
+  printPlan(mode);
+}
+function printPlan(mode){
+  const bilan=mode==='bilan';
   const nom=document.getElementById('eleveNom2').value||'Élève';
-  const diag='<p>Diagnostic : '+(document.getElementById('diag').value||'—')+'</p>';
   const prep=collectSection(document.getElementById('prep'));
   const transfo=collectSection(document.getElementById('transfo'));
   const valid=collectSection(document.getElementById('valid'));
-  let total=0, h=diag;
+  let total=0, h='';
+  h+='<p><strong>Problème :</strong> '+(document.getElementById('diag').value||'—')+'</p>';
+  h+='<p><strong>Objectif de la séance :</strong> '+(document.getElementById('objSeance').value||'—')+'</p>';
   const section=(title,list)=>{
     let s='<h3>'+title+'</h3><ul>';
-    list.forEach(it=>{ s+='<li><strong>'+it.n+'</strong> — '+it.d+'m'+(it.c?'<br><span style="color:#5C7089;font-size:13px">'+it.c+'</span>':'')+'</li>'; total+=it.d; });
+    list.forEach(it=>{
+      const distTxt = it.rep>1 ? it.rep+'×'+it.dpr+'m (total '+it.d+'m)' : it.d+'m';
+      s+='<li><strong>'+it.n+'</strong> — '+distTxt+(it.rec?' — récup '+it.rec:'')+
+         (it.c?'<br><span style="color:#5C7089;font-size:13px">'+it.c+'</span>':'')+
+         (bilan&&it.res?'<br><span style="font-size:13px">Résultat : '+it.res+'</span>':'')+'</li>';
+      total+=it.d;
+    });
     return s+'</ul>';
   };
   h+=section('Préparation',prep)+section('Transformation',transfo)+section('Validation',valid);
   h+='<p><strong>Distance totale : '+total+'m</strong></p>';
-  openSheet('sheet2',"Ma séance d'entraînement",nom,h);
+  if(bilan){
+    h+='<h3>Les raisons de mes choix</h3>';
+    h+='<p>Mes difficultés : '+(document.getElementById('r1').value||'—')+'</p>';
+    h+='<p>Mon/mes objectif(s) : '+(document.getElementById('r2').value||'—')+'</p>';
+    h+='<p>Blocs choisis : '+(document.getElementById('rBlocs').textContent)+'</p>';
+    h+='<p>Pourquoi ces blocs : '+(document.getElementById('r3').value||'—')+'</p>';
+    h+='<p>Indicateurs observés : '+(document.getElementById('rInd').textContent)+'</p>';
+    h+='<p>Résultat : '+(document.getElementById('r4').value||'—')+'</p>';
+    h+='<p>Ce que je modifie la prochaine fois : '+(document.getElementById('r5').value||'—')+'</p>';
+  }
+  openSheet('sheet2', bilan?"Ma fiche bilan":"Ma fiche d'entraînement", nom, h);
 }
 
 buildPrep(); buildTransfo(); buildValid(); recompute();
