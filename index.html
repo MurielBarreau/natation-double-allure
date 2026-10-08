@@ -63,6 +63,17 @@ input[type=number],input[type=text]{border:1px solid var(--border);border-radius
 .detail{margin:6px 0 10px 26px;padding:8px 10px;background:var(--bg);border-radius:6px}
 .detail label{margin-right:10px}
 .detail input[type=text]{width:100%;margin-top:6px}
+.planRow{display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--border)}
+.planRow:first-child{border-top:none}
+.pn{font-weight:700;min-width:24px}
+.pb{flex:1;font-size:14px;min-width:0}
+.pbtn{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.pbtn button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:6px;padding:8px 14px;font-size:15px;cursor:pointer}
+.pbtn button:disabled{opacity:.3;cursor:not-allowed}
+.plink{border:none;background:none;color:var(--primary2);font-size:12.5px;text-decoration:underline;cursor:pointer;padding:2px 0}
+@media (prefers-color-scheme: dark){ .plink{color:var(--accent)} }
+.cpHead{font-weight:700;margin:14px 0 4px;color:var(--primary2)}
+@media (prefers-color-scheme: dark){ .cpHead{color:var(--accent)} }
 details summary{cursor:pointer;padding:4px 0}
 details[open] summary{margin-bottom:6px}
 .rm{border:none;background:none;color:var(--warn);font-size:16px;cursor:pointer;padding:0 4px}
@@ -165,22 +176,25 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
 <!-- TAB 2 -->
 <div id="tab2" class="hidden">
   <div class="card">
+    <h2>MA DÉMARCHE AVANT, PENDANT ET APRÈS LA SÉANCE DE NATATION</h2>
+    <p class="small" style="margin:10px 0 2px"><strong>AVANT MA SÉANCE D'ENTRAÎNEMENT</strong></p>
+    <p style="margin:2px 0">1. Je repère un problème prioritaire constaté à la suite de l'épreuve de la « double allure ».</p>
+    <p style="margin:2px 0">2. Je choisis sur l'appli, le ou les blocs (un prioritaire, un secondaire) qui correspondent à mon problème des exercices et des quantités de travail.</p>
+    <p style="margin:2px 0">3. J'envoie mon plan au professeur et je l'imprime.</p>
+    <p class="small" style="margin:10px 0 2px"><strong>PENDANT LA SÉANCE</strong></p>
+    <p style="margin:2px 0">4. Je réalise les exercices de mon plan d'entraînement que je combine au mieux pour moi.</p>
+    <p class="small" style="margin:10px 0 2px"><strong>FIN DE SÉANCE</strong></p>
+    <p style="margin:2px 0">5. Je mesure les effets de mon travail.</p>
+    <p class="small" style="margin:10px 0 2px"><strong>PERSPECTIVES SÉANCE SUIVANTE</strong></p>
+    <p style="margin:2px 0">6. Je garde le bloc choisi s'il m'aide à progresser ; sinon, je choisis un autre problème à résoudre dans l'appli.</p>
+  </div>
+
+  <div class="card">
     <h2>Mon diagnostic</h2>
-    <p class="small">Ce que mes résultats montrent (coché automatiquement depuis l'onglet Performance, modifiable) :</p>
-    <label class="small" style="display:block"><input type="checkbox" id="dg1"> Mes deux allures sont trop proches.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg2"> Quand j'accélère, ma nage se dégrade.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg3"> Je fais trop de coups de bras pour aller vite.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg4"> Ma respiration perturbe ma nage.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg5"> Je n'arrive pas suffisamment à récupérer pendant le lent.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg6"> Je perds de la vitesse à la reprise.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg7"> Mon deuxième sprint est moins bon que le premier.</label>
-    <label class="small" style="display:block"><input type="checkbox" id="dg8"> Autre</label>
-    <input type="text" id="dgAutre" placeholder="Préciser…" style="margin:4px 0 10px">
+    <p class="small">Ce que mes résultats montrent (coché automatiquement depuis l'onglet Performance quand c'est possible, modifiable) :</p>
+    <div id="diagList"></div>
 
-    <label class="small" style="display:block">Mon problème prioritaire</label>
-    <textarea id="diag" rows="2" placeholder="Le problème que je veux résoudre aujourd'hui…"></textarea>
-
-    <label class="small" style="margin-top:10px;display:block">Mon objectif pour cette séance</label>
+    <label class="small" style="margin-top:12px;display:block">Mon objectif pour cette séance</label>
     <textarea id="objSeance" rows="2" placeholder="Se propose automatiquement quand tu ouvres un bloc — tu peux le modifier"></textarea>
 
     <p class="small" style="margin-top:10px">Mon indicateur de réussite (1 ou 2 maximum) :</p>
@@ -191,17 +205,10 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
     <label class="small"><input type="checkbox" class="indRe"> Ressenti</label>
     <label class="small" style="margin-top:6px;display:block">Je saurai que j'ai progressé si…</label>
     <textarea id="jeSaurai" rows="2"></textarea>
-
-    <label class="small" style="margin-top:10px;display:block">Pourquoi ces blocs ?</label>
-    <textarea id="r3" rows="2"></textarea>
-
-    <p class="small" style="margin-top:10px"><strong>Comment saurai-je que j'ai progressé ?</strong><br>
-    1. Je repère mon problème.<br>2. Je choisis le bloc qui correspond à mon problème.<br>3. Je réalise les exercices.<br>
-    4. Je ressens et je mesure les effets.<br>5. Je garde le bloc s'il m'aide à progresser ; sinon, j'en choisis un autre.</p>
   </div>
 
   <div class="card">
-    <h2>Contraintes</h2>
+    <h2>Exigences de construction du plan d'entraînement</h2>
     <div class="status" id="status"></div>
     <p id="planWarn" class="hidden" style="color:var(--warn);font-weight:600;margin-top:8px"></p>
   </div>
@@ -213,15 +220,19 @@ textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:8px
   </div>
 
   <div class="card">
-    <h2>Bloc de transformation <span class="small">(2 blocs différents minimum, au choix)</span></h2>
+    <h2>Bloc de transformation <span class="small">(2 déclinaisons différentes minimum, au choix)</span></h2>
     <div id="transfo"></div>
   </div>
 
   <div class="card">
     <h2>Bloc de validation <span class="small">(obligatoire)</span></h2>
     <div id="valid"></div>
-    <label class="small" style="margin-top:10px;display:block">Mon critère de réussite</label>
-    <textarea id="critereReussite" rows="2" placeholder="Ex. je retrouve un écart de temps lent/vite d'au moins 3s"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>Mon plan d'entraînement</h2>
+    <p class="small">Voici l'ordre de ta séance. La préparation 🔒 reste en premier et la validation 🔒 en dernier. Déplace tes exercices de transformation avec ▲ ▼, et utilise « Refaire cet exercice » pour le refaire plus tard dans la séance, après un autre exercice.</p>
+    <div id="planList"></div>
   </div>
 
   <div class="card">
@@ -505,10 +516,9 @@ function majDerives(){
     sVV.innerHTML=msg+(bloc?'<br>Problème à explorer : « '+bloc+' » — bloc conseillé : '+bloc:'');
   } else sVV.innerHTML='';
   window.diagAuto={
-    dg1:(dt!==null&&dt<3)||(df!==null&&df<10),
-    dg2:(dt!==null&&dcb!==null&&dt>6&&dcb>2)||(dcb!==null&&dcb<-2),
-    dg3:dcb!==null&&dcb>2,
-    dg7:dt2!==null&&dt2>3
+    dgA1:dcb!==null&&(dcb>2||dcb<-2),
+    dgB3:(dt!==null&&dt<3)||(df!==null&&df<10),
+    dgC1:dt2!==null&&dt2>3
   };
   applyDiagAuto();
 }
@@ -624,7 +634,7 @@ const PREP=[
  {n:"Crawl rattrapé",d:50,c:"Rattraper la main par devant, nager grand, inspiration quand le pouce touche la cuisse"},
  {n:"Crawl accélération progressive",d:50,c:"Augmenter la vitesse progressivement par 25m"},
 ];
-const CP_LABELS={1:"CP1 — Être efficace",2:"CP2 — Ventiler, récupérer et différencier les allures",3:"CP3 — Gérer ses ressources et enchaîner les segments"};
+const CP_LABELS={1:"CP1 — Être efficace",2:"CP2 — Ventiler et différencier les allures pour récupérer",3:"CP3 — Gérer ses ressources et enchaîner les segments"};
 const TRANSFO=[
  {cp:1, decl:"CP1A", theme:"Je fais beaucoup de coups de bras pour aller vite / Quand j'accélère, ma nage se dégrade",
   cible:"Écart temps lent/vite > 6s avec CB hors cible (> +2 ou < -2)",
@@ -685,14 +695,13 @@ function updateTotal(row){
   recompute();
 }
 function exRow(item){
-  const row=document.createElement('div'); row.className='exrow';
-  row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk"><span class="n">'+item.n+'</span><span class="tot small" style="font-weight:600">'+item.d+'m</span></div>'+
+  const row=document.createElement('div'); row.className='exrow'; row.dataset.uid='r'+(++uidC);
+  row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk"><span class="n">'+esc(item.n)+'</span><span class="tot small" style="font-weight:600">'+item.d+'m</span></div>'+
     (item.c?'<div class="obs">'+item.c+'</div>':'')+
     '<div class="detail hidden">'+
       '<label class="small">Répétitions <select class="rep">'+repOptions()+'</select></label>'+
       '<label class="small">Distance <input type="number" class="distpr" step="12.5" value="'+item.d+'" style="width:70px"> m</label>'+
       '<label class="small">Récup <select class="rec"><option>0s</option><option selected>15s</option><option>30s</option><option>45s</option><option>1min</option></select></label>'+
-      '<input type="text" class="res" placeholder="Résultat obtenu (après réalisation)">'+
     '</div>';
   const chk=row.querySelector('.chk'), det=row.querySelector('.detail');
   chk.addEventListener('change',()=>{ det.classList.toggle('hidden', !chk.checked); recompute(); });
@@ -708,6 +717,7 @@ function addRow(container){
     if(!name) return;
     const row=exRow({n:name,d:dist,c:''});
     row.querySelector('.chk').checked=true; row.querySelector('.detail').classList.remove('hidden');
+    const gd=wrap.parentElement.dataset.decl; if(gd) row.dataset.decl=gd;
     const rm=document.createElement('button'); rm.className='rm'; rm.textContent='×';
     rm.onclick=()=>{row.remove(); recompute();};
     row.querySelector('.exrow-main').appendChild(rm);
@@ -716,6 +726,31 @@ function addRow(container){
     recompute();
   };
   return wrap;
+}
+const DIAG=[
+ {t:"1 - Être efficace", items:[
+  {id:'dgA1', q:["Je fais beaucoup de coups de bras pour aller vite","Quand j'accélère, ma nage se dégrade"]},
+  {id:'dgA2', q:["J'ai une bonne amplitude mais mon chrono n'est pas bon"]},
+  {id:'dgA3', q:["Je perds ma vitesse à la poussée ou à la reprise de nage"]}]},
+ {t:"2 - Ventiler et différencier les allures pour récupérer", items:[
+  {id:'dgB1', q:["Ma respiration perturbe ma nage"]},
+  {id:'dgB2', q:["Je suis vite essoufflé et j'ai du mal à récupérer pendant le lent"]},
+  {id:'dgB3', q:["Mes deux allures sont trop proches"]},
+  {id:'dgB4', q:["Je n'arrive pas à nager lentement sans perdre ma nage"]}]},
+ {t:"3 - Gérer ses ressources et enchaîner les segments", items:[
+  {id:'dgC1', q:["Mon deuxième sprint est moins bon que le premier"]},
+  {id:'dgC2', q:["Je pars trop vite et je n'ai plus assez de ressources pour le deuxième sprint"]},
+  {id:'dgC3', q:["J'ai du mal à passer du lent au vite"]}]}
+];
+function buildDiag(){
+  const c=document.getElementById('diagList'); let h='';
+  DIAG.forEach(g=>{
+    h+='<div class="cpHead">'+g.t+'</div>';
+    g.items.forEach(it=>{
+      h+='<label class="small" style="display:block;margin:3px 0"><input type="checkbox" id="'+it.id+'" data-t="'+it.q.join(' / ').replace(/"/g,'&quot;')+'"> '+it.q.map(x=>'« '+x+' »').join('<br>')+'</label>';
+    });
+  });
+  c.innerHTML=h;
 }
 function buildPrep(){
   const c=document.getElementById('prep'); c.innerHTML='';
@@ -739,7 +774,8 @@ function buildTransfo(){
     det.innerHTML='<summary>'+(g.cible?'<div class="small" style="color:var(--muted)">'+g.cible+'</div>':'')+
       '<div class="small" style="color:var(--accent);font-weight:600">'+g.decl+'</div><strong>'+g.theme+'</strong></summary>'+
       '<div class="obs">Objectif : '+g.obj+'.</div><div class="obs">Indicateurs à observer : '+g.ind+'.</div>';
-    g.ex.forEach(it=>det.appendChild(exRow(it)));
+    det.dataset.decl=g.decl;
+    g.ex.forEach(it=>{ const r=exRow(it); r.dataset.decl=g.decl; det.appendChild(r); });
     det.appendChild(addRow(det));
     det.addEventListener('toggle',()=>{
       if(det.open){
@@ -767,12 +803,98 @@ function buildValid(){
   });
   const modeTxt=modeDemi?"25m vite / 25m lent":"25m vite → 25m lent → 15s → 25m vite → 25m lent";
   const dist=modeDemi?50:100;
-  const row=document.createElement('div'); row.className='exrow'; row.style.marginTop='10px';
+  const row=document.createElement('div'); row.className='exrow'; row.style.marginTop='10px'; row.dataset.uid='v';
   row.innerHTML='<div class="exrow-main"><input type="checkbox" class="chk" checked disabled><span class="n">'+modeTxt+'</span><input type="number" class="distpr" step="12.5" value="'+dist+'" disabled style="display:none"></div>'+
     '<div class="obs">Je vérifie si je peux reproduire ma performance malgré la fatigue et une récupération courte.</div>'+
-    '<div class="obs">Indicateurs à observer : Temps et CB des 4 segments, stabilité Vite 1/Vite 2.</div>'+
-    '<input type="text" class="res" placeholder="Résultat obtenu (après réalisation)" style="margin-top:6px">';
+    '<div class="obs">Indicateurs à observer : Temps et CB des 4 segments, stabilité Vite 1/Vite 2.</div>';
   c.appendChild(row);
+}
+/* ---------- Mon plan d'entraînement : ordre des exercices ---------- */
+let uidC=0, planT=[], planSig='';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function ordinal(k){ return k===1?'1er':k+'e'; }
+function rowName(r){ return r.querySelector('.n').textContent; }
+function rowParams(row){
+  const repEl=row.querySelector('.rep'), dprEl=row.querySelector('.distpr'), recEl=row.querySelector('.rec');
+  return {rep:repEl?parseInt(repEl.value)||1:1, dpr:dprEl?parseFloat(dprEl.value)||0:0, rec:recEl?recEl.value:''};
+}
+function entryRow(e){ return e.copy?e.src:e.row; }
+function entryParams(e){ return e.copy?{rep:e.rep,dpr:e.dpr,rec:e.rec}:rowParams(e.row); }
+function paramsText(p){ return (p.rep>1?p.rep+'×'+p.dpr+'m (total '+(p.rep*p.dpr)+'m)':(p.rep*p.dpr)+'m')+(p.rec?' — récup '+p.rec:''); }
+function checkedRows(sel){ return [...document.querySelectorAll(sel+' .exrow')].filter(r=>r.querySelector('.chk').checked); }
+function recOptionsSel(v){ return ['0s','15s','30s','45s','1min'].map(o=>'<option'+(o===v?' selected':'')+'>'+o+'</option>').join(''); }
+function repOptionsSel(v){ let o=''; for(let i=1;i<=8;i++) o+='<option value="'+i+'"'+(i===v?' selected':'')+'>'+i+'×</option>'; return o; }
+function passInfo(){
+  const tot=new Map(), cur=new Map(), res={};
+  planT.forEach(e=>{ const s=entryRow(e); tot.set(s,(tot.get(s)||0)+1); });
+  planT.forEach(e=>{ const s=entryRow(e); const k=(cur.get(s)||0)+1; cur.set(s,k); res[e.uid]=tot.get(s)>1?ordinal(k)+' passage':''; });
+  return res;
+}
+function syncPlan(){
+  const rows=checkedRows('#transfo');
+  planT=planT.filter(e=>rows.includes(entryRow(e)));
+  rows.forEach(r=>{ if(!planT.some(e=>!e.copy&&e.row===r)) planT.push({uid:'t'+(++uidC),row:r,copy:false}); });
+  const sig=checkedRows('#prep').map(r=>r.dataset.uid).join(',')+'|'+planT.map(e=>e.uid).join(',')+'|'+(modeDemi?'d':'c');
+  if(sig!==planSig){ planSig=sig; renderPlan(); } else updatePlanSummaries();
+}
+function updatePlanSummaries(){
+  document.querySelectorAll('#planList .psum').forEach(el=>{
+    const row=document.querySelector('.exrow[data-uid="'+el.dataset.ruid+'"]');
+    if(row) el.textContent=paramsText(rowParams(row));
+  });
+}
+function renderPlan(){
+  const el=document.getElementById('planList'); if(!el) return;
+  const pass=passInfo(); let n=0, h='';
+  const fixed=(row,tag)=>{ n++; return '<div class="planRow"><span class="pn">'+n+'.</span><div class="pb">🔒 <strong>'+esc(rowName(row))+'</strong> <span class="small">('+tag+')</span>'+
+    '<div class="small psum" data-ruid="'+row.dataset.uid+'">'+paramsText(rowParams(row))+'</div></div></div>'; };
+  checkedRows('#prep').forEach(r=>{ h+=fixed(r,'préparation'); });
+  planT.forEach((e,i)=>{
+    n++;
+    const src=entryRow(e), decl=src.dataset.decl||'';
+    h+='<div class="planRow"><span class="pn">'+n+'.</span><div class="pb"><strong>'+esc(rowName(src))+'</strong>'+
+      (pass[e.uid]?' <span class="small" style="color:var(--accent);font-weight:600">'+pass[e.uid]+'</span>':'')+
+      (decl?' <span class="small">('+decl+')</span>':'');
+    if(e.copy){
+      h+='<div class="small" style="margin-top:4px">Répétitions <select onchange="editCopy(\''+e.uid+'\',\'rep\',this.value)">'+repOptionsSel(e.rep)+'</select> '+
+        'Distance <input type="number" step="12.5" value="'+e.dpr+'" style="width:70px" oninput="editCopy(\''+e.uid+'\',\'dpr\',this.value)"> m '+
+        'Récup <select onchange="editCopy(\''+e.uid+'\',\'rec\',this.value)">'+recOptionsSel(e.rec)+'</select> — <span id="ptot-'+e.uid+'">'+(e.rep*e.dpr)+'m</span></div>';
+    } else {
+      h+='<div class="small psum" data-ruid="'+src.dataset.uid+'">'+paramsText(rowParams(src))+'</div>';
+    }
+    h+='<div style="margin-top:4px"><button class="plink" onclick="dupPlan(\''+e.uid+'\')">+ Refaire cet exercice</button>'+
+      (e.copy?' <button class="plink" onclick="removePlan(\''+e.uid+'\')">Retirer ce passage</button>':'')+'</div></div>'+
+      '<div class="pbtn"><button '+(i===0?'disabled':'')+' onclick="movePlan(\''+e.uid+'\',-1)" aria-label="Monter">▲</button>'+
+      '<button '+(i===planT.length-1?'disabled':'')+' onclick="movePlan(\''+e.uid+'\',1)" aria-label="Descendre">▼</button></div></div>';
+  });
+  checkedRows('#valid').forEach(r=>{ h+=fixed(r,'validation'); });
+  if(!n) h='<p class="small">Aucun exercice coché pour l\'instant : coche des exercices dans les blocs ci-dessus.</p>';
+  el.innerHTML=h;
+}
+function movePlan(uid,dir){
+  const i=planT.findIndex(e=>e.uid===uid), j=i+dir;
+  if(i<0||j<0||j>=planT.length) return;
+  [planT[i],planT[j]]=[planT[j],planT[i]]; planSig=''; syncPlan();
+}
+function dupPlan(uid){
+  const e=planT.find(x=>x.uid===uid); if(!e) return;
+  const p=entryParams(e);
+  planT.push({uid:'t'+(++uidC),src:entryRow(e),copy:true,rep:p.rep,dpr:p.dpr,rec:p.rec});
+  planSig=''; recompute();
+}
+function removePlan(uid){ planT=planT.filter(x=>x.uid!==uid); planSig=''; recompute(); }
+function editCopy(uid,f,v){
+  const e=planT.find(x=>x.uid===uid); if(!e) return;
+  if(f==='rep') e.rep=parseInt(v)||1; else if(f==='dpr') e.dpr=parseFloat(v)||0; else e.rec=v;
+  const t=document.getElementById('ptot-'+uid); if(t) t.textContent=(e.rep*e.dpr)+'m';
+  recompute();
+}
+function collectPlanT(){
+  const pass=passInfo();
+  return planT.map(e=>{
+    const src=entryRow(e), p=entryParams(e), obs=src.querySelector('.obs');
+    return {n:rowName(src), c:obs?obs.textContent:'', rep:p.rep, dpr:p.dpr, rec:p.rec, d:p.rep*p.dpr, decl:src.dataset.decl||'', pas:pass[e.uid]};
+  });
 }
 function exDist(r){
   const reps=parseFloat(r.querySelector('.rep')?.value)||1;
@@ -796,9 +918,11 @@ function groupsChecked(){
     });
     if(any) decls.add(TRANSFO[i].decl);
   });
+  planT.forEach(e=>{ if(e.copy) dist+=e.rep*e.dpr; });
   return {groups:decls.size,n,dist};
 }
 function recompute(){
+  syncPlan();
   const p=countChecked(document.getElementById('prep'));
   const t=groupsChecked();
   const v=countChecked(document.getElementById('valid'));
@@ -851,37 +975,31 @@ function printPlan(mode){
   const bilan=mode==='bilan';
   const nom=document.getElementById(bilan?'eleveNom3':'eleveNom2').value||'Élève';
   const prep=collectSection(document.getElementById('prep'));
-  const transfo=collectSection(document.getElementById('transfo'));
+  const transfo=collectPlanT();
   const valid=collectSection(document.getElementById('valid'));
   let total=0, h='';
   if(!bilan){
-    const dgLabels={dg1:"Mes deux allures sont trop proches",dg2:"Quand j'accélère, ma nage se dégrade",dg3:"Je fais trop de coups de bras pour aller vite",
-      dg4:"Ma respiration perturbe ma nage",dg5:"Je n'arrive pas suffisamment à récupérer pendant le lent",dg6:"Je perds de la vitesse à la reprise",dg7:"Mon deuxième sprint est moins bon que le premier"};
-    const dgChecked=Object.keys(dgLabels).filter(id=>document.getElementById(id).checked).map(id=>dgLabels[id]);
-    if(document.getElementById('dg8').checked && document.getElementById('dgAutre').value) dgChecked.push(document.getElementById('dgAutre').value);
+    const dgChecked=[...document.querySelectorAll('#diagList input:checked')].map(c=>c.dataset.t);
     h+='<p><strong>Mon diagnostic :</strong> '+(dgChecked.length?dgChecked.join(' ; '):'—')+'</p>';
-    h+='<p><strong>Problème prioritaire :</strong> '+(document.getElementById('diag').value||'—')+'</p>';
     h+='<p><strong>Objectif de la séance :</strong> '+(document.getElementById('objSeance').value||'—')+'</p>';
     const indRe=[...document.querySelectorAll('.indRe:checked')].map(c=>c.parentElement.textContent.trim());
     h+='<p><strong>Mon indicateur de réussite :</strong> '+(indRe.length?indRe.join(', '):'—')+'</p>';
     h+='<p>Je saurai que j\'ai progressé si : '+(document.getElementById('jeSaurai').value||'—')+'</p>';
-    h+='<p>Pourquoi ces blocs : '+(document.getElementById('r3').value||'—')+'</p>';
-  }
-  const section=(title,list)=>{
-    let s='<h3>'+title+'</h3><ul>';
-    list.forEach(it=>{
-      const distTxt = it.rep>1 ? it.rep+'×'+it.dpr+'m (total '+it.d+'m)' : it.d+'m';
-      s+='<li><strong>'+it.n+'</strong> — '+distTxt+(it.rec?' — récup '+it.rec:'')+
-         (it.c?'<br><span style="color:#5C7089;font-size:13px">'+it.c+'</span>':'')+
-         (bilan&&it.res?'<br><span style="font-size:13px">Résultat : '+it.res+'</span>':'')+'</li>';
-      total+=it.d;
-    });
-    return s+'</ul>';
-  };
-  h+=section('Préparation',prep)+section('Transformation',transfo)+section('Validation',valid);
-  if(!bilan) h+='<p>Mon critère de réussite : '+(document.getElementById('critereReussite').value||'—')+'</p>';
-  h+='<p><strong>Distance totale : '+total+'m</strong></p>';
-  if(bilan){
+    let num=1;
+    const section=(title,list)=>{
+      let s='<h3>'+title+'</h3><ol start="'+num+'">';
+      list.forEach(it=>{
+        const distTxt = it.rep>1 ? it.rep+'×'+it.dpr+'m (total '+it.d+'m)' : it.d+'m';
+        s+='<li><strong>'+esc(it.n)+'</strong>'+(it.decl?' <span style="font-size:12px">('+it.decl+')</span>':'')+(it.pas?' — '+it.pas:'')+
+           ' — '+distTxt+(it.rec?' — récup '+it.rec:'')+
+           (it.c?'<br><span style="color:#5C7089;font-size:13px">'+esc(it.c)+'</span>':'')+'</li>';
+        total+=it.d; num++;
+      });
+      return s+'</ol>';
+    };
+    h+=section('Préparation',prep)+section('Transformation',transfo)+section('Validation',valid);
+    h+='<p><strong>Distance totale : '+total+'m</strong></p>';
+  } else {
     h+='<h3>Mon bilan</h3>';
     const atteintEl=document.querySelector('input[name=atteint]:checked');
     const atteintTxt={oui:'🟢 Oui',partiel:'🟠 Partiellement',non:'🔴 Non'};
@@ -907,7 +1025,7 @@ async function partagerPlan(mode){
   if(navigator.share){ try{ await navigator.share({title:bilan?'Fiche bilan':"Fiche d'entraînement",text:txt}); }catch(e){} }
 }
 
-buildPrep(); buildTransfo(); buildValid(); recompute();
+buildDiag(); buildPrep(); buildTransfo(); buildValid(); recompute();
 </script>
 </body>
 </html>
