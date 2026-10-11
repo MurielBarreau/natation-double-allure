@@ -5,7 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#145DA0">
-<meta name="author" content="Muriel Barreau, lycée Théas">
+<!--
+  CA1 - Natation Double Allure
+  © Muriel Barreau, CEDREPS, 2026
+  Licence Creative Commons Attribution - Pas d'Utilisation Commerciale 4.0 International (CC BY-NC 4.0)
+  https://creativecommons.org/licenses/by-nc/4.0/deed.fr
+  Cette application ne collecte aucune donnée : tout reste sur l'appareil de l'utilisateur.
+-->
+<meta name="author" content="Muriel Barreau, CEDREPS">
+<meta name="copyright" content="© Muriel Barreau, CEDREPS, 2026 - CC BY-NC 4.0">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr">
 <meta name="robots" content="noindex, nofollow, noarchive, noai, noimageai">
 <title>CA1 - Natation Double Allure</title>
 <style>
@@ -41,7 +50,7 @@ header{background:linear-gradient(135deg,var(--blue) 0%,var(--turq) 100%);color:
 nav{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:720px;z-index:20;display:flex;gap:2px;background:#fff;
   border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(20,93,160,.16);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
 nav button{flex:1;border:none;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;
-  font-size:11.5px;font-weight:700;padding:7px 2px;cursor:pointer;border-radius:18px;line-height:1.15;transition:background .2s,color .2s}
+  font-size:11px;font-weight:700;padding:7px 1px;cursor:pointer;border-radius:18px;line-height:1.15;transition:background .2s,color .2s}
 nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--blue);background:var(--turq-bg)}
 
@@ -176,12 +185,40 @@ summary strong{font-size:16px;font-weight:700;color:var(--blue)}
 .sheet ul,.sheet ol{padding-left:22px}
 .sheetFoot{color:var(--muted);font-size:13px;margin-top:16px;border-top:1px solid var(--border);padding-top:8px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.t1::after{width:76px}}
+.profChip{display:inline-block;background:rgba(255,255,255,.22);color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:3px 12px;font-size:12.5px;font-weight:700;margin-top:6px;cursor:pointer}
+footer a{color:var(--blue);font-weight:700}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pill{border:1.5px solid var(--border);background:#fff;color:var(--ink);border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.pill.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.row2{display:flex;gap:8px;align-items:center;margin-top:8px}
+.row2 input{flex:1}
+.btn-s{border:none;background:var(--turq);color:var(--ink);font-weight:800;border-radius:999px;padding:10px 18px;cursor:pointer;white-space:nowrap;font-size:14px}
+.btn-s.warn{background:var(--coral);color:#3A1500}
+.seg{display:flex;gap:6px;background:var(--turq-bg);border-radius:999px;padding:4px;margin:8px 0 12px}
+.seg button{flex:1;border:none;background:none;border-radius:999px;padding:9px 4px;font-weight:700;font-size:13px;color:var(--muted);cursor:pointer}
+.seg button.on{background:#fff;color:var(--blue);box-shadow:0 2px 8px rgba(20,93,160,.15)}
+.ent{border:1.5px solid var(--border);border-radius:18px;padding:12px 14px;margin:10px 0;background:#FBFEFF}
+.entHead{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.entBtns{margin-top:6px}
+.mini{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;margin:3px 4px 0 0}
+.chartCard{margin:14px 0}
+.chartCard h3{margin:0 0 4px}
+.chartLine{stroke-dasharray:1;animation:draw 1.2s ease}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.saveArea{margin-bottom:6px}
+.toast{position:fixed;left:50%;bottom:112px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:50;font-weight:700;font-size:14px;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.t1::after{width:76px}}
 @media print{
-  body *{display:none !important}
-  body{background:#fff}
-  .sheet.show, .sheet.show *{display:revert !important}
-  .sheet.show{box-shadow:none;border:0;padding:0;margin:0;max-width:none}
-  .sheet.show .no-print{display:none !important}
+  *,*::before,*::after{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;padding-bottom:0}
+  nav,.waves,.profChip,.toast{display:none !important}
+  .card{box-shadow:none;break-inside:avoid}
+  .btnrow,.addrow,.pbtn,.plink,.printbtn,.row2{display:none !important}
+  html.has-sheet body *{display:none !important}
+  html.has-sheet .sheet.show, html.has-sheet .sheet.show *{display:revert !important}
+  html.has-sheet .sheet.show{box-shadow:none;border:0;padding:0;margin:0;max-width:none}
+  html.has-sheet .sheet.show .no-print{display:none !important}
 }
 </style>
 </head>
@@ -191,14 +228,16 @@ summary strong{font-size:16px;font-weight:700;color:var(--blue)}
   <svg class="waves w2" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true"><path fill="#EAF4FA" d="M0 20 C150 0 150 40 300 20 C450 0 450 40 600 20 C750 0 750 40 900 20 C1050 0 1050 40 1200 20 V40 H0 Z"/></svg>
   <div class="brandRow">
     <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="rgba(255,255,255,.22)"/><circle cx="31" cy="15" r="3.4" fill="#fff"/><path d="M9 24c3-3 6-3 9 0s6 3 9 0 6-3 9 0" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M9 32c3-3 6-3 9 0s6 3 9 0 6-3 9 0" fill="none" stroke="#7ED957" stroke-width="2.6" stroke-linecap="round"/></svg>
-    <div><p class="brand">CA1 - Natation Double Allure</p><p class="sub">Lycée Théas</p></div>
+    <div><p class="brand">CA1 - Natation Double Allure</p><p class="sub">Lycée Théas</p>
+      <button id="profChip" class="profChip" onclick="showTab(5)">Choisir un profil</button></div>
   </div>
 </header>
 <nav>
   <button id="tabBtn1" class="active" onclick="showTab(1)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="7"/><path d="M12 14V10M9.5 3h5M12 3v4"/></svg><span>Performance</span></button>
-  <button id="tabBtn2" onclick="showTab(2)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Plan d'entraînement</span></button>
+  <button id="tabBtn2" aria-label="Plan d'entraînement" onclick="showTab(2)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Plan</span></button>
   <button id="tabBtn3" onclick="showTab(3)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg><span>Épreuve</span></button>
   <button id="tabBtn4" onclick="showTab(4)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="17" rx="3"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Bilan</span></button>
+  <button id="tabBtn5" onclick="showTab(5)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"/><path d="M9 9h5M9 13h5"/></svg><span>Carnet</span></button>
 </nav>
 <main>
 
@@ -380,6 +419,35 @@ summary strong{font-size:16px;font-weight:700;color:var(--blue)}
   </div>
 </div>
 <!-- /TAB 4 -->
+<!-- TAB 5 : CARNET -->
+<div id="tab5" class="hidden">
+  <h1 class="t1">Carnet</h1>
+  <div class="card">
+    <h2>Mon profil</h2>
+    <p class="small">Un carnet par profil. Un prénom ou un pseudo suffit : tout reste sur ce téléphone, rien n'est envoyé.</p>
+    <div id="profList" class="pills"></div>
+    <div class="row2"><input type="text" id="newProf" maxlength="24" placeholder="Nouveau profil (prénom)"><button class="btn-s" onclick="addProfile()">Créer</button></div>
+    <div id="profDel" style="margin-top:8px"></div>
+  </div>
+  <div class="card"><h2>Mon évolution</h2><div id="evo"></div></div>
+  <div class="card">
+    <h2>Mes séances enregistrées</h2>
+    <div class="seg" id="seg"><button data-k="perf" class="on" onclick="setKind('perf')">Performances</button><button data-k="plan" onclick="setKind('plan')">Plans</button><button data-k="bilan" onclick="setKind('bilan')">Bilans</button></div>
+    <div id="entries"></div>
+  </div>
+  <div class="card">
+    <h2>Sauvegarde et impression</h2>
+    <div id="stNote"></div>
+    <button class="printbtn" onclick="exportCarnet()">Sauvegarder mon carnet</button>
+    <button class="printbtn sec" onclick="document.getElementById('fileIn').click()">Restaurer un carnet</button>
+    <input type="file" id="fileIn" class="hidden" accept=".json,application/json" onchange="importFile(this)">
+    <button class="printbtn sec" onclick="carnetPrint()">Imprimer mon carnet de progression</button>
+    <p class="small" id="bkMsg" style="margin-top:10px"></p>
+    <h3>À savoir</h3>
+    <p class="small">Ton carnet est enregistré uniquement dans le navigateur de ce téléphone. Il disparaît si tu vides le cache, changes de téléphone ou navigues en mode privé ; sur iPhone, ajoute l'application à l'écran d'accueil. Fais une sauvegarde de temps en temps. Les valeurs sont déclaratives : l'estimation AFL1 est indicative, la note officielle est celle de ton enseignant.</p>
+  </div>
+</div>
+<!-- /TAB 5 -->
 
 <!-- TAB 3 -->
 <div id="tab3" class="hidden">
@@ -402,7 +470,7 @@ summary strong{font-size:16px;font-weight:700;color:var(--blue)}
       <tr><th>Garçons</th><td id="rG_t"></td><td id="rG_cb"></td><td id="rG_tot"></td></tr>
       <tr><th>Filles</th><td id="rF_t"></td><td id="rF_cb"></td><td id="rF_tot"></td></tr>
     </table>
-    <p class="small" style="margin-top:10px">Hors barème : en dessous du seuil le plus bas = 0 point, au-dessus du seuil le plus haut = 6 points.</p>
+    <p class="small" style="margin-top:10px">Hors barème : en dessous du seuil le plus bas = 0 point, au-dessus du seuil le plus haut = 6 points.<br>Estimation indicative : la note officielle est celle de l'enseignant.</p>
     <p id="effTxt" style="font-weight:600;margin-top:12px"></p>
     <p id="freqTxt" style="font-weight:600;margin-top:6px"></p>
   </div>
@@ -471,7 +539,9 @@ summary strong{font-size:16px;font-weight:700;color:var(--blue)}
 <div id="sheet1" class="sheet"></div>
 <div id="sheet2" class="sheet"></div>
 <div id="sheet3" class="sheet"></div>
-<footer class="foot">© Muriel Barreau, lycée Théas</footer>
+<div id="sheet4" class="sheet"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<footer class="foot">© Muriel Barreau, CEDREPS, 2026 · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="license noopener">Licence CC BY-NC 4.0</a><br>Cette application ne collecte aucune donnée : tout reste sur votre appareil.</footer>
 
 <script>
 /* ---------- Navigation ---------- */
@@ -487,7 +557,9 @@ function setTrio(d){
 }
 function showTab(n){
   window.scrollTo({top:0,behavior:'smooth'});
-  [1,2,3,4].forEach(i=>{
+  document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show')); document.documentElement.classList.remove('has-sheet');
+  if(n===5) renderCarnet();
+  [1,2,3,4,5].forEach(i=>{
     document.getElementById('tab'+i).classList.toggle('hidden', n!==i);
     document.getElementById('tabBtn'+i).classList.toggle('active', n===i);
   });
@@ -653,16 +725,263 @@ document.addEventListener('change', e=>{
     if(checked.length>2) e.target.checked=false;
   }
 });
-function fichePage(corpsHTML){
-  return corpsHTML+'<p class="sheetFoot">© Muriel Barreau, lycée Théas</p><div class="no-print" style="margin-top:14px;display:flex;gap:8px">'+
-    '<button class="printbtn" onclick="window.print()">Imprimer / enregistrer en PDF</button>'+
-    '</div>';
+/* ---------- Carnet : historique local (aucune donnée envoyée) ---------- */
+const NS='cedreps.ca1-double-allure.v1.';
+let db={v:1,current:null,profiles:[]}, storageOk=true, carnetKind='perf', delProf=false, delEnt=null;
+const pendingRec={};
+function dbLoad(){
+  try{ const raw=localStorage.getItem(NS+'db'); if(raw){ const o=JSON.parse(raw); if(o&&o.v===1&&Array.isArray(o.profiles)) db=o; } }
+  catch(e){ storageOk=false; }
 }
-function openSheet(id, titre, nom, corpsHTML){
-  const el=document.getElementById(id);
-  el.innerHTML='<h2>'+titre+'</h2><p><strong>'+nom+'</strong> — '+new Date().toLocaleDateString('fr-FR')+' à '+new Date().toLocaleTimeString('fr-FR').slice(0,5)+'</p>'+fichePage(corpsHTML);
-  document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('show'));
-  el.classList.add('show');
+function dbSave(){
+  try{ localStorage.setItem(NS+'db',JSON.stringify(db)); return true; }
+  catch(e){ storageOk=false; return false; }
+}
+function uid2(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function curProf(){ return db.profiles.find(p=>p.id===db.current)||null; }
+function fmtTs(ts){ const d=new Date(ts); return d.toLocaleDateString('fr-FR')+' à '+d.toLocaleTimeString('fr-FR').slice(0,5); }
+function toast(msg){ const t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2800); }
+function sheetText(id){
+  const el=document.getElementById(id), hid=[...el.querySelectorAll('.no-print')];
+  hid.forEach(e=>e.style.display='none'); const t=el.innerText; hid.forEach(e=>e.style.display=''); return t.trim();
+}
+async function shareSheet(id,title){
+  const txt=title+'\n'+sheetText(id);
+  if(navigator.share){ try{ await navigator.share({title,text:txt}); }catch(e){} }
+  else if(navigator.clipboard){ try{ await navigator.clipboard.writeText(txt); toast('Texte copié'); }catch(e){} }
+}
+function cleanHTML(h){
+  const d=new DOMParser().parseFromString('<div>'+String(h)+'</div>','text/html');
+  d.querySelectorAll('script,style,iframe,object,embed,link,meta,form,input,button,img,video,audio,base,svg,textarea,select').forEach(n=>n.remove());
+  d.querySelectorAll('*').forEach(el=>{ [...el.attributes].forEach(a=>{
+    const ok=(a.name==='style'&&!/url\(|expression|@import/i.test(a.value))||a.name==='colspan';
+    if(!ok) el.removeAttribute(a.name); }); });
+  return d.body.firstChild?d.body.firstChild.innerHTML:'';
+}
+
+/* Profils */
+function updateProfChip(){ const c=document.getElementById('profChip'); const p=curProf(); if(c) c.textContent=p?'Carnet de '+p.name:'Choisir un profil'; }
+function createProfile(name){
+  name=String(name||'').trim().slice(0,24); if(!name){ toast('Écris un prénom ou un pseudo'); return null; }
+  let p=db.profiles.find(x=>x.name.toLowerCase()===name.toLowerCase());
+  if(!p){ p={id:uid2(),name,created:Date.now(),perf:[],plan:[],bilan:[]}; db.profiles.push(p); }
+  db.current=p.id; dbSave(); updateProfChip(); return p;
+}
+function addProfile(){ const i=document.getElementById('newProf'); if(createProfile(i.value)){ i.value=''; renderCarnet(); toast('Profil prêt'); } }
+function selectProfile(id){ db.current=id; delProf=false; delEnt=null; dbSave(); renderCarnet(); }
+function confirmDelProfile(){ db.profiles=db.profiles.filter(p=>p.id!==db.current); db.current=db.profiles.length?db.profiles[0].id:null; delProf=false; dbSave(); renderCarnet(); toast('Profil supprimé'); }
+
+/* Enregistrement depuis une fiche */
+function renderSaveArea(sid){
+  const box=document.querySelector('#'+sid+' .saveArea'); if(!box) return;
+  const pr=pendingRec[sid]; if(!pr){ box.innerHTML=''; return; }
+  const p=curProf();
+  if(pr.saved){ box.innerHTML='<p class="msgbox ok">✓ Enregistré dans le carnet de '+esc(p?p.name:'')+'. <button class="plink" onclick="showTab(5)">Voir mon carnet</button></p>'; return; }
+  let h='';
+  if(p) h+='<button class="printbtn sec" onclick="saveRecord(\''+sid+'\')">Enregistrer dans le carnet de '+esc(p.name)+'</button><button class="plink" onclick="togglePick(\''+sid+'\')">Ce n\'est pas moi : changer de profil</button>';
+  h+='<div id="pick_'+sid+'" class="'+(p?'hidden':'')+'">'+
+    (db.profiles.length?'<p class="small">Qui est-ce ?</p><div class="pills">'+db.profiles.map(q=>'<button class="pill'+(q.id===db.current?' on':'')+'" onclick="pickProfile(\''+sid+'\',\''+q.id+'\')">'+esc(q.name)+'</button>').join('')+'</div>':'<p class="small">Crée ton profil pour enregistrer (un prénom suffit, tout reste sur ce téléphone).</p>')+
+    '<div class="row2"><input type="text" id="np_'+sid+'" maxlength="24" placeholder="Nouveau profil (prénom)"><button class="btn-s" onclick="newProfileFromSheet(\''+sid+'\')">Créer</button></div></div>';
+  box.innerHTML=h;
+}
+function togglePick(sid){ const e=document.getElementById('pick_'+sid); if(e) e.classList.toggle('hidden'); }
+function pickProfile(sid,id){ db.current=id; dbSave(); updateProfChip(); renderSaveArea(sid); }
+function newProfileFromSheet(sid){ const i=document.getElementById('np_'+sid); if(createProfile(i.value)) renderSaveArea(sid); }
+function saveRecord(sid){
+  const pr=pendingRec[sid], p=curProf(); if(!pr||!p||pr.saved) return;
+  p[pr.kind].push({id:uid2(),ts:Date.now(),titre:pr.titre,nom:pr.nom,corps:pr.corps,data:pr.data});
+  const ok=dbSave(); pr.saved=true; renderSaveArea(sid);
+  if(ok){ try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){} toast('Enregistré dans ton carnet'); }
+  else toast('Enregistrement impossible ici : utilise « Sauvegarder mon carnet »');
+}
+
+/* Données enregistrées */
+function perfData(){
+  const num=id=>{ const v=parseFloat(document.getElementById(id).value); return isFinite(v)?v:null; };
+  const sec=x=>(x===null||x===undefined)?null:x/1000;
+  const t={v1:sec(T.vite1),l1:sec(T.lent1),v2:sec(T.vite2),l2:sec(T.lent2)};
+  const cb={v1:num('cbV1'),l1:num('cbL1'),v2:num('cbV2'),l2:num('cbL2')};
+  const f=(c,ms)=>{ const x=freqCalc(c,ms); return x?+x.toFixed(1):null; };
+  const fq={v1:f(cb.v1,T.vite1),l1:f(cb.l1,T.lent1),v2:f(cb.v2,T.vite2),l2:f(cb.l2,T.lent2)};
+  const s=sexePerf(); let pts=null;
+  if(t.v1!==null&&t.v2!==null&&cb.v1!==null&&cb.v2!==null){
+    const pT=ptsOf(t.v1+t.v2,s==='G'?T_G:T_F), pC=ptsOf(cb.v1+cb.v2,s==='G'?CB_G:CB_F);
+    if(pT!==null&&pC!==null) pts={t:pT,cb:pC,tot:+(pT+pC).toFixed(2)};
+  }
+  const trio=[...document.querySelectorAll('#trio .tp')].map(e=>e.classList.contains('ok')?1:(e.classList.contains('ko')?0:null));
+  return {mode:modeDemi?'demi':'complete',sexe:s,t,cb,fq,pts,trio,
+    dt:(t.l1!==null&&t.v2!==null)?+(t.l1-t.v2).toFixed(2):null, dt2:(t.v1!==null&&t.v2!==null)?+(t.v2-t.v1).toFixed(2):null};
+}
+function planData(prep,transfo,valid,total){
+  const mk=(cat,arr)=>arr.map(e=>({cat,n:e.n,decl:e.decl||'',rep:e.rep,dpr:e.dpr,rec:e.rec,d:e.d,pas:e.pas||''}));
+  return {diag:[...document.querySelectorAll('#diagList input:checked')].map(c=>c.dataset.t),
+    objectif:document.getElementById('objSeance').value, jeSaurai:document.getElementById('jeSaurai').value,
+    ind:[...document.querySelectorAll('.indRe:checked')].map(c=>c.parentElement.textContent.trim()),
+    mode:modeDemi?'demi':'complete', total, ex:[...mk('prep',prep),...mk('transfo',transfo),...mk('valid',valid)]};
+}
+function bilanData(){
+  const a=document.querySelector('input[name=atteint]:checked'), v=id=>document.getElementById(id).value;
+  return {atteint:a?a.value:null,difficultes:v('r1'),appris:v('appris'),resultat:v('r4'),
+    modif:[...document.querySelectorAll('.modif:checked')].map(c=>c.parentElement.textContent.trim()),prochain:v('prochainObj')};
+}
+
+/* Affichage du carnet */
+function renderCarnet(){ renderProfiles(); renderEvo(); renderEntries(); renderStorageNote(); }
+function renderProfiles(){
+  const el=document.getElementById('profList');
+  el.innerHTML=db.profiles.length?db.profiles.map(p=>'<button class="pill'+(p.id===db.current?' on':'')+'" onclick="selectProfile(\''+p.id+'\')">'+esc(p.name)+'</button>').join(''):'<p class="small">Aucun profil pour l\'instant : crée le tien ci-dessous.</p>';
+  const p=curProf(), del=document.getElementById('profDel');
+  del.innerHTML=p?(delProf?'<p class="small" style="color:var(--warn);font-weight:700">Supprimer le profil « '+esc(p.name)+' » et toutes ses données ?</p><button class="btn-s warn" onclick="confirmDelProfile()">Oui, supprimer</button> <button class="btn-s" onclick="delProf=false;renderProfiles()">Annuler</button>':'<button class="plink" onclick="delProf=true;renderProfiles()">Supprimer le profil « '+esc(p.name)+' »</button>'):'';
+  updateProfChip();
+}
+function renderStorageNote(){
+  const el=document.getElementById('stNote'); if(!el) return;
+  el.innerHTML=storageOk?'':'<p class="msgbox ko">⚠ L\'enregistrement automatique n\'est pas disponible sur ce navigateur (navigation privée ?). Utilise « Sauvegarder mon carnet » pour garder une copie.</p>';
+}
+function f1(x){ return (x===null||x===undefined||!isFinite(x))?'—':esc(String(+(+x).toFixed(2)).replace('.',',')); }
+function avg2(a,b){ const v=[a,b].filter(x=>x!==null&&x!==undefined&&isFinite(x)); return v.length?v.reduce((s,x)=>s+x,0)/v.length:null; }
+function smoothPath(P){
+  if(P.length<2) return '';
+  if(P.length===2) return 'M'+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1)+' L'+P[1][0].toFixed(1)+' '+P[1][1].toFixed(1);
+  let d='M'+P[0][0].toFixed(1)+' '+P[0][1].toFixed(1);
+  for(let i=0;i<P.length-1;i++){
+    const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||p2;
+    d+=' C'+(p1[0]+(p2[0]-p0[0])/6).toFixed(1)+' '+(p1[1]+(p2[1]-p0[1])/6).toFixed(1)+','+(p2[0]-(p3[0]-p1[0])/6).toFixed(1)+' '+(p2[1]-(p3[1]-p1[1])/6).toFixed(1)+','+p2[0].toFixed(1)+' '+p2[1].toFixed(1);
+  }
+  return d;
+}
+function lineChart(o){
+  const W=320,H=150,pl=36,pr=12,pt=22,pb=26;
+  const all=o.series.flatMap(s=>s.pts.map(p=>p.y)); if(!all.length) return '';
+  if(o.band) all.push(o.band[0],o.band[1]); if(o.hline) all.push(o.hline.y);
+  let lo=Math.min(...all), hi=Math.max(...all); if(hi-lo<1){ lo-=.5; hi+=.5; } const pad=(hi-lo)*.12; lo-=pad; hi+=pad;
+  const X=i=>pl+(o.n<=1?(W-pl-pr)/2:i*(W-pl-pr)/(o.n-1)), Y=v=>pt+(hi-v)*(H-pt-pb)/(hi-lo);
+  let g='';
+  for(let k=0;k<3;k++){ const v=lo+(hi-lo)*k/2; g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="#D3E5F1"/><text x="'+(pl-5)+'" y="'+(Y(v)+3.5).toFixed(1)+'" text-anchor="end" font-size="10" fill="#566F86">'+v.toFixed(o.dec)+'</text>'; }
+  if(o.band) g+='<rect x="'+pl+'" width="'+(W-pl-pr)+'" y="'+Y(o.band[1]).toFixed(1)+'" height="'+(Y(o.band[0])-Y(o.band[1])).toFixed(1)+'" fill="#7ED957" opacity=".28"/>';
+  if(o.hline) g+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+Y(o.hline.y).toFixed(1)+'" y2="'+Y(o.hline.y).toFixed(1)+'" stroke="#FF914D" stroke-width="2" stroke-dasharray="5 4"/>';
+  o.series.forEach(s=>{
+    const P=s.pts.map(p=>[X(p.x),Y(p.y)]);
+    if(P.length>1) g+='<path class="chartLine" pathLength="1" d="'+smoothPath(P)+'" fill="none" stroke="'+s.color+'" stroke-width="2.6" stroke-linecap="round"/>';
+    P.forEach(q=>{ g+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="3.6" fill="#fff" stroke="'+s.color+'" stroke-width="2.2"/>'; });
+  });
+  g+='<text x="'+pl+'" y="'+(H-6)+'" font-size="10" fill="#566F86">'+esc(o.labels[0])+'</text>';
+  if(o.n>1) g+='<text x="'+(W-pr)+'" y="'+(H-6)+'" font-size="10" text-anchor="end" fill="#566F86">'+esc(o.labels[o.n-1])+'</text>';
+  if(o.series.length>1) o.series.forEach((s,i)=>{ g+='<circle cx="'+(pl+i*70)+'" cy="8" r="4" fill="'+s.color+'"/><text x="'+(pl+i*70+8)+'" y="12" font-size="10.5" fill="#0E2742">'+esc(s.name)+'</text>'; });
+  return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(o.title||'')+'" style="width:100%;height:auto;display:block">'+g+'</svg>';
+}
+function evoHTML(recs){
+  const labels=recs.map(r=>new Date(r.ts).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}));
+  const ser=(name,color,fn)=>({name,color,pts:recs.map((r,i)=>({x:i,y:fn(r.data||{})})).filter(p=>p.y!==null&&p.y!==undefined&&isFinite(p.y))});
+  const n=recs.length, blk=(t,svg)=>'<div class="chartCard"><h3>'+t+'</h3>'+(svg||'<p class="small">Pas encore assez de données.</p>')+'</div>';
+  return blk('Temps des vite (s)',lineChart({n,labels,dec:1,title:'Temps des vite',series:[ser('Vite 1','#0CC0DF',d=>d.t&&d.t.v1),ser('Vite 2','#145DA0',d=>d.t&&d.t.v2)]}))+
+    blk('Écart lent 1 − vite 2 (s) · cible 3 à 6 s',lineChart({n,labels,dec:1,band:[3,6],title:'Écart lent vite',series:[ser('Écart','#145DA0',d=>d.dt)]}))+
+    blk('Fréquence des vite (cy/min) · repère 30',lineChart({n,labels,dec:0,hline:{y:30},title:'Fréquence des vite',series:[ser('Fréquence','#0CC0DF',d=>avg2(d.fq&&d.fq.v1,d.fq&&d.fq.v2))]}));
+}
+function renderEvo(){
+  const el=document.getElementById('evo'), p=curProf();
+  if(!p){ el.innerHTML='<p class="small">Choisis un profil pour voir ton évolution.</p>'; return; }
+  const recs=p.perf.slice().sort((a,b)=>a.ts-b.ts);
+  if(recs.length<2){ el.innerHTML='<p class="small">'+(recs.length?'Enregistre une 2e performance':'Enregistre tes performances')+' pour voir ton évolution : temps, écart lent/vite et fréquence.</p>'; return; }
+  el.innerHTML=evoHTML(recs);
+}
+function setKind(k){ carnetKind=k; delEnt=null; renderEntries(); }
+function entSummary(kind,e){
+  const d=e.data||{};
+  if(kind==='perf'){
+    const t=d.t||{};
+    let s='Vite 1 '+f1(t.v1)+' s · Lent 1 '+f1(t.l1)+' s'+(d.mode==='complete'?' · Vite 2 '+f1(t.v2)+' s · Lent 2 '+f1(t.l2)+' s':'');
+    if(d.dt!==null&&d.dt!==undefined) s+='<br>Écart lent 1 − vite 2 : '+f1(d.dt)+' s';
+    if(d.pts) s+='<br>Estimation AFL1 : '+f1(d.pts.tot)+' / 12 (indicative)';
+    const names=['Efficacité','Fréquence','Récupération'], tr=Array.isArray(d.trio)?d.trio:[];
+    if(tr.some(x=>x===0||x===1)) s+='<br>'+tr.map((x,i)=>(x===0||x===1)?'<span class="mini '+(x?'ok':'ko')+'">'+(x?'✓ ':'⚠ ')+names[i]+'</span>':'').join('');
+    return s;
+  }
+  if(kind==='plan') return (d.objectif?'Objectif : '+esc(d.objectif)+'<br>':'')+(Array.isArray(d.ex)?d.ex.length:0)+' exercices · '+f1(d.total)+' m';
+  return 'Objectif atteint : '+({oui:'🟢 Oui',partiel:'🟠 Partiellement',non:'🔴 Non'}[d.atteint]||'—')+(d.prochain?'<br>Prochain objectif : '+esc(d.prochain):'');
+}
+function renderEntries(){
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.k===carnetKind));
+  const el=document.getElementById('entries'), p=curProf();
+  if(!p){ el.innerHTML='<p class="small">Choisis ou crée un profil pour voir tes séances enregistrées.</p>'; return; }
+  const list=p[carnetKind].slice().sort((a,b)=>b.ts-a.ts);
+  if(!list.length){ el.innerHTML='<p class="small">Rien d\'enregistré ici pour l\'instant. Ouvre une fiche, puis « Enregistrer dans le carnet ».</p>'; return; }
+  el.innerHTML=list.map(e=>'<div class="ent"><div class="entHead"><b>'+esc(e.titre)+'</b><span class="small">'+fmtTs(e.ts)+'</span></div><div class="small" style="color:var(--ink)">'+entSummary(carnetKind,e)+'</div><div class="entBtns">'+
+    (delEnt===e.id?'<span class="small" style="color:var(--warn);font-weight:700">Supprimer cette séance ?</span> <button class="btn-s warn" onclick="delEntry(\''+e.id+'\',true)">Oui</button> <button class="btn-s" onclick="delEntry(null)">Non</button>'
+    :'<button class="plink" onclick="viewEntry(\''+e.id+'\')">Revoir</button> <button class="plink" onclick="viewEntry(\''+e.id+'\',true)">Partager</button> <button class="plink" onclick="delEntry(\''+e.id+'\')">Supprimer</button>')+'</div></div>').join('');
+}
+function delEntry(id,yes){
+  if(yes){ const p=curProf(); p[carnetKind]=p[carnetKind].filter(x=>x.id!==id); dbSave(); delEnt=null; renderCarnet(); toast('Séance supprimée'); return; }
+  delEnt=id; renderEntries();
+}
+function viewEntry(id,share){
+  const p=curProf(), e=p&&p[carnetKind].find(x=>x.id===id); if(!e) return;
+  openSheet('sheet4',e.titre,e.nom||p.name,cleanHTML(e.corps),{ts:e.ts});
+  if(share) shareSheet('sheet4',e.titre);
+}
+function carnetPrint(){
+  const p=curProf(); if(!p){ toast('Choisis d\'abord un profil'); return; }
+  const perf=p.perf.slice().sort((a,b)=>a.ts-b.ts), plans=p.plan.slice().sort((a,b)=>a.ts-b.ts), bil=p.bilan.slice().sort((a,b)=>a.ts-b.ts);
+  let h='';
+  if(perf.length){
+    h+='<h3>Performances</h3><table><tr><th>Date</th><th>Vite 1</th><th>Lent 1</th><th>Vite 2</th><th>Lent 2</th><th>Écart L1−V2</th><th>AFL1 (indicatif)</th></tr>'+
+      perf.map(e=>{ const d=e.data||{}, t=d.t||{}; return '<tr><td>'+new Date(e.ts).toLocaleDateString('fr-FR')+'</td><td>'+f1(t.v1)+'</td><td>'+f1(t.l1)+'</td><td>'+f1(t.v2)+'</td><td>'+f1(t.l2)+'</td><td>'+f1(d.dt)+'</td><td>'+(d.pts?f1(d.pts.tot)+'/12':'—')+'</td></tr>'; }).join('')+'</table>';
+    if(perf.length>1) h+=evoHTML(perf);
+  }
+  if(plans.length) h+='<h3>Plans d\'entraînement</h3><ul>'+plans.map(e=>'<li><b>'+new Date(e.ts).toLocaleDateString('fr-FR')+'</b> — '+entSummary('plan',e)+'</li>').join('')+'</ul>';
+  if(bil.length) h+='<h3>Bilans</h3><ul>'+bil.map(e=>{ const d=e.data||{}; return '<li><b>'+new Date(e.ts).toLocaleDateString('fr-FR')+'</b> — '+entSummary('bilan',e)+(d.appris?'<br>Ce que j\'ai appris : '+esc(d.appris):'')+'</li>'; }).join('')+'</ul>';
+  if(!h) h='<p>Aucune séance enregistrée pour l\'instant.</p>';
+  h+='<p class="small">Les valeurs sont déclaratives : l\'estimation AFL1 est indicative, la note officielle est celle de l\'enseignant.</p>';
+  openSheet('sheet4','Mon carnet de progression',p.name,h,{});
+}
+
+/* Sauvegarde / restauration */
+function carnetMsg(t){ const e=document.getElementById('bkMsg'); if(e) e.textContent=t; }
+function exportCarnet(){
+  const p=curProf(); if(!p){ carnetMsg('Choisis d\'abord un profil.'); return; }
+  const blob=new Blob([JSON.stringify({app:'cedreps.ca1-double-allure',v:1,exported:Date.now(),profiles:[p]})],{type:'application/json'});
+  const url=URL.createObjectURL(blob), a=document.createElement('a');
+  a.href=url; a.download='carnet-'+p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },1500);
+  carnetMsg('Carnet de '+p.name+' sauvegardé dans un fichier. Garde-le précieusement (cloud, mail, ordinateur).');
+}
+function cleanProfile(q){
+  if(!q||typeof q.id!=='string'||typeof q.name!=='string') return null;
+  const ents=(arr)=>(Array.isArray(arr)?arr:[]).filter(e=>e&&typeof e.id==='string'&&typeof e.ts==='number'&&typeof e.corps==='string'&&e.corps.length<80000)
+    .map(e=>({id:e.id.slice(0,40),ts:e.ts,titre:String(e.titre||'').slice(0,80),nom:String(e.nom||'').slice(0,60),corps:cleanHTML(e.corps),data:(e.data&&typeof e.data==='object')?e.data:{}}));
+  return {id:q.id.slice(0,40),name:q.name.slice(0,24),created:+q.created||Date.now(),perf:ents(q.perf),plan:ents(q.plan),bilan:ents(q.bilan)};
+}
+function importFile(inp){
+  const f=inp.files&&inp.files[0]; if(!f) return;
+  if(f.size>3000000){ carnetMsg('Fichier trop volumineux.'); inp.value=''; return; }
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const o=JSON.parse(r.result); if(o.app!=='cedreps.ca1-double-allure'||!Array.isArray(o.profiles)) throw 0;
+      let added=0;
+      o.profiles.map(cleanProfile).filter(Boolean).forEach(q=>{
+        const p=db.profiles.find(x=>x.id===q.id);
+        if(!p){ db.profiles.push(q); added+=q.perf.length+q.plan.length+q.bilan.length; if(!db.current) db.current=q.id; }
+        else ['perf','plan','bilan'].forEach(k=>q[k].forEach(e=>{ if(!p[k].some(x=>x.id===e.id)){ p[k].push(e); added++; } }));
+      });
+      dbSave(); renderCarnet(); carnetMsg('Carnet restauré : '+added+' séance(s) ajoutée(s).');
+    }catch(e){ carnetMsg('Fichier non reconnu : choisis un fichier sauvegardé depuis cette application.'); }
+    inp.value='';
+  };
+  r.readAsText(f);
+}
+
+function fichePage(corpsHTML,noSave){
+  return corpsHTML+'<p class="sheetFoot">© Muriel Barreau, CEDREPS, 2026 — Licence CC BY-NC 4.0 : creativecommons.org/licenses/by-nc/4.0/deed.fr</p>'+
+    '<div class="no-print" style="margin-top:14px">'+(noSave?'':'<div class="saveArea"></div>')+'<button class="printbtn" onclick="window.print()">Imprimer / enregistrer en PDF</button></div>';
+}
+function openSheet(id,titre,nom,corpsHTML,opts){
+  opts=opts||{};
+  const el=document.getElementById(id), ts=opts.ts?new Date(opts.ts):new Date();
+  el.innerHTML='<h2>'+esc(titre)+'</h2><p><strong>'+esc(nom)+'</strong> — '+ts.toLocaleDateString('fr-FR')+' à '+ts.toLocaleTimeString('fr-FR').slice(0,5)+'</p>'+fichePage(corpsHTML,!opts.kind);
+  if(opts.kind){ pendingRec[id]={kind:opts.kind,titre,nom,corps:corpsHTML,data:opts.data,saved:false}; renderSaveArea(id); }
+  document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show'));
+  el.classList.add('show'); document.documentElement.classList.add('has-sheet');
   el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 function ficheCorpsPerf(){
@@ -678,12 +997,12 @@ function ficheCorpsPerf(){
   return h;
 }
 function printPerf(){
-  openSheet('sheet1','Fiche de performance',document.getElementById('eleveNom1').value||'Élève',ficheCorpsPerf());
+  openSheet('sheet1','Fiche de performance',document.getElementById('eleveNom1').value||'Élève',ficheCorpsPerf(),{kind:'perf',data:perfData()});
 }
 async function partagerPerf(){
   printPerf();
   const nom=document.getElementById('eleveNom1').value||'Élève';
-  const txt='Fiche de performance — '+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+document.getElementById('sheet1').innerText;
+  const txt='Fiche de performance — '+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+sheetText('sheet1');
   if(navigator.share){ try{ await navigator.share({title:'Fiche de performance',text:txt}); return; }catch(e){} }
 }
 
@@ -1131,7 +1450,7 @@ function printPlan(mode){
     h+='<p>Blocs choisis : '+(document.getElementById('rBlocs').textContent)+'</p>';
     h+='<p>Indicateurs observés : '+(document.getElementById('rInd').textContent)+'</p>';
   }
-  openSheet(bilan?'sheet3':'sheet2', bilan?"Ma fiche bilan":"Ma fiche d'entraînement", nom, h);
+  openSheet(bilan?'sheet3':'sheet2', bilan?"Ma fiche bilan":"Ma fiche d'entraînement", nom, h, {kind:bilan?'bilan':'plan', data:bilan?bilanData():planData(prep,transfo,valid,total)});
 }
 async function partagerPlan(mode){
   onVoirFiche(mode);
@@ -1139,11 +1458,11 @@ async function partagerPlan(mode){
   const sheetEl=document.getElementById(bilan?'sheet3':'sheet2');
   if(!sheetEl.classList.contains('show')) return; // contraintes non remplies, message déjà affiché
   const nom=document.getElementById(bilan?'eleveNom3':'eleveNom2').value||'Élève';
-  const txt=(bilan?'Ma fiche bilan — ':"Ma fiche d'entraînement — ")+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+sheetEl.innerText;
+  const txt=(bilan?'Ma fiche bilan — ':"Ma fiche d'entraînement — ")+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+sheetText(bilan?'sheet3':'sheet2');
   if(navigator.share){ try{ await navigator.share({title:bilan?'Fiche bilan':"Fiche d'entraînement",text:txt}); }catch(e){} }
 }
 
-buildDiag(); buildPrep(); buildTransfo(); buildValid(); recompute();
+dbLoad(); buildDiag(); buildPrep(); buildTransfo(); buildValid(); recompute(); updateProfChip();
 </script>
 </body>
 </html>
