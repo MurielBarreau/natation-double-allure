@@ -184,6 +184,22 @@ summary strong{font-size:16px;font-weight:700;color:var(--blue)}
 .sheet.show{display:block}
 .sheet ul,.sheet ol{padding-left:22px}
 .sheetFoot{color:var(--muted);font-size:13px;margin-top:16px;border-top:1px solid var(--border);padding-top:8px}
+.lead{margin:-6px 4px 14px;color:var(--muted);font-weight:700;font-size:15px}
+.stepper{display:flex;gap:4px;margin:2px 0 10px}
+.stp{flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;padding:2px 0;line-height:1.15;text-align:center}
+.stp i{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid var(--border);transition:all .25s}
+.stp svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.stp.on{color:var(--blue)}
+.stp.on i{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 14px rgba(20,93,160,.3)}
+.stp.done{color:var(--good)}
+.stp.done i{background:var(--green);border-color:var(--green);color:#143507}
+.bnav{display:flex;gap:10px;margin:4px 0 18px}
+.bnav button{flex:1;margin-top:0}
+.btn-ghost{border:1.5px solid var(--border);background:#fff;color:var(--blue);border-radius:999px;padding:14px 20px;font-size:15px;font-weight:800;cursor:pointer}
+.chk-line .ex{display:block;font-size:12.5px;color:var(--muted);font-weight:400;margin-top:2px}
+.sugchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.sugchip{border:1.5px dashed var(--turq);background:var(--turq-bg);color:var(--ink);border-radius:14px;padding:6px 10px;font-size:12.5px;font-weight:700;text-align:left;cursor:pointer}
+.mini.sug{background:var(--turq-bg);color:var(--ink)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.t1::after{width:76px}}
 .profChip{display:inline-block;background:rgba(255,255,255,.22);color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:3px 12px;font-size:12.5px;font-weight:700;margin-top:6px;cursor:pointer}
 footer a{color:var(--blue);font-weight:700}
@@ -326,6 +342,7 @@ footer a{color:var(--blue);font-weight:700}
 
   <div class="card">
     <h2>Mon diagnostic</h2>
+    <p id="prefillNote" class="small hidden" style="color:var(--blue);font-weight:700"></p>
     <p class="small">Ce que mes résultats montrent (coché automatiquement depuis l'onglet Performance quand c'est possible, modifiable) :</p>
     <div id="diagList"></div>
 
@@ -336,8 +353,10 @@ footer a{color:var(--blue);font-weight:700}
     <label class="chk-inline"><input type="checkbox" class="indRe"> Temps</label>
     <label class="chk-inline"><input type="checkbox" class="indRe"> CB</label>
     <label class="chk-inline"><input type="checkbox" class="indRe"> Fréquence</label>
-    <label class="chk-inline"><input type="checkbox" class="indRe"> Distance/cycle</label>
+    <label class="chk-inline"><input type="checkbox" class="indRe"> Amplitude</label>
+    <label class="chk-inline"><input type="checkbox" class="indRe"> Respiration</label>
     <label class="chk-inline"><input type="checkbox" class="indRe"> Ressenti</label>
+    <label class="chk-inline"><input type="checkbox" class="indRe"> Qualité de la relance</label>
     <label class="small" style="margin-top:6px;display:block">Je saurai que j'ai progressé si…</label>
     <textarea id="jeSaurai" rows="2"></textarea>
   </div>
@@ -375,7 +394,7 @@ footer a{color:var(--blue);font-weight:700}
     <label class="small">Nom de l'élève</label>
     <input type="text" id="eleveNom2" placeholder="Prénom Nom">
     <button class="printbtn" onclick="onVoirFiche('entrainement')">Voir ma fiche d'entraînement</button>
-    <button class="printbtn sec" onclick="partagerPlan('entrainement')">Partager</button>
+    <button class="printbtn sec" onclick="partagerPlan()">Partager</button>
   </div>
 </div>
 <!-- /TAB 2 -->
@@ -383,39 +402,88 @@ footer a{color:var(--blue);font-weight:700}
 <!-- TAB 4 : BILAN -->
 <div id="tab4" class="hidden">
   <h1 class="t1">Bilan</h1>
-  <div class="card">
-    <h2>Mon bilan</h2>
-    <p class="small">À remplir après la séance, une fois le plan d'entraînement réalisé (onglet précédent).</p>
-    <p class="small" style="margin-top:8px">Mon objectif est-il atteint ?</p>
-    <label class="small"><input type="radio" name="atteint" value="oui"> 🟢 Oui</label>
-    <label class="small" style="margin-left:10px"><input type="radio" name="atteint" value="partiel"> 🟠 Partiellement</label>
-    <label class="small" style="margin-left:10px"><input type="radio" name="atteint" value="non"> 🔴 Non</label>
-
-    <label class="small" style="margin-top:10px;display:block">Mes difficultés rencontrées</label><textarea id="r1" rows="2"></textarea>
-    <label class="small" style="margin-top:6px;display:block">Ce que j'ai appris</label><textarea id="appris" rows="2" placeholder="J'ai constaté que…"></textarea>
-    <label class="small" style="margin-top:6px;display:block">Résultat</label><textarea id="r4" rows="2"></textarea>
-
-    <p class="small" style="margin-top:10px">Ce que je modifie pour la prochaine séance :</p>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Augmenter la difficulté</span></label>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Diminuer la difficulté</span></label>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Modifier l'exercice</span></label>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Modifier la récupération</span></label>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Travailler davantage le lent</span></label>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Travailler davantage le vite</span></label>
-    <label class="chk-line"><input type="checkbox" class="modif"><span>Changer de problème prioritaire</span></label>
-
-    <label class="small" style="margin-top:10px;display:block">Mon prochain objectif</label>
-    <textarea id="prochainObj" rows="2"></textarea>
-
-    <p class="small" style="margin:10px 0 2px">Blocs choisis : <span id="rBlocs">—</span></p>
-    <p class="small" style="margin:0 0 2px">Indicateurs que je vais observer : <span id="rInd">—</span></p>
+  <p class="lead">Je prépare ma prochaine séance</p>
+  <div class="stepper">
+    <button class="stp on" data-s="1" onclick="bJump(1)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></svg></i>Je comprends</button>
+    <button class="stp" data-s="2" onclick="bJump(2)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h10M18 8h2M4 16h2M10 16h10"/><circle cx="16" cy="8" r="2"/><circle cx="8" cy="16" r="2"/></svg></i>Je décide</button>
+    <button class="stp" data-s="3" onclick="bJump(3)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10h-9l-4 4v-4H5z"/></svg></i>Je justifie</button>
+    <button class="stp" data-s="4" onclick="bJump(4)"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></i>Je me projette</button>
   </div>
-  <div class="card">
-    <p id="planWarn2" class="hidden" style="color:var(--warn);font-weight:600"></p>
-    <label class="small">Nom de l'élève</label>
+  <div class="bar" aria-hidden="true"><span id="stepBar" style="width:25%"></span></div>
+
+  <div class="card bstep" data-step="1">
+    <h2>Je comprends</h2>
+    <label class="small">Mon objectif précédent</label>
+    <textarea id="bObjPrec" rows="2" placeholder="Ex. créer un contraste plus important entre mes deux allures"></textarea>
+    <p class="small" id="bObjSrc" style="margin-top:4px"></p>
+    <h3>Mes résultats</h3>
+    <div id="bRes"></div>
+    <h3>Mon objectif est-il atteint ?</h3>
+    <label class="chk-line"><input type="radio" name="bAtt" value="oui"><span>🟢 Oui, j'ai atteint ma cible.</span></label>
+    <label class="chk-line"><input type="radio" name="bAtt" value="partiel"><span>🟠 Partiellement, j'ai progressé mais je dois poursuivre.</span></label>
+    <label class="chk-line"><input type="radio" name="bAtt" value="non"><span>🔴 Non, je n'ai pas encore atteint ma cible.</span></label>
+    <h3>Ce que j'ai compris</h3>
+    <div id="bCompris"></div>
+    <label class="small" style="margin-top:8px;display:block">J'ai constaté que…</label>
+    <textarea id="bConstate" rows="2"></textarea>
+  </div>
+
+  <div class="card bstep hidden" data-step="2">
+    <h2>Je décide</h2>
+    <h3 style="margin-top:0">Mon problème précédent est-il toujours prioritaire ?</h3>
+    <label class="chk-line"><input type="radio" name="bPrio" value="oui" onchange="bUpd2()"><span>Oui, je dois poursuivre le même travail.</span></label>
+    <label class="chk-line"><input type="radio" name="bPrio" value="partiel" onchange="bUpd2()"><span>En partie, je dois ajuster mon objectif.</span></label>
+    <label class="chk-line"><input type="radio" name="bPrio" value="non" onchange="bUpd2()"><span>Non, je peux travailler un autre problème.</span></label>
+    <div id="bProbWrap" class="hidden">
+      <h3>Mon nouveau problème prioritaire</h3>
+      <p class="small">Les problèmes suggérés viennent de tes résultats : confirme-les avec ce que tu as ressenti et observé.</p>
+      <div id="bProbList"></div>
+      <p id="bBloc" class="msgbox ok hidden"></p>
+    </div>
+    <div id="bEvoWrap">
+      <h3>Je fais évoluer mon entraînement <span class="small">(2 choix maximum)</span></h3>
+      <div id="bEvo"></div>
+    </div>
+  </div>
+
+  <div class="card bstep hidden" data-step="3">
+    <h2>Je justifie</h2>
+    <p class="small">Je complète ma phrase à partir de mes résultats et de mon ressenti.</p>
+    <label class="small">Je choisis de…</label>
+    <textarea id="bDecision" rows="2"></textarea>
+    <label class="small" style="margin-top:10px;display:block">…parce que mes résultats montrent que…</label>
+    <div id="bChips" class="sugchips"></div>
+    <textarea id="bConstat" rows="2"></textarea>
+    <label class="small" style="margin-top:10px;display:block">Ce que j'ai ressenti ou observé</label>
+    <textarea id="bRessenti" rows="2" placeholder="Ex. j'ai senti que ma nage se désorganisait quand…"></textarea>
+    <label class="small" style="margin-top:10px;display:block">Lors de la prochaine séance, je chercherai à…</label>
+    <textarea id="bObjJ" rows="2"></textarea>
+    <h3>Ma phrase</h3>
+    <p id="bPreview" class="msgbox" style="background:var(--turq-bg);font-weight:600"></p>
+  </div>
+
+  <div class="card bstep hidden" data-step="4">
+    <h2>Je me projette</h2>
+    <label class="small">Mon objectif pour la prochaine séance : je cherche à…</label>
+    <textarea id="bObj" rows="2"></textarea>
+    <p class="small" style="margin-top:10px">Mon indicateur de réussite (1 ou 2 maximum) :</p>
+    <div id="bIndList"></div>
+    <label class="small" style="margin-top:6px;display:block">Je saurai que j'ai progressé si…</label>
+    <textarea id="bSaurai" rows="2"></textarea>
+    <label class="small" style="margin-top:10px;display:block">Mon défi : je veux réussir à… <span>(repères du référentiel)</span></label>
+    <div id="bDefiChips" class="sugchips"></div>
+    <textarea id="bDefi" rows="2"></textarea>
+    <label class="small" style="margin-top:12px;display:block">Nom de l'élève</label>
     <input type="text" id="eleveNom3" placeholder="Prénom Nom">
-    <button class="printbtn" onclick="onVoirFiche('bilan')">Voir ma fiche bilan</button>
-    <button class="printbtn sec" onclick="partagerPlan('bilan')">Partager</button>
+    <button class="printbtn" onclick="printBilan()">Voir ma fiche bilan</button>
+    <button class="printbtn sec" onclick="partagerBilan()">Partager</button>
+    <button class="plink" style="margin-top:10px" onclick="bReset()">Effacer et recommencer un bilan</button>
+  </div>
+
+  <p id="bWarn" class="hidden" style="color:var(--warn);font-weight:700;margin:4px 4px 10px"></p>
+  <div class="bnav">
+    <button id="bPrev" class="btn-ghost hidden" onclick="bStep(-1)">Précédent</button>
+    <button id="bNext" class="printbtn" onclick="bStep(1)">Suivant</button>
   </div>
 </div>
 <!-- /TAB 4 -->
@@ -559,6 +627,8 @@ function showTab(n){
   window.scrollTo({top:0,behavior:'smooth'});
   document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show')); document.documentElement.classList.remove('has-sheet');
   if(n===5) renderCarnet();
+  if(n===2) prefillPlanFromBilan();
+  if(n===4) bGo(bN);
   [1,2,3,4,5].forEach(i=>{
     document.getElementById('tab'+i).classList.toggle('hidden', n!==i);
     document.getElementById('tabBtn'+i).classList.toggle('active', n===i);
@@ -776,7 +846,7 @@ function renderSaveArea(sid){
   const box=document.querySelector('#'+sid+' .saveArea'); if(!box) return;
   const pr=pendingRec[sid]; if(!pr){ box.innerHTML=''; return; }
   const p=curProf();
-  if(pr.saved){ box.innerHTML='<p class="msgbox ok">✓ Enregistré dans le carnet de '+esc(p?p.name:'')+'. <button class="plink" onclick="showTab(5)">Voir mon carnet</button></p>'; return; }
+  if(pr.saved){ box.innerHTML='<p class="msgbox ok">✓ Enregistré dans le carnet de '+esc(p?p.name:'')+'. <button class="plink" onclick="showTab(5)">Voir mon carnet</button>'+(pr.kind==='bilan'?' <button class="plink" onclick="bReset()">Nouveau bilan</button>':'')+'</p>'; return; }
   let h='';
   if(p) h+='<button class="printbtn sec" onclick="saveRecord(\''+sid+'\')">Enregistrer dans le carnet de '+esc(p.name)+'</button><button class="plink" onclick="togglePick(\''+sid+'\')">Ce n\'est pas moi : changer de profil</button>';
   h+='<div id="pick_'+sid+'" class="'+(p?'hidden':'')+'">'+
@@ -819,12 +889,6 @@ function planData(prep,transfo,valid,total){
     ind:[...document.querySelectorAll('.indRe:checked')].map(c=>c.parentElement.textContent.trim()),
     mode:modeDemi?'demi':'complete', total, ex:[...mk('prep',prep),...mk('transfo',transfo),...mk('valid',valid)]};
 }
-function bilanData(){
-  const a=document.querySelector('input[name=atteint]:checked'), v=id=>document.getElementById(id).value;
-  return {atteint:a?a.value:null,difficultes:v('r1'),appris:v('appris'),resultat:v('r4'),
-    modif:[...document.querySelectorAll('.modif:checked')].map(c=>c.parentElement.textContent.trim()),prochain:v('prochainObj')};
-}
-
 /* Affichage du carnet */
 function renderCarnet(){ renderProfiles(); renderEvo(); renderEntries(); renderStorageNote(); }
 function renderProfiles(){
@@ -898,7 +962,9 @@ function entSummary(kind,e){
     return s;
   }
   if(kind==='plan') return (d.objectif?'Objectif : '+esc(d.objectif)+'<br>':'')+(Array.isArray(d.ex)?d.ex.length:0)+' exercices · '+f1(d.total)+' m';
-  return 'Objectif atteint : '+({oui:'🟢 Oui',partiel:'🟠 Partiellement',non:'🔴 Non'}[d.atteint]||'—')+(d.prochain?'<br>Prochain objectif : '+esc(d.prochain):'');
+  const att=({oui:'🟢 Oui',partiel:'🟠 Partiellement',non:'🔴 Non'}[d.atteint]||'—');
+  if(d.v===2) return 'Objectif atteint : '+att+(d.decision?'<br>Décision : '+esc(d.decision):'')+(d.objectif?'<br>Prochain objectif : '+esc(d.objectif):'');
+  return 'Objectif atteint : '+att+(d.prochain?'<br>Prochain objectif : '+esc(d.prochain):'');
 }
 function renderEntries(){
   document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.k===carnetKind));
@@ -929,7 +995,7 @@ function carnetPrint(){
     if(perf.length>1) h+=evoHTML(perf);
   }
   if(plans.length) h+='<h3>Plans d\'entraînement</h3><ul>'+plans.map(e=>'<li><b>'+new Date(e.ts).toLocaleDateString('fr-FR')+'</b> — '+entSummary('plan',e)+'</li>').join('')+'</ul>';
-  if(bil.length) h+='<h3>Bilans</h3><ul>'+bil.map(e=>{ const d=e.data||{}; return '<li><b>'+new Date(e.ts).toLocaleDateString('fr-FR')+'</b> — '+entSummary('bilan',e)+(d.appris?'<br>Ce que j\'ai appris : '+esc(d.appris):'')+'</li>'; }).join('')+'</ul>';
+  if(bil.length) h+='<h3>Bilans</h3><ul>'+bil.map(e=>{ const d=e.data||{}; return '<li><b>'+new Date(e.ts).toLocaleDateString('fr-FR')+'</b> — '+entSummary('bilan',e)+((d.constate||d.appris)?'<br>J\'ai constaté / appris : '+esc(d.constate||d.appris):'')+'</li>'; }).join('')+'</ul>';
   if(!h) h='<p>Aucune séance enregistrée pour l\'instant.</p>';
   h+='<p class="small">Les valeurs sont déclaratives : l\'estimation AFL1 est indicative, la note officielle est celle de l\'enseignant.</p>';
   openSheet('sheet4','Mon carnet de progression',p.name,h,{});
@@ -969,6 +1035,218 @@ function importFile(inp){
     inp.value='';
   };
   r.readAsText(f);
+}
+
+/* ---------- Bilan prospectif : je prépare ma prochaine séance ---------- */
+const BEVO=[
+ {id:'e1',t:"Je complexifie mon exercice",inf:"complexifier mon exercice",ex:"Je conserve le même objectif, mais j'augmente la difficulté. Ex. passer de 12,5 m lent → 12,5 m vite à 25 m lent → 25 m vite."},
+ {id:'e2',t:"Je simplifie mon exercice",inf:"simplifier mon exercice",ex:"Je réduis la difficulté pour mieux maîtriser ce que je cherche à apprendre. Ex. travailler sur 12,5 m pour mieux sentir le changement de fréquence."},
+ {id:'e3',t:"Je change d'exercice",inf:"changer d'exercice",ex:"Je conserve mon objectif, mais je choisis une autre situation pour progresser. Ex. passer d'un exercice de contraste d'allure à un travail de fréquence progressive."},
+ {id:'e4',t:"Je modifie le nombre de répétitions",inf:"modifier le nombre de répétitions",ex:"J'adapte la quantité de travail à mon niveau et à mon objectif. Ex. 3 répétitions au lieu de 2 pour stabiliser mon changement d'allure."},
+ {id:'e5',t:"Je modifie la récupération",inf:"modifier la récupération",ex:"J'adapte le temps de récupération pour mieux réussir mon travail. Ex. augmenter la récupération pour préserver la qualité des sprints."},
+ {id:'e6',t:"Je modifie mon organisation de travail",inf:"modifier mon organisation de travail",ex:"Je change la manière dont j'enchaîne les exercices ou dont je prends mes mesures. Ex. alterner une répétition technique et une répétition chronométrée."}
+];
+const BCOMPRIS=["J'ai trouvé ce qui fonctionne.","J'ai identifié ce qui me bloque.","Je dois encore comprendre pourquoi je n'y arrive pas."];
+const IND7=["Temps","CB","Fréquence","Amplitude","Respiration","Ressenti","Qualité de la relance"];
+const DIAG_BLOC={dgA1:'CP1A',dgA2:'CP1B',dgA3:'CP1C',dgB1:'CP2A',dgB2:'CP2A',dgB3:'CP2B',dgB4:'CP2B',dgC1:'CP3A',dgC2:'CP3A',dgC3:'CP3B'};
+const ATT_TXT={oui:"🟢 Oui, j'ai atteint ma cible.",partiel:"🟠 Partiellement, j'ai progressé mais je dois poursuivre.",non:"🔴 Non, je n'ai pas encore atteint ma cible."};
+const PRIO_TXT={oui:"Oui, je dois poursuivre le même travail.",partiel:"En partie, je dois ajuster mon objectif.",non:"Non, je peux travailler un autre problème."};
+const BIL_IND=[
+ {k:'dt',label:'Écart de temps lent/vite',unit:' s',dec:1,cible:'3 à 6 s',ok:v=>v>=3&&v<=6},
+ {k:'df',label:'Écart de fréquence lent/vite',unit:' cy/min',dec:0,cible:'≥ +10 cy/min',ok:v=>v>=10},
+ {k:'dcb',label:'Écart de CB lent/vite',unit:' CB',dec:0,cible:'-2 à +2',ok:v=>v>=-2&&v<=2},
+ {k:'dt2',label:'Évolution du 2e sprint (Vite 2 − Vite 1)',unit:' s',dec:1,cible:'-1 à +3 s',ok:v=>v>=-1&&v<=3}
+];
+const DEFI_CHIPS=["augmenter l'écart de fréquence entre le lent et le vite d'au moins +10 cy/min","obtenir un écart de temps lent/vite de 3 à 6 s","garder un écart de CB entre -2 et +2 entre le lent et le vite","réaliser un 2e sprint à moins de 3 s du premier","garder mes CB sous 24 sur chaque segment"];
+let bN=1, planPrefilled=null;
+function isNum(x){ return typeof x==='number'&&isFinite(x); }
+function bv(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
+function bRadio(n){ const e=document.querySelector('input[name='+n+']:checked'); return e?e.value:null; }
+function lcFirst(s){ return s?s.charAt(0).toLowerCase()+s.slice(1):s; }
+function ucFirst(s){ return s?s.charAt(0).toUpperCase()+s.slice(1):s; }
+function noDot(s){ return String(s||'').replace(/[.\s]+$/,''); }
+function fsg(v,d){ const r=Number(v.toFixed(d)); return (r>0?'+':(r<0?'-':''))+Math.abs(r).toFixed(d).replace('.',','); }
+function joinFr(a){ return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' et '+a[a.length-1]; }
+function bPerfs(){ const p=curProf(); return p?p.perf.slice().sort((a,b)=>a.ts-b.ts):[]; }
+function bInds(d){
+  d=d||{}; const fq=d.fq||{}, cb=d.cb||{};
+  return {dt:isNum(d.dt)?d.dt:null, df:(isNum(fq.v2)&&isNum(fq.l1))?fq.v2-fq.l1:null, dcb:(isNum(cb.v2)&&isNum(cb.l1))?cb.v2-cb.l1:null, dt2:isNum(d.dt2)?d.dt2:null};
+}
+function bRows(){
+  const P=bPerfs(), after=P.length?bInds(P[P.length-1].data):null, before=P.length>1?bInds(P[P.length-2].data):null;
+  return BIL_IND.map(ix=>{ const a=after?after[ix.k]:null, b=before?before[ix.k]:null;
+    return {label:ix.label,cible:ix.cible,avant:b===null?'—':fsg(b,ix.dec)+ix.unit,apres:a===null?'—':fsg(a,ix.dec)+ix.unit,ok:a===null?null:ix.ok(a)}; });
+}
+function suggestedProblems(){
+  const P=bPerfs(), s=new Set();
+  if(P.length){ const x=bInds(P[P.length-1].data);
+    if(x.dcb!==null&&(x.dcb>2||x.dcb<-2)) s.add('dgA1');
+    if((x.dt!==null&&x.dt<3)||(x.df!==null&&x.df<10)) s.add('dgB3');
+    if(x.dt2!==null&&x.dt2>3) s.add('dgC1');
+  } else if(window.diagAuto){ Object.keys(window.diagAuto).forEach(k=>{ if(window.diagAuto[k]) s.add(k); }); }
+  return s;
+}
+function bProblem(){
+  const id=bRadio('bProb'); if(!id) return null;
+  const it=DIAG.flatMap(g=>g.items).find(i=>i.id===id);
+  return it?{id,label:it.q.join(' / '),bloc:DIAG_BLOC[id]}:null;
+}
+function bEvoSel(){ return document.getElementById('bEvoWrap').classList.contains('hidden')?[]:[...document.querySelectorAll('.bEvo:checked')].map(c=>BEVO.find(e=>e.id===c.value)); }
+function setAuto(id,val){ const el=document.getElementById(id); if(el.dataset.auto!=='0') el.value=val||''; }
+function bWarn(m){ const w=document.getElementById('bWarn'); w.textContent=m; w.classList.remove('hidden'); }
+function buildBilan(){
+  const q=document.querySelector.bind(document), g=id=>document.getElementById(id);
+  g('bCompris').innerHTML=BCOMPRIS.map(t=>'<label class="chk-line"><input type="checkbox" class="bCompris" data-t="'+esc(t)+'"><span>'+esc(t)+'</span></label>').join('');
+  g('bEvo').innerHTML=BEVO.map(e=>'<label class="chk-line"><input type="checkbox" class="bEvo" value="'+e.id+'" onchange="bLimit(this,2)"><span><b>'+esc(e.t)+'</b><span class="ex">'+esc(e.ex)+'</span></span></label>').join('');
+  g('bProbList').innerHTML=DIAG.map(gr=>'<div class="cpHead">'+esc(gr.t)+'</div>'+gr.items.map(it=>'<label class="chk-line"><input type="radio" name="bProb" value="'+it.id+'" onchange="bBloc()"><span>'+it.q.map(x=>'« '+esc(x)+' »').join('<br>')+' <span class="mini sug hidden" data-sug="'+it.id+'">suggéré</span></span></label>').join('')).join('');
+  g('bIndList').innerHTML=IND7.map(t=>'<label class="chk-inline"><input type="checkbox" class="bInd" value="'+esc(t)+'" onchange="bLimit(this,2)"> '+esc(t)+'</label>').join('');
+  g('bDefiChips').innerHTML=DEFI_CHIPS.map(t=>'<button type="button" class="sugchip" data-t="'+esc(t)+'" onclick="bAddTo(\'bDefi\',this.dataset.t)">+ '+esc(t)+'</button>').join('');
+  ['bDecision','bObjJ','bObj'].forEach(id=>g(id).addEventListener('input',e=>{ e.target.dataset.auto='0'; bPreview(); }));
+  ['bConstat','bRessenti'].forEach(id=>g(id).addEventListener('input',bPreview));
+  g('bObjPrec').addEventListener('input',e=>{ e.target.dataset.edited='1'; });
+  bGo(1);
+}
+function bLimit(el,max){ if(el.checked&&document.querySelectorAll('.'+el.className+':checked').length>max){ el.checked=false; toast(max+' choix maximum'); } }
+function bAddTo(id,t){ const e=document.getElementById(id); e.value=e.value.trim()?e.value.trim()+' ; '+t:t; bPreview(); }
+function bBloc(){
+  const el=document.getElementById('bBloc'), id=bRadio('bProb');
+  if(!id){ el.classList.add('hidden'); return; }
+  const code=DIAG_BLOC[id]; el.classList.remove('hidden');
+  el.textContent='Bloc conseillé dans le plan : '+code+' ('+CP_LABELS[code.charAt(2)].replace(/^CP\d — /,'')+')';
+}
+function bUpd2(){
+  document.getElementById('bEvoWrap').classList.toggle('hidden',bRadio('bAtt')==='oui');
+  document.getElementById('bProbWrap').classList.toggle('hidden',bRadio('bPrio')!=='non');
+  bBloc();
+}
+function bRefresh1(){
+  const p=curProf(), plans=p?p.plan.slice().sort((a,b)=>b.ts-a.ts):[], last=plans.find(e=>e.data&&e.data.objectif);
+  const o=document.getElementById('bObjPrec'), src=document.getElementById('bObjSrc');
+  if(last&&!o.value.trim()&&o.dataset.edited!=='1') o.value=last.data.objectif;
+  src.textContent=last?'Repris de ton plan enregistré le '+new Date(last.ts).toLocaleDateString('fr-FR')+' : tu peux le modifier.':
+    (p?'Aucun plan enregistré dans ce carnet : écris ton objectif précédent.':'Choisis un profil (onglet Carnet) pour reprendre automatiquement ton objectif et tes résultats, ou écris-les à la main.');
+  const rows=bRows(), has=rows.some(r=>r.apres!=='—'), el=document.getElementById('bRes'), man=document.getElementById('bResMan'), keep=man?man.value:'';
+  if(has) el.innerHTML='<table><tr><th>Indicateur</th><th>Avant</th><th>Après</th><th>Cible</th></tr>'+rows.map(r=>'<tr><td>'+esc(r.label)+'</td><td>'+esc(r.avant)+'</td><td'+(r.ok===null?'':' class="'+(r.ok?'ok':'ko')+'"')+'>'+esc(r.apres)+'</td><td>'+esc(r.cible)+'</td></tr>').join('')+'</table><p class="small">Avant : avant-dernière performance enregistrée. Après : la plus récente.</p>';
+  else { el.innerHTML='<p class="small">Aucune performance enregistrée dans ce carnet : écris tes résultats (écarts mesurés) ci-dessous.</p><textarea id="bResMan" rows="3" placeholder="Ex. écart de temps lent/vite : 2,5 s ; écart de fréquence : +7 cy/min"></textarea>'; document.getElementById('bResMan').value=keep; }
+}
+function bRefresh2(){
+  const sug=suggestedProblems();
+  document.querySelectorAll('[data-sug]').forEach(e=>e.classList.toggle('hidden',!sug.has(e.dataset.sug)));
+  bUpd2();
+}
+function chipText(r){ return 'mon '+lcFirst(r.label)+' est de '+r.apres+(r.ok?' (dans la cible : '+r.cible+')':', hors cible (cible : '+r.cible+')'); }
+function bDecisionAuto(){
+  const pr=bRadio('bPrio'), parts=[];
+  if(pr==='oui') parts.push('poursuivre le même travail');
+  if(pr==='partiel') parts.push('ajuster mon objectif');
+  if(pr==='non'){ const p=bProblem(); parts.push(p?'changer de priorité et travailler « '+p.label+' »':'changer de priorité'); }
+  bEvoSel().forEach(e=>parts.push(e.inf));
+  return joinFr(parts);
+}
+function bObjAuto(){
+  if(bRadio('bPrio')==='non'){ const p=bProblem(); if(p){ const gb=TRANSFO.find(x=>x.decl===p.bloc); if(gb) return lcFirst(gb.obj); } }
+  return lcFirst(noDot(bv('bObjPrec')));
+}
+function bRefresh3(){
+  setAuto('bDecision',bDecisionAuto()); setAuto('bObjJ',bObjAuto());
+  const rows=bRows().filter(r=>r.apres!=='—').sort((a,b)=>(a.ok===b.ok?0:(a.ok?1:-1)));
+  document.getElementById('bChips').innerHTML=rows.length?rows.slice(0,4).map(r=>'<button type="button" class="sugchip" data-t="'+esc(chipText(r))+'" onclick="bAddTo(\'bConstat\',this.dataset.t)">+ '+esc(chipText(r))+'</button>').join(''):'<span class="small">Écris ce que tes résultats montrent.</span>';
+  bPreview();
+}
+function bRefresh4(){ setAuto('bObj',bv('bObjJ')); }
+function bPhrase(){
+  const d=noDot(bv('bDecision')), c=noDot(bv('bConstat')), o=noDot(bv('bObjJ'));
+  return 'Je choisis de '+(d||'…')+' parce que mes résultats montrent que '+(c?c+'.':'…')+' Lors de la prochaine séance, je chercherai à '+(o?o+'.':'…');
+}
+function bPreview(){ const el=document.getElementById('bPreview'); if(el) el.textContent=bPhrase(); }
+function bValid(n){
+  if(n===1&&!bRadio('bAtt')) return "Choisis si ton objectif est atteint.";
+  if(n===2){
+    const pr=bRadio('bPrio');
+    if(!pr) return "Indique si ton problème précédent est toujours prioritaire.";
+    if(pr==='non'&&!bRadio('bProb')) return "Choisis ton nouveau problème prioritaire.";
+    if(bRadio('bAtt')!=='oui'&&pr!=='non'&&!bEvoSel().length) return "Choisis au moins un ajustement de ton entraînement (2 maximum).";
+  }
+  if(n===3){
+    const m=[]; if(!bv('bDecision')) m.push('ta décision'); if(!bv('bConstat')) m.push('« parce que mes résultats montrent que… »');
+    if(!bv('bRessenti')) m.push('ce que tu as ressenti ou observé'); if(!bv('bObjJ')) m.push('« je chercherai à… »');
+    if(m.length) return 'Complète : '+m.join(', ')+'.';
+  }
+  return '';
+}
+function bGo(n){
+  bN=Math.max(1,Math.min(4,n));
+  document.querySelectorAll('.bstep').forEach(c=>c.classList.toggle('hidden',+c.dataset.step!==bN));
+  document.querySelectorAll('.stp').forEach(b=>{ const k=+b.dataset.s; b.classList.toggle('on',k===bN); b.classList.toggle('done',k<bN); });
+  document.getElementById('stepBar').style.width=(bN*25)+'%';
+  document.getElementById('bPrev').classList.toggle('hidden',bN===1);
+  document.getElementById('bNext').classList.toggle('hidden',bN===4);
+  document.getElementById('bWarn').classList.add('hidden');
+  [null,bRefresh1,bRefresh2,bRefresh3,bRefresh4][bN]();
+}
+function bStep(d){
+  if(d>0){ const m=bValid(bN); if(m){ bWarn(m); return; } }
+  bGo(bN+d); window.scrollTo({top:0,behavior:'smooth'});
+}
+function bJump(k){ if(k<=bN){ bGo(k); window.scrollTo({top:0,behavior:'smooth'}); } }
+function bilanDataV2(){
+  const rows=bRows().map(r=>({label:r.label,avant:r.avant,apres:r.apres,cible:r.cible,ok:r.ok})), man=document.getElementById('bResMan');
+  return {v:2,objPrec:bv('bObjPrec'),resultats:rows,resMan:man?man.value.trim():'',atteint:bRadio('bAtt'),
+    compris:[...document.querySelectorAll('.bCompris:checked')].map(c=>c.dataset.t),constate:bv('bConstate'),
+    priorite:bRadio('bPrio'),probleme:bRadio('bPrio')==='non'?bProblem():null,evolutions:bEvoSel().map(e=>e.t),
+    decision:noDot(bv('bDecision')),constat:noDot(bv('bConstat')),ressenti:bv('bRessenti'),objectifJ:noDot(bv('bObjJ')),phrase:bPhrase(),
+    objectif:bv('bObj'),indicateurs:[...document.querySelectorAll('.bInd:checked')].map(c=>c.value),saurai:bv('bSaurai'),defi:bv('bDefi')};
+}
+function bilanCorps(d){
+  const L=(t,v)=>'<p><strong>'+t+' :</strong> '+(v?esc(v):'—')+'</p>', UL=a=>'<ul>'+a.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>';
+  let h='<h3>Je comprends</h3>'+L('Mon objectif précédent',d.objPrec);
+  if(d.resultats.some(r=>r.apres!=='—')) h+='<table><tr><th>Indicateur</th><th>Avant</th><th>Après</th><th>Cible</th></tr>'+d.resultats.map(r=>'<tr><td>'+esc(r.label)+'</td><td>'+esc(r.avant)+'</td><td'+(r.ok===null?'':' style="background:'+(r.ok?'#E4F7D9':'#FFE7D6')+'"')+'>'+esc(r.apres)+'</td><td>'+esc(r.cible)+'</td></tr>').join('')+'</table>';
+  else if(d.resMan) h+=L('Mes résultats',d.resMan);
+  h+='<p><strong>Objectif atteint :</strong> '+esc(ATT_TXT[d.atteint]||'—')+'</p>';
+  if(d.compris.length) h+='<p><strong>Ce que j\'ai compris :</strong></p>'+UL(d.compris);
+  if(d.constate) h+=L('J\'ai constaté que',d.constate);
+  h+='<h3>Je décide</h3><p><strong>Mon problème précédent est-il toujours prioritaire ?</strong> '+esc(PRIO_TXT[d.priorite]||'—')+'</p>';
+  if(d.probleme) h+='<p><strong>Nouveau problème prioritaire :</strong> '+esc(d.probleme.label)+'<br>Bloc conseillé dans le plan : '+esc(d.probleme.bloc)+'</p>';
+  if(d.evolutions.length) h+='<p><strong>Je fais évoluer mon entraînement :</strong></p>'+UL(d.evolutions);
+  h+='<h3>Je justifie</h3><p>'+esc(d.phrase)+'</p>'+L('Ce que j\'ai ressenti ou observé',d.ressenti);
+  h+='<h3>Je me projette</h3>'+L('Mon objectif pour la prochaine séance (je cherche à…)',d.objectif)+L('Mon indicateur de réussite',d.indicateurs.join(', '))+L('Je saurai que j\'ai progressé si',d.saurai)+L('Mon défi (je veux réussir à…)',d.defi);
+  return h;
+}
+function printBilan(){
+  if(!bv('bObj')){ bWarn("Écris ton objectif pour la prochaine séance."); return false; }
+  const d=bilanDataV2();
+  openSheet('sheet3','Ma fiche bilan',bv('eleveNom3')||'Élève',bilanCorps(d),{kind:'bilan',data:d});
+  return true;
+}
+async function partagerBilan(){
+  if(!printBilan()) return;
+  const txt='Ma fiche bilan — '+(bv('eleveNom3')||'Élève')+' — '+new Date().toLocaleString('fr-FR')+'\n'+sheetText('sheet3');
+  if(navigator.share){ try{ await navigator.share({title:'Fiche bilan',text:txt}); }catch(e){} }
+  else if(navigator.clipboard){ try{ await navigator.clipboard.writeText(txt); toast('Texte copié'); }catch(e){} }
+}
+function bReset(){
+  document.querySelectorAll('#tab4 textarea,#tab4 input[type=text]').forEach(e=>{ e.value=''; delete e.dataset.auto; delete e.dataset.edited; });
+  document.querySelectorAll('#tab4 input[type=checkbox],#tab4 input[type=radio]').forEach(e=>{ e.checked=false; });
+  document.getElementById('sheet3').classList.remove('show'); document.documentElement.classList.remove('has-sheet'); delete pendingRec.sheet3;
+  bGo(1); window.scrollTo({top:0,behavior:'smooth'});
+}
+/* Le Plan reprend l'objectif, l'indicateur et le problème du dernier bilan enregistré */
+function prefillPlanFromBilan(){
+  const p=curProf(); if(!p) return;
+  const last=p.bilan.filter(e=>e.data&&e.data.v===2).sort((a,b)=>b.ts-a.ts)[0];
+  if(!last||planPrefilled===last.id) return;
+  const d=last.data; let did=false;
+  const obj=document.getElementById('objSeance'); if(!obj.value.trim()&&d.objectif){ obj.value=ucFirst(d.objectif); did=true; }
+  const js=document.getElementById('jeSaurai'); if(!js.value.trim()&&d.saurai){ js.value=d.saurai; did=true; }
+  if(!document.querySelector('.indRe:checked')&&Array.isArray(d.indicateurs)&&d.indicateurs.length){
+    document.querySelectorAll('.indRe').forEach(c=>{ if(d.indicateurs.includes(c.parentElement.textContent.trim())) c.checked=true; }); did=true; }
+  if(d.probleme&&d.probleme.id){
+    const c=document.getElementById(d.probleme.id); if(c&&!c.checked){ c.checked=true; did=true; }
+    const det=[...document.querySelectorAll('#transfo details')].find(x=>x.dataset.decl===d.probleme.bloc); if(det) det.open=true;
+  }
+  planPrefilled=last.id;
+  const n=document.getElementById('prefillNote');
+  if(n&&did){ n.textContent='Repris de ton dernier bilan du '+new Date(last.ts).toLocaleDateString('fr-FR')+' : objectif, indicateur et problème. Tu peux tout modifier.'; n.classList.remove('hidden'); }
 }
 
 function fichePage(corpsHTML,noSave){
@@ -1368,19 +1646,8 @@ function recompute(){
   document.getElementById('status').innerHTML=
     tag(okP,'Échauffement : '+p.dist+'m / 100m min')+tag(okT,'Transformation : '+t.groups+'/2 déclinaisons différentes')+tag(okV,'Validation : '+v.n+'/1')+tag(okD,'Distance : '+total+'m / 600m min');
   const pb=document.getElementById('distBar'); if(pb){ pb.style.width=Math.min(100,Math.round(total/6))+'%'; pb.className=okD?'full':''; }
-  updateRaisons();
   return {okP,okT,okV,okD,total};
 }
-function updateRaisons(){
-  const blocs=[], inds=[];
-  document.querySelectorAll('#transfo .grp').forEach((grp,i)=>{
-    if([...grp.querySelectorAll('.exrow .chk')].some(c=>c.checked)){ blocs.push(TRANSFO[i].theme); inds.push(TRANSFO[i].ind); }
-  });
-  document.getElementById('rBlocs').textContent=blocs.length?blocs.join(' • '):'—';
-  document.getElementById('rInd').textContent=inds.length?inds.join(' ; '):'—';
-}
-
-
 function collectSection(container){
   const out=[];
   container.querySelectorAll('.exrow').forEach(r=>{
@@ -1396,7 +1663,6 @@ function collectSection(container){
   return out;
 }
 function onVoirFiche(mode){
-  if(mode==='bilan'){ printPlan('bilan'); return; } // le bilan se remplit indépendamment du plan d'entraînement
   const r=recompute();
   const probs=[];
   if(!r.okP) probs.push('le bloc préparation (100m minimum)');
@@ -1409,8 +1675,8 @@ function onVoirFiche(mode){
   printPlan(mode);
 }
 function printPlan(mode){
-  const bilan=mode==='bilan';
-  const nom=document.getElementById(bilan?'eleveNom3':'eleveNom2').value||'Élève';
+  const bilan=false;
+  const nom=document.getElementById('eleveNom2').value||'Élève';
   const prep=collectSection(document.getElementById('prep'));
   const transfo=collectPlanT();
   const valid=collectSection(document.getElementById('valid'));
@@ -1436,33 +1702,19 @@ function printPlan(mode){
     };
     h+=section('Préparation',prep)+section('Transformation',transfo)+section('Validation',valid);
     h+='<p><strong>Distance totale : '+total+'m</strong></p>';
-  } else {
-    h+='<h3>Mon bilan</h3>';
-    const atteintEl=document.querySelector('input[name=atteint]:checked');
-    const atteintTxt={oui:'🟢 Oui',partiel:'🟠 Partiellement',non:'🔴 Non'};
-    h+='<p><strong>Objectif atteint :</strong> '+(atteintEl?atteintTxt[atteintEl.value]:'—')+'</p>';
-    h+='<p>Mes difficultés : '+(document.getElementById('r1').value||'—')+'</p>';
-    h+='<p>Ce que j\'ai appris : '+(document.getElementById('appris').value||'—')+'</p>';
-    h+='<p>Résultat : '+(document.getElementById('r4').value||'—')+'</p>';
-    const modif=[...document.querySelectorAll('.modif:checked')].map(c=>c.parentElement.textContent.trim());
-    h+='<p>Ce que je modifie : '+(modif.length?modif.join(' ; '):'—')+'</p>';
-    h+='<p>Mon prochain objectif : '+(document.getElementById('prochainObj').value||'—')+'</p>';
-    h+='<p>Blocs choisis : '+(document.getElementById('rBlocs').textContent)+'</p>';
-    h+='<p>Indicateurs observés : '+(document.getElementById('rInd').textContent)+'</p>';
   }
-  openSheet(bilan?'sheet3':'sheet2', bilan?"Ma fiche bilan":"Ma fiche d'entraînement", nom, h, {kind:bilan?'bilan':'plan', data:bilan?bilanData():planData(prep,transfo,valid,total)});
+  openSheet('sheet2',"Ma fiche d'entraînement",nom,h,{kind:'plan',data:planData(prep,transfo,valid,total)});
 }
-async function partagerPlan(mode){
-  onVoirFiche(mode);
-  const bilan=mode==='bilan';
-  const sheetEl=document.getElementById(bilan?'sheet3':'sheet2');
+async function partagerPlan(){
+  onVoirFiche('entrainement');
+  const sheetEl=document.getElementById('sheet2');
   if(!sheetEl.classList.contains('show')) return; // contraintes non remplies, message déjà affiché
-  const nom=document.getElementById(bilan?'eleveNom3':'eleveNom2').value||'Élève';
-  const txt=(bilan?'Ma fiche bilan — ':"Ma fiche d'entraînement — ")+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+sheetText(bilan?'sheet3':'sheet2');
-  if(navigator.share){ try{ await navigator.share({title:bilan?'Fiche bilan':"Fiche d'entraînement",text:txt}); }catch(e){} }
+  const nom=document.getElementById('eleveNom2').value||'Élève';
+  const txt="Ma fiche d'entraînement — "+nom+' — '+new Date().toLocaleString('fr-FR')+'\n'+sheetText('sheet2');
+  if(navigator.share){ try{ await navigator.share({title:"Fiche d'entraînement",text:txt}); }catch(e){} }
 }
 
-dbLoad(); buildDiag(); buildPrep(); buildTransfo(); buildValid(); recompute(); updateProfChip();
+dbLoad(); buildDiag(); buildBilan(); buildPrep(); buildTransfo(); buildValid(); recompute(); updateProfChip();
 </script>
 </body>
 </html>
