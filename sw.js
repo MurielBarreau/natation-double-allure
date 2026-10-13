@@ -1,6 +1,6 @@
 /* Service worker : permet d'utiliser l'application hors ligne.
    © Muriel Barreau, CEDREPS, 2026 - CC BY-NC 4.0 */
-const CACHE = 'ca1-double-allure-v1';
+const CACHE = 'ca1-double-allure-v2';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
