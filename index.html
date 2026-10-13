@@ -15,6 +15,12 @@
 <meta name="author" content="Muriel Barreau, CEDREPS">
 <meta name="copyright" content="© Muriel Barreau, CEDREPS, 2026 - CC BY-NC 4.0">
 <link rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Double Allure">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="robots" content="noindex, nofollow, noarchive, noai, noimageai">
 <title>CA1 - Natation Double Allure</title>
 <style>
@@ -504,6 +510,11 @@ footer a{color:var(--blue);font-weight:700}
     <div id="entries"></div>
   </div>
   <div class="card">
+    <h2>Utiliser sans réseau</h2>
+    <p id="offNote" class="small" style="font-weight:700;color:var(--ink)"></p>
+    <p class="small">Pour installer l'application : ouvre le site une fois avec du réseau, puis utilise le menu du navigateur « Ajouter à l'écran d'accueil » (iPhone : bouton Partager, puis « Sur l'écran d'accueil »). Elle s'ouvre ensuite comme une application, même sans connexion.</p>
+  </div>
+  <div class="card">
     <h2>Sauvegarde et impression</h2>
     <div id="stNote"></div>
     <button class="printbtn" onclick="exportCarnet()">Sauvegarder mon carnet</button>
@@ -890,7 +901,7 @@ function planData(prep,transfo,valid,total){
     mode:modeDemi?'demi':'complete', total, ex:[...mk('prep',prep),...mk('transfo',transfo),...mk('valid',valid)]};
 }
 /* Affichage du carnet */
-function renderCarnet(){ renderProfiles(); renderEvo(); renderEntries(); renderStorageNote(); }
+function renderCarnet(){ renderProfiles(); renderEvo(); renderEntries(); renderStorageNote(); offlineStatus(); }
 function renderProfiles(){
   const el=document.getElementById('profList');
   el.innerHTML=db.profiles.length?db.profiles.map(p=>'<button class="pill'+(p.id===db.current?' on':'')+'" onclick="selectProfile(\''+p.id+'\')">'+esc(p.name)+'</button>').join(''):'<p class="small">Aucun profil pour l\'instant : crée le tien ci-dessous.</p>';
@@ -1249,14 +1260,161 @@ function prefillPlanFromBilan(){
   if(n&&did){ n.textContent='Repris de ton dernier bilan du '+new Date(last.ts).toLocaleDateString('fr-FR')+' : objectif, indicateur et problème. Tu peux tout modifier.'; n.classList.remove('hidden'); }
 }
 
-function fichePage(corpsHTML,noSave){
+/* ---------- PDF intégré (aucune bibliothèque, fonctionne hors ligne) ---------- */
+const PDFW={"r":[278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584,761,556,0,222,556,333,1000,556,556,333,1000,667,333,1000,0,611,0,0,222,222,333,333,350,556,1000,333,1000,500,333,944,0,500,667,278,333,556,556,556,556,260,556,333,737,370,556,584,333,737,333,400,584,333,333,333,556,537,278,333,333,365,556,834,834,834,611,667,667,667,667,667,667,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,500,556,556,556,556,278,278,278,278,556,556,556,556,556,556,556,584,611,556,556,556,556,500,556,500],"b":[278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584,761,556,0,278,556,500,1000,556,556,333,1000,667,333,1000,0,611,0,0,278,278,500,500,350,556,1000,333,1000,556,333,944,0,500,667,278,333,556,556,556,556,280,556,333,737,370,556,584,333,737,333,400,584,333,333,333,611,556,278,333,333,365,556,834,834,834,611,722,722,722,722,722,722,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,556,556,556,556,556,278,278,278,278,611,611,611,611,611,611,611,584,611,611,611,611,611,556,611,556]};
+const CP1252={'€':0x80,'‚':0x82,'ƒ':0x83,'„':0x84,'…':0x85,'†':0x86,'‡':0x87,'ˆ':0x88,'‰':0x89,'Š':0x8A,'‹':0x8B,'Œ':0x8C,'Ž':0x8E,'‘':0x91,'’':0x92,'“':0x93,'”':0x94,'•':0x95,'–':0x96,'—':0x97,'˜':0x98,'™':0x99,'š':0x9A,'›':0x9B,'œ':0x9C,'ž':0x9E,'Ÿ':0x9F};
+function pdfEnc(s){
+  s=String(s).replace(/[\u{1F000}-\u{1FFFF}\u2600-\u27BF\uFE0F\u200D]/gu,'').replace(/→/g,'->').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/−/g,'-').replace(/[\u00A0\u202F\s]+/g,' ');
+  let o=''; for(const ch of s){ const c=ch.codePointAt(0); if(c<256&&!(c>=0x80&&c<=0x9F)) o+=String.fromCharCode(c); else if(CP1252[ch]) o+=String.fromCharCode(CP1252[ch]); else o+='?'; }
+  return o;
+}
+function pesc(s){ return s.replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)'); }
+function tw(s,b,size){ const t=b?PDFW.b:PDFW.r; let w=0; for(let i=0;i<s.length;i++){ const c=s.charCodeAt(i)-32; w+=(c>=0&&c<224)?t[c]:0; } return w*size/1000; }
+function pieces(runs){
+  const out=[]; let pend=false;
+  runs.forEach(r=>{
+    if(r.br){ out.push({br:1}); pend=false; return; }
+    const t=pdfEnc(r.t); if(!t.trim()){ if(t) pend=true; return; }
+    const ws=t.split(' ');
+    ws.forEach((w,i)=>{ if(w==='') return; out.push({w,b:r.b,gap:(i===0?(pend||t.charAt(0)===' '):true)}); pend=false; });
+    pend=t.charAt(t.length-1)===' ';
+  });
+  return out;
+}
+function wrapLines(ps,maxW,size){
+  const sp=tw(' ',false,size), lines=[]; let cur=[], cw=0;
+  const push=()=>{ lines.push(cur); cur=[]; cw=0; };
+  ps.forEach(p=>{
+    if(p.br){ push(); return; }
+    let w=p.w; let ww=tw(w,p.b,size);
+    while(ww>maxW){ let k=w.length; while(k>1&&tw(w.slice(0,k),p.b,size)>maxW) k--; if(cur.length) push(); cur.push({w:w.slice(0,k),b:p.b,x:0}); push(); w=w.slice(k); ww=tw(w,p.b,size); }
+    const gap=(cur.length&&p.gap)?sp:0;
+    if(cur.length&&cw+gap+ww>maxW) push();
+    const g=(cur.length&&p.gap)?sp:0;
+    cur.push({w,b:p.b,x:cw+g}); cw+=g+ww;
+  });
+  if(cur.length) push();
+  return lines;
+}
+function runsOf(node,bold,out){
+  out=out||[]; bold=!!bold;
+  node.childNodes.forEach(n=>{
+    if(n.nodeType===3) out.push({t:n.textContent,b:bold});
+    else if(n.nodeType===1){
+      const tag=n.tagName.toUpperCase();
+      if(tag==='BR') out.push({br:1});
+      else if(tag==='SVG'||n.classList.contains('no-print')) {}
+      else runsOf(n,bold||tag==='STRONG'||tag==='B',out);
+    }
+  });
+  return out;
+}
+function buildPDF(el){
+  const W=595.28,H=841.89,M=48,CW=W-2*M,BOT=64;
+  const INK='0.055 0.153 0.259',BLUE='0.078 0.365 0.627',MUTED='0.337 0.435 0.525';
+  const pages=[]; let cur,y;
+  const newPage=()=>{ cur={ops:[]}; pages.push(cur); y=H-M; };
+  const ensure=h=>{ if(y-h<BOT) newPage(); };
+  const word=(x,yy,w,b,size,col)=>cur.ops.push('BT /'+(b?'F2':'F1')+' '+size+' Tf '+col+' rg '+x.toFixed(2)+' '+yy.toFixed(2)+' Td ('+pesc(w)+') Tj ET');
+  const rect=(x,yy,w,h,fill,stroke)=>{ cur.ops.push((fill?fill+' rg ':'')+(stroke?'0.827 0.898 0.945 RG 0.6 w ':'')+x.toFixed(2)+' '+yy.toFixed(2)+' '+w.toFixed(2)+' '+h.toFixed(2)+' re '+(fill&&stroke?'B':(fill?'f':'S'))); };
+  function para(runs,o){
+    o=o||{}; const size=o.size||10.5, lh=size*1.38, x0=o.x||M, mw=o.w||CW, col=o.color||INK;
+    const lines=wrapLines(pieces(o.forceBold?runs.map(r=>r.br?r:{t:r.t,b:true}):runs),mw,size);
+    (o.before)&&(y-=o.before);
+    lines.forEach(l=>{ ensure(lh); y-=lh*0.82; l.forEach(s=>word(x0+s.x,y,s.w,s.b,size,col)); y-=lh*0.18; });
+    y-=(o.after===undefined?4:o.after);
+  }
+  function list(li,ordered,start){
+    let n=start;
+    [...li].forEach(it=>{
+      const size=10.5, lh=size*1.38, lines=wrapLines(pieces(runsOf(it)),CW-24,size);
+      ensure(lh*Math.min(lines.length,2));
+      const mark=ordered?(n++)+'.':'\x95';
+      lines.forEach((l,i)=>{ ensure(lh); y-=lh*0.82; if(i===0) word(M+6,y,mark,ordered,size,ordered?BLUE:INK); l.forEach(s=>word(M+24+s.x,y,s.w,s.b,size,INK)); y-=lh*0.18; });
+      y-=2;
+    });
+    y-=4;
+  }
+  function table(tb){
+    const rows=[...tb.querySelectorAll('tr')].map(tr=>[...tr.children].map(c=>({runs:runsOf(c),th:c.tagName==='TH',bg:(c.getAttribute('style')||'').match(/background:\s*(#[0-9a-fA-F]{6})/),cls:c.className})));
+    if(!rows.length) return;
+    const nc=Math.max(...rows.map(r=>r.length)), size=9.5, pad=4, lh=size*1.35;
+    const len=Array(nc).fill(6); rows.forEach(r=>r.forEach((c,i)=>{ const t=c.runs.map(x=>x.t||' ').join(''); len[i]=Math.max(len[i],Math.min(34,pdfEnc(t).length)); }));
+    const tot=len.reduce((a,b)=>a+b,0), cw=len.map(l=>CW*l/tot);
+    const hex=h=>[1,3,5].map(i=>(parseInt(h.substr(i,2),16)/255).toFixed(3)).join(' ');
+    rows.forEach(r=>{
+      const cells=r.map((c,i)=>wrapLines(pieces(c.th?c.runs.map(x=>x.br?x:{t:x.t,b:true}):c.runs),cw[i]-2*pad,size));
+      const h=Math.max(...cells.map(l=>l.length),1)*lh+2*pad;
+      ensure(h); const top=y; let x=M;
+      r.forEach((c,i)=>{
+        const fill=c.th?'0.851 0.957 0.980':(c.bg?hex(c.bg[1]):(/\bok\b/.test(c.cls)?'0.894 0.969 0.851':(/\bko\b/.test(c.cls)?'1 0.906 0.839':null)));
+        rect(x,top-h,cw[i],h,fill,true);
+        cells[i].forEach((l,k)=>l.forEach(s=>word(x+pad+s.x,top-pad-(k+0.82)*lh,s.w,s.b,size,INK)));
+        x+=cw[i];
+      });
+      y=top-h;
+    });
+    y-=8;
+  }
+  function block(n){
+    if(n.nodeType!==1) return;
+    const tag=n.tagName.toUpperCase();
+    if(n.classList.contains('no-print')||n.classList.contains('sheetFoot')||n.classList.contains('chartCard')||tag==='SVG') return;
+    if(tag==='H2'){ ensure(40); para(runsOf(n),{size:18,color:BLUE,forceBold:true,after:2}); }
+    else if(tag==='H3'){ ensure(34); para(runsOf(n),{size:13,color:BLUE,forceBold:true,before:8,after:3}); }
+    else if(tag==='P') para(runsOf(n),{});
+    else if(tag==='UL') list(n.children,false,1);
+    else if(tag==='OL') list(n.children,true,parseInt(n.getAttribute('start'))||1);
+    else if(tag==='TABLE') table(n);
+    else [...n.childNodes].forEach(block);
+  }
+  newPage();
+  word(M,y-9,pdfEnc('CA1 - Natation Double Allure · Lycée Théas'),true,9,MUTED); y-=14;
+  rect(M,y-2,56,3.5,'0.047 0.753 0.875'); y-=16;
+  [...el.childNodes].forEach(block);
+  const foot=pdfEnc('© Muriel Barreau, CEDREPS, 2026 - Licence CC BY-NC 4.0 - creativecommons.org/licenses/by-nc/4.0/deed.fr');
+  pages.forEach((p,i)=>{ cur=p; word(M,32,foot,false,7.5,MUTED); const t='Page '+(i+1)+'/'+pages.length; word(W-M-tw(t,false,7.5),32,t,false,7.5,MUTED); });
+  // assemblage du fichier
+  const ids=pages.map((p,i)=>({c:6+2*i,p:7+2*i}));
+  const body=[null,'<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids ['+ids.map(o=>o.p+' 0 R').join(' ')+'] /Count '+pages.length+' >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>',
+    '<< /Title ('+pesc(pdfEnc(el.querySelector('h2')?el.querySelector('h2').textContent:'Fiche'))+') /Author (Muriel Barreau, CEDREPS) /Creator (CA1 - Natation Double Allure) >>'];
+  pages.forEach((p,i)=>{ const d=p.ops.join('\n'); body[ids[i].c]='<< /Length '+d.length+' >>\nstream\n'+d+'\nendstream';
+    body[ids[i].p]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents '+ids[i].c+' 0 R >>'; });
+  let out='%PDF-1.4\n%\xE2\xE3\xCF\xD3\n'; const off=[];
+  for(let i=1;i<body.length;i++){ off[i]=out.length; out+=i+' 0 obj\n'+body[i]+'\nendobj\n'; }
+  const xr=out.length; out+='xref\n0 '+body.length+'\n0000000000 65535 f \n';
+  for(let i=1;i<body.length;i++) out+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+  out+='trailer\n<< /Size '+body.length+' /Root 1 0 R /Info 5 0 R >>\nstartxref\n'+xr+'\n%%EOF';
+  const u=new Uint8Array(out.length); for(let i=0;i<out.length;i++) u[i]=out.charCodeAt(i)&255;
+  return u;
+}
+async function sheetPDF(id){
+  const el=document.getElementById(id); if(!el) return;
+  let bytes; try{ bytes=buildPDF(el); }catch(e){ toast("PDF impossible ici : utilise « Imprimer »"); return; }
+  const base=((el.querySelector('h2')?el.querySelector('h2').textContent:'fiche')+'-'+(el.dataset.nom||'')).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const fname=(base||'fiche')+'.pdf', blob=new Blob([bytes],{type:'application/pdf'});
+  try{
+    const file=new File([blob],fname,{type:'application/pdf'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:fname}); return; }
+  }catch(e){ if(e&&e.name==='AbortError') return; }
+  const url=URL.createObjectURL(blob), a=document.createElement('a');
+  a.href=url; a.download=fname; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },4000);
+  toast('PDF créé : vérifie tes téléchargements');
+}
+
+function fichePage(corpsHTML,noSave,id){
   return corpsHTML+'<p class="sheetFoot">© Muriel Barreau, CEDREPS, 2026 — Licence CC BY-NC 4.0 : creativecommons.org/licenses/by-nc/4.0/deed.fr</p>'+
-    '<div class="no-print" style="margin-top:14px">'+(noSave?'':'<div class="saveArea"></div>')+'<button class="printbtn" onclick="window.print()">Imprimer / enregistrer en PDF</button></div>';
+    '<div class="no-print" style="margin-top:14px">'+(noSave?'':'<div class="saveArea"></div>')+
+    '<button class="printbtn" onclick="sheetPDF(\''+id+'\')">Télécharger / envoyer le PDF</button>'+
+    '<button class="printbtn sec" onclick="window.print()">Imprimer</button>'+
+    '<p class="small" style="margin-top:8px">Le PDF se crée dans l\'application, même sans réseau. Si ton téléphone propose « Partager », tu peux l\'envoyer directement à ton professeur.</p></div>';
 }
 function openSheet(id,titre,nom,corpsHTML,opts){
   opts=opts||{};
   const el=document.getElementById(id), ts=opts.ts?new Date(opts.ts):new Date();
-  el.innerHTML='<h2>'+esc(titre)+'</h2><p><strong>'+esc(nom)+'</strong> — '+ts.toLocaleDateString('fr-FR')+' à '+ts.toLocaleTimeString('fr-FR').slice(0,5)+'</p>'+fichePage(corpsHTML,!opts.kind);
+  el.innerHTML='<h2>'+esc(titre)+'</h2><p><strong>'+esc(nom)+'</strong> — '+ts.toLocaleDateString('fr-FR')+' à '+ts.toLocaleTimeString('fr-FR').slice(0,5)+'</p>'+fichePage(corpsHTML,!opts.kind,id);
+  el.dataset.nom=nom;
   if(opts.kind){ pendingRec[id]={kind:opts.kind,titre,nom,corps:corpsHTML,data:opts.data,saved:false}; renderSaveArea(id); }
   document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show'));
   el.classList.add('show'); document.documentElement.classList.add('has-sheet');
@@ -1715,6 +1873,15 @@ async function partagerPlan(){
 }
 
 dbLoad(); buildDiag(); buildBilan(); buildPrep(); buildTransfo(); buildValid(); recompute(); updateProfChip();
+function offlineStatus(){
+  const el=document.getElementById('offNote'); if(!el) return;
+  if(!('serviceWorker' in navigator)){ el.textContent="Ce navigateur ne permet pas l'utilisation hors ligne."; return; }
+  el.textContent=navigator.serviceWorker.controller?"✓ L'application est disponible hors ligne sur cet appareil.":"Ouvre l'application une fois avec du réseau, puis recharge-la : elle fonctionnera ensuite hors ligne.";
+}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+  window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(offlineStatus).catch(()=>{}); });
+  navigator.serviceWorker.addEventListener('controllerchange',offlineStatus);
+}
 </script>
 </body>
 </html>

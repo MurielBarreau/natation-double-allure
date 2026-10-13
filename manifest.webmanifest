@@ -1,0 +1,15 @@
+{
+  "name": "CA1 - Natation Double Allure",
+  "short_name": "Double Allure",
+  "description": "Chrono, plan d'entraînement, bilan et carnet de progression - CA1 natation de vitesse (Muriel Barreau, CEDREPS).",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EAF4FA",
+  "theme_color": "#145DA0",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
