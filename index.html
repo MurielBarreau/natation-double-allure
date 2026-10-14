@@ -34,9 +34,13 @@
   --r:22px;
 }
 *{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;overflow:hidden;overscroll-behavior:none}
+body{height:100%}
+#app{display:flex;flex-direction:column;height:100%;height:100dvh;width:100%;max-width:100vw}
+#scroll{flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",ui-rounded,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  font-size:15px;line-height:1.45;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  font-size:15px;line-height:1.45;padding-bottom:0}
 button,input,select,textarea{font-family:inherit}
 :focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 
@@ -53,10 +57,11 @@ header{background:linear-gradient(135deg,var(--blue) 0%,var(--turq) 100%);color:
 @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* Navigation basse */
-nav{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:720px;z-index:20;display:flex;gap:2px;background:#fff;
-  border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(20,93,160,.16);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
-nav button{flex:1;border:none;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;
-  font-size:11px;font-weight:700;padding:7px 1px;cursor:pointer;border-radius:18px;line-height:1.15;transition:background .2s,color .2s}
+nav{position:relative;flex:0 0 auto;width:100%;max-width:720px;margin:0 auto;z-index:20;display:flex;gap:0;background:#fff;
+  border-radius:26px 26px 0 0;box-shadow:0 -6px 24px rgba(20,93,160,.16);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1 1 0;min-width:0;border:none;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:clamp(9.5px,2.8vw,11.5px);font-weight:700;padding:7px 0;cursor:pointer;border-radius:18px;line-height:1.15;transition:background .2s,color .2s}
+nav button span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 nav button.active{color:var(--blue);background:var(--turq-bg)}
 
@@ -233,18 +238,22 @@ footer a{color:var(--blue);font-weight:700}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.t1::after{width:76px}}
 @media print{
   *,*::before,*::after{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{height:auto;overflow:visible}
+  #app{display:block;height:auto;max-width:none}
+  #scroll{overflow:visible;height:auto}
   body{background:#fff;padding-bottom:0}
   nav,.waves,.profChip,.toast{display:none !important}
   .card{box-shadow:none;break-inside:avoid}
   .btnrow,.addrow,.pbtn,.plink,.printbtn,.row2{display:none !important}
-  html.has-sheet body *{display:none !important}
-  html.has-sheet .sheet.show, html.has-sheet .sheet.show *{display:revert !important}
+  html.has-sheet #scroll>header,html.has-sheet #scroll>main,html.has-sheet #scroll>footer,html.has-sheet #app>nav{display:none !important}
   html.has-sheet .sheet.show{box-shadow:none;border:0;padding:0;margin:0;max-width:none}
   html.has-sheet .sheet.show .no-print{display:none !important}
 }
 </style>
 </head>
 <body>
+<div id="app">
+<div id="scroll">
 <header>
   <svg class="waves w1" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true"><path fill="rgba(255,255,255,.4)" d="M0 20 C150 0 150 40 300 20 C450 0 450 40 600 20 C750 0 750 40 900 20 C1050 0 1050 40 1200 20 V40 H0 Z"/></svg>
   <svg class="waves w2" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true"><path fill="#EAF4FA" d="M0 20 C150 0 150 40 300 20 C450 0 450 40 600 20 C750 0 750 40 900 20 C1050 0 1050 40 1200 20 V40 H0 Z"/></svg>
@@ -254,13 +263,6 @@ footer a{color:var(--blue);font-weight:700}
       <button id="profChip" class="profChip" onclick="showTab(5)">Choisir un profil</button></div>
   </div>
 </header>
-<nav>
-  <button id="tabBtn1" class="active" onclick="showTab(1)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="7"/><path d="M12 14V10M9.5 3h5M12 3v4"/></svg><span>Performance</span></button>
-  <button id="tabBtn2" aria-label="Plan d'entraînement" onclick="showTab(2)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Plan</span></button>
-  <button id="tabBtn3" onclick="showTab(3)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg><span>Épreuve</span></button>
-  <button id="tabBtn4" onclick="showTab(4)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="17" rx="3"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Bilan</span></button>
-  <button id="tabBtn5" onclick="showTab(5)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"/><path d="M9 9h5M9 13h5"/></svg><span>Carnet</span></button>
-</nav>
 <main>
 
 <!-- TAB 1 -->
@@ -619,8 +621,17 @@ footer a{color:var(--blue);font-weight:700}
 <div id="sheet2" class="sheet"></div>
 <div id="sheet3" class="sheet"></div>
 <div id="sheet4" class="sheet"></div>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
 <footer class="foot">© Muriel Barreau, CEDREPS, 2026 · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.fr" target="_blank" rel="license noopener">Licence CC BY-NC 4.0</a><br>Cette application ne collecte aucune donnée : tout reste sur votre appareil.</footer>
+</div>
+<nav>
+  <button id="tabBtn1" class="active" onclick="showTab(1)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="7"/><path d="M12 14V10M9.5 3h5M12 3v4"/></svg><span>Performance</span></button>
+  <button id="tabBtn2" aria-label="Plan d'entraînement" onclick="showTab(2)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Plan</span></button>
+  <button id="tabBtn3" onclick="showTab(3)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg><span>Épreuve</span></button>
+  <button id="tabBtn4" onclick="showTab(4)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="17" rx="3"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Bilan</span></button>
+  <button id="tabBtn5" onclick="showTab(5)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"/><path d="M9 9h5M9 13h5"/></svg><span>Carnet</span></button>
+</nav>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ---------- Navigation ---------- */
@@ -635,7 +646,7 @@ function setTrio(d){
   }).join('');
 }
 function showTab(n){
-  window.scrollTo({top:0,behavior:'smooth'});
+  scrollTop0();
   document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show')); document.documentElement.classList.remove('has-sheet');
   if(n===5) renderCarnet();
   if(n===2) prefillPlanFromBilan();
@@ -822,6 +833,7 @@ function uid2(){ return Date.now().toString(36)+Math.random().toString(36).slice
 function curProf(){ return db.profiles.find(p=>p.id===db.current)||null; }
 function fmtTs(ts){ const d=new Date(ts); return d.toLocaleDateString('fr-FR')+' à '+d.toLocaleTimeString('fr-FR').slice(0,5); }
 function toast(msg){ const t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2800); }
+function scrollTop0(){ const c=document.getElementById('scroll'); if(c&&c.scrollTo) c.scrollTo({top:0,behavior:'smooth'}); else window.scrollTo({top:0,behavior:'smooth'}); }
 function sheetText(id){
   const el=document.getElementById(id), hid=[...el.querySelectorAll('.no-print')];
   hid.forEach(e=>e.style.display='none'); const t=el.innerText; hid.forEach(e=>e.style.display=''); return t.trim();
@@ -1197,9 +1209,9 @@ function bGo(n){
 }
 function bStep(d){
   if(d>0){ const m=bValid(bN); if(m){ bWarn(m); return; } }
-  bGo(bN+d); window.scrollTo({top:0,behavior:'smooth'});
+  bGo(bN+d); scrollTop0();
 }
-function bJump(k){ if(k<=bN){ bGo(k); window.scrollTo({top:0,behavior:'smooth'}); } }
+function bJump(k){ if(k<=bN){ bGo(k); scrollTop0(); } }
 function bilanDataV2(){
   const rows=bRows().map(r=>({label:r.label,avant:r.avant,apres:r.apres,cible:r.cible,ok:r.ok})), man=document.getElementById('bResMan');
   return {v:2,objPrec:bv('bObjPrec'),resultats:rows,resMan:man?man.value.trim():'',atteint:bRadio('bAtt'),
@@ -1239,7 +1251,7 @@ function bReset(){
   document.querySelectorAll('#tab4 textarea,#tab4 input[type=text]').forEach(e=>{ e.value=''; delete e.dataset.auto; delete e.dataset.edited; });
   document.querySelectorAll('#tab4 input[type=checkbox],#tab4 input[type=radio]').forEach(e=>{ e.checked=false; });
   document.getElementById('sheet3').classList.remove('show'); document.documentElement.classList.remove('has-sheet'); delete pendingRec.sheet3;
-  bGo(1); window.scrollTo({top:0,behavior:'smooth'});
+  bGo(1); scrollTop0();
 }
 /* Le Plan reprend l'objectif, l'indicateur et le problème du dernier bilan enregistré */
 function prefillPlanFromBilan(){
