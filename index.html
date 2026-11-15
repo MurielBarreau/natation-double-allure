@@ -269,6 +269,120 @@ footer a{color:var(--blue);font-weight:700}
 input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px 12px;font-size:15px;width:100%;max-width:230px;background:#fff;color:var(--ink)}
 .softWarn{border-left:6px solid var(--coral);background:#FFF4EC;border-radius:12px;padding:10px 14px;margin:10px 0;font-size:13.5px;color:var(--ink)}
 .softWarn ul{margin:6px 0 0 18px;padding:0}
+
+/* Cartes repliables */
+.foldH{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;user-select:none}
+.foldH::after{content:"";width:9px;height:9px;border-right:3px solid var(--blue);border-bottom:3px solid var(--blue);transform:rotate(45deg);transition:transform .2s;flex:none;margin:0 4px 4px 0}
+.card.fold.open>.foldH::after{transform:rotate(-135deg);margin:4px 4px 0 0}
+.card.fold>.foldBody{display:none;margin-top:12px}.card.fold.open>.foldBody{display:block}
+.card.sub{box-shadow:none;border:1px solid var(--border);margin:10px 0 0;padding:14px}
+.planCard{border:2px solid var(--blue)}
+.planCard>h2{background:linear-gradient(135deg,#145DA0,#0CC0DF);color:#fff;margin:-20px -20px 14px;padding:16px 20px;border-radius:var(--r) var(--r) 0 0}
+.refd summary{cursor:pointer;color:var(--blue);font-weight:700;margin-top:12px;padding:6px 0}
+
+/* Diagnostic et corps de séance : 3 sous-blocs colorés */
+.cpFold{--c:#1F5FA8;border:2px solid var(--c);border-radius:14px;overflow:hidden;margin:10px 0;background:#fff}
+.cpFold.cp2{--c:#0B6E78}.cpFold.cp3{--c:#A24B00}
+.cpFold>summary{background:var(--c);color:#fff;font-weight:800;padding:14px 16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cpFold>summary::-webkit-details-marker{display:none}
+.cpFold>summary::after{content:"";width:9px;height:9px;border-right:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(45deg);flex:none;margin:0 4px 4px 0;transition:transform .2s}
+.cpFold[open]>summary::after{transform:rotate(-135deg);margin:4px 4px 0 0}
+.cpBody{padding:6px 12px 12px}
+/* Évolution : 3 cartes */
+.evoStats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.stat{flex:1 1 104px;background:#fff;border:1px solid var(--border);border-top:5px solid var(--c);border-radius:14px;padding:10px 10px 8px}
+.stat .sl{font-size:11.5px;font-weight:700;color:var(--muted)}.stat .sv{font-size:22px;font-weight:800;margin:2px 0}
+.stat .sd{font-size:12px;font-weight:800}.stat .sd.ok{color:#17622B}.stat .sd.ko{color:#8A4300}.stat .sc{font-size:11px;color:var(--muted)}
+.stat svg{display:block;width:100%;height:28px;margin-top:4px}
+
+/* Cases à cocher unifiées : carré arrondi + coche */
+input[type=checkbox],input[type=radio]{-webkit-appearance:none;appearance:none;width:24px;height:24px;border:2px solid #7A8FA6;border-radius:7px;background:#fff;vertical-align:middle;margin:0 6px 0 0;flex:none;cursor:pointer;transition:background .15s,border-color .15s}
+input[type=checkbox]:checked,input[type=radio]:checked{background:#0B3D6B url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/16px no-repeat;border-color:#0B3D6B}
+input[type=checkbox]:focus-visible,input[type=radio]:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
+.chk-line input{margin-top:0}
+.planSel{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px;font-size:13px}.planSel select{flex:1;min-width:150px;padding:6px 8px;border-radius:10px;border:1.5px solid var(--border);background:#fff}
+
+/* Mode Enseignant / Coach */
+.coachCard{border:1px solid var(--border);border-radius:16px;padding:14px;margin:12px 0;background:#fff}
+.coachCard .top{display:flex;gap:8px;align-items:center}
+.coachCard .top input{flex:1}
+.coachCard table{margin-top:8px}.coachCard th{font-size:12px}
+.coachCard .fq{font-size:13px;margin:8px 0 4px;color:var(--ink)}
+.coachCard .pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.cpill{display:inline-block;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+.cpill.ok{background:#E3F5E8;color:#17622B}.cpill.wa{background:#FFF0DA;color:#8A4300}
+.coachLink{display:block;text-align:center;margin:14px 0 4px}
+
+/* ===== Passe design : lisible, moderne, tactile (la vague de l'en-tête est conservée) ===== */
+body{font-size:16px;line-height:1.5}
+main{padding:20px 14px 10px}
+.card{border-color:#DCE9F3;box-shadow:0 4px 18px rgba(20,93,160,.09);padding:18px}
+.card.sub{box-shadow:none}
+h2{font-size:19px;letter-spacing:-.1px}
+h2::after{display:none}
+.card>h2:not(.foldH)::after,.planCard>h2::after{display:none}
+.t1{font-size:28px}
+.small{font-size:13.5px}
+/* En-têtes de cartes repliables : zone tactile large, état visible */
+.foldH{min-height:52px;padding:6px 2px}
+.card.fold>.foldH{border-radius:14px}
+.card.fold.open>.foldH{color:var(--blue)}
+.card.fold:not(.open)>.foldH:hover,.card.fold:not(.open)>.foldH:active{background:var(--turq-bg)}
+.card.fold>.foldBody{margin-top:8px;padding-top:12px;border-top:1px solid var(--border)}
+.planCard{box-shadow:0 10px 28px rgba(20,93,160,.28);border-width:2px}
+/* Boutons : 48 px mini, primaire en dégradé */
+.printbtn{min-height:48px;font-size:16px;background:linear-gradient(135deg,#145DA0,#1C7CC4);box-shadow:0 6px 16px rgba(20,93,160,.3)}
+.printbtn.sec{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
+.plink{font-size:14px;min-height:36px}
+.big{min-height:56px}
+/* Barre d'onglets : l'onglet actif est une pastille pleine */
+nav{box-shadow:0 -6px 24px rgba(20,93,160,.18)}
+nav button{padding:8px 2px;min-height:56px}
+nav button.active{background:var(--blue);color:#fff}
+/* Champs plus confortables */
+input[type=number],input[type=text],input[type=date],select,textarea{min-height:44px;font-size:16px}
+td input[type=number],td input[type=text]{min-height:42px}
+/* Messages et pastilles : contraste renforcé */
+.msgbox.ok{background:var(--ok-bg);color:#1F4D10}.msgbox.ko{background:var(--ko-bg);color:#6B2A05}
+.tp{border-radius:16px}
+.cpFold>summary{min-height:52px;font-size:16px}
+.chk-line{margin:10px 0;font-size:15.5px}
+.stat .sv{font-size:24px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (min-width:700px){main{padding-top:28px}.card{padding:22px}}
+
+.cchrono{margin:10px 0 4px;text-align:center}
+.ccrow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.clbl{font-weight:700;margin:2px 0 10px;min-height:22px}
+.cdisp{font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--blue)}
+.cchrono .big{padding:12px 22px;font-size:16px;min-width:0}
+
+/* Cartes moins arrondies (6 px) */
+:root{--r:6px}
+.card,.card.sub,.cpFold,.grp,.coachCard,.stat,.card.fold>.foldH{border-radius:6px}
+.planCard>h2{border-radius:4px 4px 0 0}
+
+/* Cartes plus compactes (hauteur réduite) */
+.card{padding:12px 14px;margin-bottom:10px}
+.card.sub{padding:10px 12px;margin:8px 0 0}
+h2{font-size:18px;margin:0 0 8px}
+.foldH{min-height:44px;padding:2px 0}
+.card.fold>.foldBody{margin-top:4px;padding-top:8px}
+.planCard>h2{margin:-12px -14px 10px;padding:12px 14px}
+h3,.cpHead{margin:12px 0 4px}
+.cpFold{margin:8px 0}
+.cpFold>summary{min-height:44px;padding:8px 14px}
+.cpBody{padding:2px 12px 8px}
+.grp{padding:8px 12px;margin-top:8px}
+.chk-line{margin:6px 0}
+th,td{padding:6px}
+.exrow{padding:5px 0}
+.planRow{padding:8px 0}
+.msgbox{padding:10px 14px;margin:8px 0}
+.t1{margin:2px 4px 10px;font-size:26px}
+main{padding-top:14px}
+.coachCard{padding:10px 12px;margin:8px 0}
+@media (min-width:700px){.card{padding:14px 16px}}
 </style>
 </head>
 <body>
@@ -280,7 +394,7 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
   <div class="brandRow">
     <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="rgba(255,255,255,.22)"/><circle cx="31" cy="15" r="3.4" fill="#fff"/><path d="M9 24c3-3 6-3 9 0s6 3 9 0 6-3 9 0" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M9 32c3-3 6-3 9 0s6 3 9 0 6-3 9 0" fill="none" stroke="#7ED957" stroke-width="2.6" stroke-linecap="round"/></svg>
     <div><p class="brand">CA1 - Natation Double Allure</p><p class="sub">Lycée Théas</p>
-      <button id="profChip" class="profChip" onclick="showTab(5)">Choisir un profil</button></div>
+      <button id="profChip" class="profChip" onclick="showTab(5);openFold(document.getElementById('settingsCard'))">Choisir un profil</button></div>
   </div>
 </header>
 <main>
@@ -354,18 +468,23 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
     <div id="manualMsg"></div>
     <label class="small">Nom de l'élève</label>
     <input type="text" id="eleveNom1" placeholder="Prénom Nom">
-    <button class="printbtn" onclick="printPerf()">Voir ma fiche</button>
+    <button class="printbtn" onclick="printPerf()">Enregistrer dans le carnet</button>
     <button class="printbtn" onclick="partagerPerf()">Partager</button>
     <button class="printbtn sec" onclick="resetChrono()">Nouvel essai</button>
   </div>
+<div class="card" id="coachEntry">
+  <h2>Mode Enseignant / Coach</h2>
+  <p class="small" style="margin:0 0 4px">Chronomètre et relève les temps et les CB de plusieurs nageurs ou nageuses, puis exporte en tableau.</p>
+  <button class="printbtn sec" onclick="showTab(6)">Ouvrir le mode Enseignant / Coach</button>
+</div>
 </div>
 <!-- /TAB 1 -->
 
 <!-- TAB 2 -->
 <div id="tab2" class="hidden">
-  <h1 class="t1">Plan d'entraînement</h1>
+  <h1 class="t1">Entraînement</h1>
   <div class="card">
-    <h2>Ma démarche avant, pendant et après la séance de natation</h2>
+    <h2>Démarche pour s'entraîner et progresser</h2>
     <h3>Avant ma séance d'entraînement</h3>
     <p style="margin:2px 0">1. Je repère un problème prioritaire constaté à la suite de l'épreuve de la « double allure ».</p>
     <p style="margin:2px 0">2. Je choisis sur l'appli, le ou les blocs (un prioritaire, un secondaire) qui correspondent à mon problème des exercices et des quantités de travail.</p>
@@ -399,45 +518,44 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
     <textarea id="jeSaurai" rows="2"></textarea>
   </div>
 
-  <div class="card" id="reqCard">
+  <div class="card" id="buildCard">
+    <h2>Construction de mon plan d'entraînement</h2>
+  <div class="card sub" id="reqCard">
     <h2>Exigences de construction du plan d'entraînement</h2>
     <div class="status" id="status"></div>
     <div class="bar" aria-hidden="true"><span id="distBar"></span></div>
     <p class="small" style="margin-top:8px">Ces exigences doivent toutes être remplies pour obtenir ta fiche d'entraînement (PDF, impression, partage). Elles se mettent à jour à chaque exercice coché.</p>
   </div>
 
-  <div class="card">
-    <h2>Bloc de préparation <span class="small">(100m minimum d'échauffement)</span></h2>
+  <div class="card sub">
+    <h2>Échauffement <span class="small">(100m minimum d'échauffement)</span></h2>
     <div class="obs">Ce que tu vas observer : ta perception de l'effort et la qualité de ta nage.</div>
     <div id="prep"></div>
   </div>
 
-  <div class="card">
-    <h2>Bloc de transformation <span class="small">(2 déclinaisons différentes minimum, au choix)</span></h2>
+  <div class="card sub">
+    <h2>Corps de séance <span class="small">(2 déclinaisons différentes minimum, au choix)</span></h2>
     <div id="transfo"></div>
   </div>
 
-  <div class="card">
-    <h2>Bloc de validation <span class="small">(obligatoire)</span></h2>
+  <div class="card sub">
+    <h2>Validation <span class="small">(obligatoire)</span></h2>
     <div id="valid"></div>
   </div>
 
-  <div class="card">
+  </div>
+
+  <div class="card planCard" id="finalCard">
     <h2>Mon plan d'entraînement</h2>
     <p class="small">Voici l'ordre de ta séance. La préparation 🔒 reste en premier et la validation 🔒 en dernier. Déplace tes exercices de transformation avec ▲ ▼, et utilise « Refaire cet exercice » pour le refaire plus tard dans la séance, après un autre exercice.</p>
     <div id="planList"></div>
-  </div>
-
-  <div class="card" id="finalCard">
-    <h2>Ma fiche d'entraînement</h2>
-    <p class="small" style="margin-top:0">Exigences de construction :</p>
-    <div id="reqList" class="reqList"></div>
     <p id="planWarn" class="msgbox ko hidden"></p>
     <label class="small" style="margin-top:10px;display:block">Nom de l'élève</label>
     <input type="text" id="eleveNom2" placeholder="Prénom Nom">
-    <button class="printbtn" onclick="onVoirFiche('entrainement')">Voir ma fiche d'entraînement</button>
+    <button class="printbtn" onclick="onVoirFiche('entrainement')">Enregistrer dans le carnet</button>
     <button class="printbtn sec" onclick="partagerPlan()">Partager</button>
   </div>
+
   <div id="reqBar" class="reqBar" role="status" onclick="reqGo()"></div>
 </div>
 <!-- /TAB 2 -->
@@ -518,7 +636,7 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
     <textarea id="bDefi" rows="2"></textarea>
     <label class="small" style="margin-top:12px;display:block">Nom de l'élève</label>
     <input type="text" id="eleveNom3" placeholder="Prénom Nom">
-    <button class="printbtn" onclick="printBilan()">Voir ma fiche bilan</button>
+    <button class="printbtn" onclick="printBilan()">Enregistrer dans le carnet</button>
     <button class="printbtn sec" onclick="partagerBilan()">Partager</button>
     <button class="plink" style="margin-top:10px" onclick="bReset()">Effacer et recommencer un bilan</button>
   </div>
@@ -540,38 +658,10 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
     <div class="row2"><input type="text" id="newProf" maxlength="24" placeholder="Nouveau profil (prénom)"><button class="btn-s" onclick="addProfile()">Créer</button></div>
     <div id="profDel" style="margin-top:8px"></div>
   </div>
-  <div class="card"><h2>Mon évolution</h2><div id="evo"></div></div>
-  <div class="card">
-    <h2>Mes séances enregistrées</h2>
-    <div class="seg" id="seg"><button data-k="perf" class="on" onclick="setKind('perf')">Performances</button><button data-k="plan" onclick="setKind('plan')">Plans</button><button data-k="bilan" onclick="setKind('bilan')">Bilans</button></div>
-    <button class="printbtn sec" id="btnAddPerf" onclick="saisirDepuisCarnet()">Ajouter une performance</button>
-    <div id="entries"></div>
-  </div>
-  <div class="card">
-    <h2>Utiliser sans réseau</h2>
-    <p id="offNote" class="small" style="font-weight:700;color:var(--ink)"></p>
-    <p class="small">Pour installer l'application : ouvre le site une fois avec du réseau, puis utilise le menu du navigateur « Ajouter à l'écran d'accueil » (iPhone : bouton Partager, puis « Sur l'écran d'accueil »). Elle s'ouvre ensuite comme une application, même sans connexion.</p>
-  </div>
-  <div class="card">
-    <h2>Sauvegarde et impression</h2>
-    <div id="stNote"></div>
-    <button class="printbtn" onclick="exportCarnet()">Sauvegarder mon carnet</button>
-    <button class="printbtn sec" onclick="document.getElementById('fileIn').click()">Restaurer un carnet</button>
-    <input type="file" id="fileIn" class="hidden" accept=".json,application/json" onchange="importFile(this)">
-    <button class="printbtn sec" onclick="carnetPrint()">Imprimer mon carnet de progression</button>
-    <p class="small" id="bkMsg" style="margin-top:10px"></p>
-    <h3>À savoir</h3>
-    <p class="small">Ton carnet est enregistré uniquement dans le navigateur de ce téléphone. Il disparaît si tu vides le cache, changes de téléphone ou navigues en mode privé ; sur iPhone, ajoute l'application à l'écran d'accueil. Fais une sauvegarde de temps en temps. Les valeurs sont déclaratives : l'estimation AFL1 est indicative, la note officielle est celle de ton enseignant.</p>
-  </div>
-</div>
-<!-- /TAB 5 -->
-
-<!-- TAB 3 -->
-<div id="tab3" class="hidden">
-  <h1 class="t1">Épreuve</h1>
-  <div class="card">
-    <h2>Barème AFL1 — Crawl (40m cumulés, 2x20m vite)</h2>
-    <button class="printbtn" style="margin-bottom:12px" onclick="chargerDepuisPerf()">Charger mes performances (onglet 1)</button>
+<div class="card" id="epreuveCard">
+    <h2>Épreuve</h2>
+    <div class="card sub" id="baremeCard"><h2>Barème AFL1 – Crawl (Cumul des 2x20m vite)</h2>
+    <button class="printbtn" style="margin-bottom:12px" onclick="chargerDepuisPerf()">Charger mes performances (onglet Performance)</button>
     <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
       <div style="flex:1;min-width:140px">
         <label class="small">Temps cumulé (Vite1+Vite2, s)</label>
@@ -589,19 +679,10 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
     </table>
     <p class="small" style="margin-top:10px">Hors barème : en dessous du seuil le plus bas = 0 point, au-dessus du seuil le plus haut = 6 points.<br>Estimation indicative : la note officielle est celle de l'enseignant.</p>
     <p id="effTxt" style="font-weight:600;margin-top:12px"></p>
-    <p id="freqTxt" style="font-weight:600;margin-top:6px"></p>
-  </div>
-  <div class="card">
-    <h2>Table de référence — Temps cumulé 40m Crawl</h2>
-    <div id="refTableTemps" style="overflow-x:auto"></div>
-  </div>
-  <div class="card">
-    <h2>Table de référence — CB cumulés</h2>
-    <div id="refTableCB" style="overflow-x:auto"></div>
-  </div>
-
-  <div class="card">
-    <h2>🏊 Conseils pour réussir mon épreuve</h2>
+    <p id="freqTxt" style="font-weight:600;margin-top:6px"></p><details class="refd"><summary>Barème temps cumulés 40m crawl vite</summary>
+    <div id="refTableTemps" style="overflow-x:auto"></div></details><details class="refd"><summary>Barème CB cumulé 40m crawl vite</summary>
+    <div id="refTableCB" style="overflow-x:auto"></div></details></div>
+    <div class="card sub" id="conseilsEleve"><h2>Conseils pour réussir mon épreuve</h2>
     <h3>1. Sur le 25 m vite : je cherche la vitesse sans perdre mon efficacité</h3>
     <ul>
       <li>Je pousse fort au mur et je profite de ma coulée.</li>
@@ -634,11 +715,8 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
     <p>Je différencie clairement mes deux allures, je reste efficace et j'utilise le 25 m lent pour être capable de relancer et de reproduire ma performance.</p>
     <div class="msgbox ok" style="color:var(--text);background:var(--bg)">
       🧠 Mon repère essentiel<br>Vite = fréquence ↑ + efficacité conservée<br>Lent = fréquence ↓ + nage ample + récupération active<br>Relance = je retrouve rapidement mon organisation efficace
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>🧑‍🏫 Conseils pour le coach</h2>
+    </div></div>
+    <div class="card sub" id="conseilsCoach"><h2>Conseils pour le coach</h2>
     <h3>Indicateurs à observer pendant l'épreuve</h3>
     <ul>
       <li><strong>Temps</strong> de chaque 25m (Vite 1, Lent 1, Vite 2, Lent 2)</li>
@@ -648,9 +726,48 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
       <li><strong>Qualité du trajet moteur</strong> sur le vite : la nage reste-t-elle organisée, ou se dégrade-t-elle ?</li>
       <li><strong>Relance après le 25m lent</strong> : le 2e 25m vite est-il proche du 1er (temps, CB) ?</li>
     </ul>
-    <p class="small">Ces indicateurs recoupent directement les tableaux d'écarts de l'onglet Performances : un coach qui les observe en direct peut confirmer ou nuancer ce que l'application calcule a posteriori.</p>
+    <p class="small">Ces indicateurs recoupent directement les tableaux d'écarts de l'onglet Performances : un coach qui les observe en direct peut confirmer ou nuancer ce que l'application calcule a posteriori.</p></div>
+  </div>
+  <div class="card"><h2>Mon évolution</h2><div id="evo"></div></div>
+  <div class="card">
+    <h2>Mes séances enregistrées</h2>
+    <div class="seg" id="seg"><button data-k="perf" class="on" onclick="setKind('perf')">Performances</button><button data-k="plan" onclick="setKind('plan')">Plans</button><button data-k="bilan" onclick="setKind('bilan')">Bilans</button></div>
+    <button class="printbtn sec" id="btnAddPerf" onclick="saisirDepuisCarnet()">Ajouter une performance</button>
+    <div id="entries"></div>
+  </div>
+  <div class="card">
+    <h2>Utiliser sans réseau</h2>
+    <p id="offNote" class="small" style="font-weight:700;color:var(--ink)"></p>
+    <p class="small">Pour installer l'application : ouvre le site une fois avec du réseau, puis utilise le menu du navigateur « Ajouter à l'écran d'accueil » (iPhone : bouton Partager, puis « Sur l'écran d'accueil »). Elle s'ouvre ensuite comme une application, même sans connexion.</p>
+  </div>
+  <div class="card">
+    <h2>Sauvegarde et impression</h2>
+    <div id="stNote"></div>
+    <button class="printbtn" onclick="exportCarnet()">Sauvegarder mon carnet</button>
+    <button class="printbtn sec" onclick="document.getElementById('fileIn').click()">Restaurer un carnet</button>
+    <input type="file" id="fileIn" class="hidden" accept=".json,application/json" onchange="importFile(this)">
+    <button class="printbtn sec" onclick="carnetPrint()">Imprimer mon carnet de progression</button>
+    <p class="small" id="bkMsg" style="margin-top:10px"></p>
+    <h3>À savoir</h3>
+    <p class="small">Ton carnet est enregistré uniquement dans le navigateur de ce téléphone. Il disparaît si tu vides le cache, changes de téléphone ou navigues en mode privé ; sur iPhone, ajoute l'application à l'écran d'accueil. Fais une sauvegarde de temps en temps. Les valeurs sont déclaratives : l'estimation AFL1 est indicative, la note officielle est celle de ton enseignant.</p>
   </div>
 </div>
+<!-- /TAB 5 -->
+
+<!-- TAB 6 : ENSEIGNANT / COACH -->
+<div id="tab6" class="hidden">
+  <h1 class="t1">Enseignant / Coach</h1>
+  <div class="card">
+    <button class="plink" onclick="showTab(1)">← Retour à l'application</button>
+    <p class="small" style="margin-top:6px">Observe un ou plusieurs nageurs ou nageuses : chronomètre comme l'élève : Vite 1 / Lent 1, récupération de 15 s, puis Vite 2 / Lent 2 (les temps s'enregistrent seuls), puis ajoute les CB. Tu peux aussi saisir les temps à la main. Épreuve complète ou demi-épreuve. Les écarts et fréquences se calculent seuls. Les observations restent sur cet appareil ; l'export en tableau (CSV) s'ouvre dans Excel ou LibreOffice.</p>
+    <div id="coachList"></div>
+    <button class="printbtn sec" onclick="coachAdd()">+ Ajouter un nageur / une nageuse observé(e)</button>
+    <button class="printbtn" onclick="coachCsv()">Exporter en tableau (CSV)</button>
+    <button class="plink" style="margin-top:8px" onclick="coachClear()">Tout effacer</button>
+  </div>
+</div>
+<!-- /TAB 6 -->
+
 
 </main>
 <div id="sheet1" class="sheet"></div>
@@ -661,8 +778,7 @@ input[type=date]{border:1.5px solid var(--border);border-radius:12px;padding:9px
 </div>
 <nav>
   <button id="tabBtn1" class="active" onclick="showTab(1)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="7"/><path d="M12 14V10M9.5 3h5M12 3v4"/></svg><span>Performance</span></button>
-  <button id="tabBtn2" aria-label="Plan d'entraînement" onclick="showTab(2)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Plan</span></button>
-  <button id="tabBtn3" onclick="showTab(3)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></svg><span>Épreuve</span></button>
+  <button id="tabBtn2" aria-label="Entraînement" onclick="showTab(2)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Entraînement</span></button>
   <button id="tabBtn4" onclick="showTab(4)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="17" rx="3"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg><span>Bilan</span></button>
   <button id="tabBtn5" onclick="showTab(5)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"/><path d="M9 9h5M9 13h5"/></svg><span>Carnet</span></button>
 </nav>
@@ -688,9 +804,10 @@ function showTab(n){
   if(n===5) renderCarnet();
   if(n===2) prefillPlanFromBilan();
   if(n===4) bGo(bN);
-  [1,2,3,4,5].forEach(i=>{
+  if(n===6) coachRender();
+  [1,2,4,5,6].forEach(i=>{
     document.getElementById('tab'+i).classList.toggle('hidden', n!==i);
-    document.getElementById('tabBtn'+i).classList.toggle('active', n===i);
+    const tb=document.getElementById('tabBtn'+i); if(tb) tb.classList.toggle('active', n===i);
   });
 }
 
@@ -946,12 +1063,14 @@ function majDerives(){
   });
   if(!manual) applyDiagAuto();
 }
+function openDiagGroups(){ document.querySelectorAll('#diagList .cpFold').forEach(d=>{ if(d.querySelector('input:checked')) d.open=true; }); }
 function applyDiagAuto(){
   if(!window.diagAuto) return;
   Object.keys(window.diagAuto).forEach(id=>{
     const el=document.getElementById(id);
     if(el && window.diagAuto[id]) el.checked=true;
   });
+  openDiagGroups();
 }
 document.addEventListener('input', e=>{
   if(['cbV1','cbL1','cbV2','cbL2'].includes(e.target.id)){ majDerives(); manualCheck(); }
@@ -963,6 +1082,9 @@ document.addEventListener('change', e=>{
     if(checked.length>2) e.target.checked=false;
   }
 });
+
+
+
 /* ---------- Carnet : historique local (aucune donnée envoyée) ---------- */
 const NS='cedreps.ca1-double-allure.v1.';
 let db={v:1,current:null,profiles:[]}, storageOk=true, carnetKind='perf', delProf=false, delEnt=null;
@@ -1112,12 +1234,31 @@ function evoHTML(recs){
     blk('Écart lent 1 − vite 2 (s) · cible 3 à 6 s',lineChart({n,labels,dec:1,band:[3,6],title:'Écart lent vite',series:[ser('Écart','#145DA0',d=>d.dt)]}))+
     blk('Fréquence des vite (cy/min) · repère 30',lineChart({n,labels,dec:0,hline:{y:30},title:'Fréquence des vite',series:[ser('Fréquence','#0CC0DF',d=>avg2(d.fq&&d.fq.v1,d.fq&&d.fq.v2))]}));
 }
+function evoCards(recs){
+  const L=recs[recs.length-1].data||{}, P=recs.length>1?(recs[recs.length-2].data||{}):null;
+  const vt=d=>(d.t&&isNum(d.t.v1)&&isNum(d.t.v2))?d.t.v1+d.t.v2:null;
+  const fv=d=>avg2(d.fq&&d.fq.v1,d.fq&&d.fq.v2);
+  const defs=[
+    {l:'Temps des vite (cumul)',f:vt,u:' s',dec:1,c:'#0B6E78',sc:'plus bas = mieux',good:(x,p)=>p===null?null:x<=p},
+    {l:'Écart lent/vite',f:d=>isNum(d.dt)?d.dt:null,u:' s',dec:1,c:'#1F5FA8',sc:'cible 3 à 6 s',good:x=>x>=3&&x<=6},
+    {l:'Fréquence des vite',f:fv,u:' cy/min',dec:0,c:'#A24B00',sc:'repère : 30 et plus',good:x=>x>=30}];
+  return '<div class="evoStats">'+defs.map(df=>{
+    const x=df.f(L), pv=P?df.f(P):null;
+    if(x===null||x===undefined) return '<div class="stat" style="--c:'+df.c+'"><div class="sl">'+df.l+'</div><div class="sv">—</div><div class="sc">'+df.sc+'</div></div>';
+    const g=df.good(x,pv), dl=(pv===null||pv===undefined)?'':(x-pv<0?'↓ ':x-pv>0?'↑ ':'= ')+fsg(x-pv,df.dec)+df.u;
+    const ser=recs.slice(-8).map(r=>df.f(r.data||{})).filter(v=>v!==null&&v!==undefined&&isFinite(v));
+    let sp=''; if(ser.length>1){ const mn=Math.min(...ser), mx=Math.max(...ser), rg=(mx-mn)||1;
+      sp='<svg viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="'+df.c+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="'+ser.map((v,k)=>(k*100/(ser.length-1)).toFixed(1)+','+(26-(v-mn)/rg*24).toFixed(1)).join(' ')+'"/></svg>'; }
+    return '<div class="stat" style="--c:'+df.c+'"><div class="sl">'+df.l+'</div><div class="sv">'+f1(x)+'<span style="font-size:12px">'+df.u+'</span></div>'+
+      (g===null?(dl?'<div class="sd">'+dl+'</div>':''):'<div class="sd '+(g?'ok':'ko')+'">'+(g?'✓ ':'⚠ ')+(dl||df.sc)+'</div>')+'<div class="sc">'+df.sc+'</div>'+sp+'</div>';
+  }).join('')+'</div>';
+}
 function renderEvo(){
   const el=document.getElementById('evo'), p=curProf();
   if(!p){ el.innerHTML='<p class="small">Choisis un profil pour voir ton évolution.</p>'; return; }
   const recs=p.perf.slice().sort((a,b)=>a.ts-b.ts);
-  if(recs.length<2){ el.innerHTML='<p class="small">'+(recs.length?'Enregistre une 2e performance':'Enregistre tes performances')+' pour voir ton évolution : temps, écart lent/vite et fréquence.</p>'; return; }
-  el.innerHTML=evoHTML(recs);
+  if(!recs.length){ el.innerHTML='<p class="small">Enregistre tes performances pour voir ton évolution : temps, écart lent/vite et fréquence.</p>'; return; }
+  el.innerHTML=evoCards(recs)+(recs.length>1?'<details class="refd"><summary>Voir les graphiques</summary>'+evoHTML(recs)+'</details>':'<p class="small">Enregistre une 2e performance pour voir les courbes.</p>');
 }
 function setKind(k){ carnetKind=k; delEnt=null; renderEntries(); }
 function entSummary(kind,e){
@@ -1143,7 +1284,7 @@ function renderEntries(){
   if(!p){ el.innerHTML='<p class="small">Choisis ou crée un profil pour voir tes séances enregistrées.</p>'; return; }
   const list=p[carnetKind].slice().sort((a,b)=>b.ts-a.ts);
   if(!list.length){ el.innerHTML='<p class="small">Rien d\'enregistré ici pour l\'instant. Ouvre une fiche, puis « Enregistrer dans le carnet ».</p>'; return; }
-  el.innerHTML=list.map(e=>'<div class="ent"><div class="entHead"><b>'+esc(e.titre)+'</b><span class="small">'+fmtTs(e.ts,carnetKind==='perf'&&e.data&&e.data.manual)+'</span></div><div class="small" style="color:var(--ink)">'+entSummary(carnetKind,e)+'</div><div class="entBtns">'+
+  el.innerHTML=list.map(e=>'<div class="ent"><div class="entHead"><b>'+esc(e.titre)+'</b><span class="small">'+fmtTs(e.ts,carnetKind==='perf'&&e.data&&e.data.manual)+'</span></div><div class="small" style="color:var(--ink)">'+entSummary(carnetKind,e)+'</div>'+planSel(e)+'<div class="entBtns">'+
     (delEnt===e.id?'<span class="small" style="color:var(--warn);font-weight:700">Supprimer cette séance ?</span> <button class="btn-s warn" onclick="delEntry(\''+e.id+'\',true)">Oui</button> <button class="btn-s" onclick="delEntry(null)">Non</button>'
     :'<button class="plink" onclick="viewEntry(\''+e.id+'\')">Revoir</button> <button class="plink" onclick="viewEntry(\''+e.id+'\',true)">Partager</button> <button class="plink" onclick="delEntry(\''+e.id+'\')">Supprimer</button>')+'</div></div>').join('');
 }
@@ -1269,7 +1410,8 @@ function buildBilan(){
   const q=document.querySelector.bind(document), g=id=>document.getElementById(id);
   g('bCompris').innerHTML=BCOMPRIS.map(t=>'<label class="chk-line"><input type="checkbox" class="bCompris" data-t="'+esc(t)+'"><span>'+esc(t)+'</span></label>').join('');
   g('bEvo').innerHTML=BEVO.map(e=>'<label class="chk-line"><input type="checkbox" class="bEvo" value="'+e.id+'" onchange="bLimit(this,2)"><span><b>'+esc(e.t)+'</b><span class="ex">'+esc(e.ex)+'</span></span></label>').join('');
-  g('bProbList').innerHTML=DIAG.map(gr=>'<div class="cpHead">'+esc(gr.t)+'</div>'+gr.items.map(it=>'<label class="chk-line"><input type="radio" name="bProb" value="'+it.id+'" onchange="bBloc()"><span>'+it.q.map(x=>'« '+esc(x)+' »').join('<br>')+' <span class="mini sug hidden" data-sug="'+it.id+'">suggéré</span></span></label>').join('')).join('');
+  g('bProbList').innerHTML=DIAG.map((gr,gi)=>'<details class="cpFold cp'+(gi+1)+'"><summary>'+esc(gr.t)+'</summary><div class="cpBody">'+gr.items.map(it=>'<label class="chk-line"><input type="radio" name="bProb" value="'+it.id+'" onchange="bBloc()"><span>'+it.q.map(x=>'« '+esc(x)+' »').join('<br>')+' <span class="mini sug hidden" data-sug="'+it.id+'">suggéré</span></span></label>').join('')+'</div></details>').join('');
+  const bpl=g('bProbList'); if(!bpl.dataset.ev){ bpl.dataset.ev='1'; bpl.addEventListener('change',()=>openBProb()); }
   g('bIndList').innerHTML=IND7.map(t=>'<label class="chk-inline"><input type="checkbox" class="bInd" value="'+esc(t)+'" onchange="bLimit(this,2)"> '+esc(t)+'</label>').join('');
   g('bDefiChips').innerHTML=DEFI_CHIPS.map(t=>'<button type="button" class="sugchip" data-t="'+esc(t)+'" onclick="bAddTo(\'bDefi\',this.dataset.t)">+ '+esc(t)+'</button>').join('');
   ['bDecision','bObjJ','bObj'].forEach(id=>g(id).addEventListener('input',e=>{ e.target.dataset.auto='0'; bPreview(); }));
@@ -1279,11 +1421,12 @@ function buildBilan(){
 }
 function bLimit(el,max){ if(el.checked&&document.querySelectorAll('.'+el.className+':checked').length>max){ el.checked=false; toast(max+' choix maximum'); } }
 function bAddTo(id,t){ const e=document.getElementById(id); e.value=e.value.trim()?e.value.trim()+' ; '+t:t; bPreview(); }
+function openBProb(){ document.querySelectorAll('#bProbList .cpFold').forEach(d=>{ if(d.querySelector('input:checked')) d.open=true; }); }
 function bBloc(){
   const el=document.getElementById('bBloc'), id=bRadio('bProb');
   if(!id){ el.classList.add('hidden'); return; }
   const code=DIAG_BLOC[id]; el.classList.remove('hidden');
-  el.textContent='Bloc conseillé dans le plan : '+code+' ('+CP_LABELS[code.charAt(2)].replace(/^CP\d — /,'')+')';
+  el.textContent='À travailler dans « Corps de séance » : '+CP_LABELS[code.charAt(2)];
 }
 function bUpd2(){
   document.getElementById('bEvoWrap').classList.toggle('hidden',bRadio('bAtt')==='oui');
@@ -1305,6 +1448,7 @@ function bRefresh1(){
 function bRefresh2(){
   const sug=suggestedProblems();
   document.querySelectorAll('[data-sug]').forEach(e=>e.classList.toggle('hidden',!sug.has(e.dataset.sug)));
+  document.querySelectorAll('#bProbList .cpFold').forEach(d=>{ if(d.querySelector('[data-sug]:not(.hidden)')) d.open=true; });
   bUpd2();
 }
 function chipText(r){ return 'mon '+lcFirst(r.label)+' est de '+r.apres+(r.ok?' (dans la cible : '+r.cible+')':', hors cible (cible : '+r.cible+')'); }
@@ -1379,7 +1523,7 @@ function bilanCorps(d){
   if(d.compris.length) h+='<p><strong>Ce que j\'ai compris :</strong></p>'+UL(d.compris);
   if(d.constate) h+=L('J\'ai constaté que',d.constate);
   h+='<h3>Je décide</h3><p><strong>Mon problème précédent est-il toujours prioritaire ?</strong> '+esc(PRIO_TXT[d.priorite]||'—')+'</p>';
-  if(d.probleme) h+='<p><strong>Nouveau problème prioritaire :</strong> '+esc(d.probleme.label)+'<br>Bloc conseillé dans le plan : '+esc(d.probleme.bloc)+'</p>';
+  if(d.probleme) h+='<p><strong>Nouveau problème prioritaire :</strong> '+esc(d.probleme.label)+'<br>À travailler dans « Corps de séance » : '+esc(blocLabel(d.probleme.bloc))+'</p>';
   if(d.evolutions.length) h+='<p><strong>Je fais évoluer mon entraînement :</strong></p>'+UL(d.evolutions);
   h+='<h3>Je justifie</h3><p>'+esc(d.phrase)+'</p>'+L('Ce que j\'ai ressenti ou observé',d.ressenti);
   h+='<h3>Je me projette</h3>'+L('Mon objectif pour la prochaine séance (je cherche à…)',d.objectif)+L('Mon indicateur de réussite',d.indicateurs.join(', '))+L('Je saurai que j\'ai progressé si',d.saurai)+L('Mon défi (je veux réussir à…)',d.defi);
@@ -1415,7 +1559,7 @@ function prefillPlanFromBilan(){
     document.querySelectorAll('.indRe').forEach(c=>{ if(d.indicateurs.includes(c.parentElement.textContent.trim())) c.checked=true; }); did=true; }
   if(d.probleme&&d.probleme.id){
     const c=document.getElementById(d.probleme.id); if(c&&!c.checked){ c.checked=true; did=true; }
-    const det=[...document.querySelectorAll('#transfo details')].find(x=>x.dataset.decl===d.probleme.bloc); if(det) det.open=true;
+    const det=[...document.querySelectorAll('#transfo details')].find(x=>x.dataset.decl===d.probleme.bloc); if(det){ det.open=true; const pf=det.closest('details.cpFold'); if(pf) pf.open=true; }
   }
   planPrefilled=last.id;
   const n=document.getElementById('prefillNote');
@@ -1577,7 +1721,9 @@ function openSheet(id,titre,nom,corpsHTML,opts){
   const el=document.getElementById(id), ts=opts.ts?new Date(opts.ts):new Date();
   el.innerHTML='<h2>'+esc(titre)+'</h2><p><strong>'+esc(nom)+'</strong> — '+ts.toLocaleDateString('fr-FR')+(opts.noTime?'':' à '+ts.toLocaleTimeString('fr-FR').slice(0,5))+'</p>'+fichePage(corpsHTML,!opts.kind,id);
   el.dataset.nom=nom;
-  if(opts.kind){ pendingRec[id]={kind:opts.kind,titre,nom,corps:corpsHTML,data:opts.data,ts:opts.ts,saved:false}; renderSaveArea(id); }
+  if(opts.kind){ pendingRec[id]={kind:opts.kind,titre,nom,corps:corpsHTML,data:opts.data,ts:opts.ts,saved:false}; renderSaveArea(id);
+    const pf=curProf(); if(pf){ const dup=pf[opts.kind].some(e=>e.corps===corpsHTML&&e.titre===titre&&Math.abs(Date.now()-e.ts)<864e5);
+      if(dup){ pendingRec[id].saved=true; renderSaveArea(id); } else saveRecord(id); } }
   document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show'));
   el.classList.add('show'); document.documentElement.classList.add('has-sheet');
   el.scrollIntoView({behavior:'smooth', block:'start'});
@@ -1678,7 +1824,8 @@ const PREP=[
  {n:"Crawl rattrapé",d:50,c:"Rattraper la main par devant, nager grand, inspiration quand le pouce touche la cuisse"},
  {n:"Crawl accélération progressive",d:50,c:"Augmenter la vitesse progressivement par 25m"},
 ];
-const CP_LABELS={1:"CP1 — Être efficace",2:"CP2 — Ventiler et différencier les allures pour récupérer",3:"CP3 — Gérer ses ressources et enchaîner les segments"};
+const CP_LABELS={1:"Efficacité",2:"Ventilation / différenciation des allures pour récupérer",3:"Gestion des ressources et enchaînement des segments"};
+function blocLabel(b){ return CP_LABELS[String(b).charAt(2)]||String(b); }
 const TRANSFO=[
  {cp:1, decl:"CP1A", theme:"Je fais beaucoup de coups de bras pour aller vite / Quand j'accélère, ma nage se dégrade",
   cible:"Écart temps lent/vite > 6s avec CB hors cible (> +2 ou < -2)",
@@ -1772,29 +1919,31 @@ function addRow(container){
   return wrap;
 }
 const DIAG=[
- {t:"1 - Être efficace", items:[
+ {t:"Efficacité", items:[
   {id:'dgA1', q:["Je fais beaucoup de coups de bras pour aller vite","Quand j'accélère, ma nage se dégrade"]},
   {id:'dgA2', q:["J'ai une bonne amplitude mais mon chrono n'est pas bon"]},
   {id:'dgA3', q:["Je perds ma vitesse à la poussée ou à la reprise de nage"]}]},
- {t:"2 - Ventiler et différencier les allures pour récupérer", items:[
+ {t:"Ventilation / différenciation des allures pour récupérer", items:[
   {id:'dgB1', q:["Ma respiration perturbe ma nage"]},
   {id:'dgB2', q:["Je suis vite essoufflé et j'ai du mal à récupérer pendant le lent"]},
   {id:'dgB3', q:["Mes deux allures sont trop proches"]},
   {id:'dgB4', q:["Je n'arrive pas à nager lentement sans perdre ma nage"]}]},
- {t:"3 - Gérer ses ressources et enchaîner les segments", items:[
+ {t:"Gestion des ressources et enchaînement des segments", items:[
   {id:'dgC1', q:["Mon deuxième sprint est moins bon que le premier"]},
   {id:'dgC2', q:["Je pars trop vite et je n'ai plus assez de ressources pour le deuxième sprint"]},
   {id:'dgC3', q:["J'ai du mal à passer du lent au vite"]}]}
 ];
 function buildDiag(){
   const c=document.getElementById('diagList'); let h='';
-  DIAG.forEach(g=>{
-    h+='<div class="cpHead">'+g.t+'</div>';
+  DIAG.forEach((g,gi)=>{
+    h+='<details class="cpFold cp'+(gi+1)+'"><summary>'+g.t+'</summary><div class="cpBody">';
     g.items.forEach(it=>{
       h+='<label class="chk-line"><input type="checkbox" id="'+it.id+'" data-t="'+it.q.join(' / ').replace(/"/g,'&quot;')+'"><span>'+it.q.map(x=>'« '+x+' »').join('<br>')+'</span></label>';
     });
+    h+='</div></details>';
   });
   c.innerHTML=h;
+  c.addEventListener('change',()=>openDiagGroups());
 }
 function buildPrep(){
   const c=document.getElementById('prep'); c.innerHTML='';
@@ -1806,17 +1955,13 @@ function buildPrep(){
 }
 function buildTransfo(){
   const c=document.getElementById('transfo'); c.innerHTML='';
-  const filterWrap=document.createElement('div'); filterWrap.style.marginBottom='12px';
-  filterWrap.innerHTML='<label class="small">Filtrer par contenu prioritaire<br><select id="cpFilter">'+
-    '<option value="all">Tous les CP</option>'+
-    '<option value="1">'+CP_LABELS[1]+'</option><option value="2">'+CP_LABELS[2]+'</option><option value="3">'+CP_LABELS[3]+'</option>'+
-    '</select></label>';
-  c.appendChild(filterWrap);
+  const cpBox={};
+  [1,2,3].forEach(k=>{ const d=document.createElement('details'); d.className='cpFold cp'+k; d.dataset.cp=k; d.innerHTML='<summary>'+CP_LABELS[k]+'</summary><div class="cpBody"></div>'; c.appendChild(d); cpBox[k]=d.querySelector('.cpBody'); });
   TRANSFO.forEach(g=>{
     const grp=document.createElement('div'); grp.className='grp'; grp.dataset.cp=g.cp;
     const det=document.createElement('details');
     det.innerHTML='<summary>'+(g.cible?'<div class="small" style="color:var(--muted)">'+g.cible+'</div>':'')+
-      '<div class="small" style="color:var(--blue);font-weight:700">'+g.decl+'</div><strong>'+g.theme+'</strong></summary>'+
+      '<strong>'+g.theme+'</strong></summary>'+
       '<div class="obs">Objectif : '+g.obj+'.</div><div class="obs">Indicateurs à observer : '+g.ind+'.</div>';
     det.dataset.decl=g.decl;
     g.ex.forEach(it=>{ const r=exRow(it); r.dataset.decl=g.decl; det.appendChild(r); });
@@ -1828,11 +1973,7 @@ function buildTransfo(){
       }
     });
     grp.appendChild(det);
-    c.appendChild(grp);
-  });
-  document.getElementById('cpFilter').addEventListener('change',e=>{
-    const v=e.target.value;
-    document.querySelectorAll('#transfo .grp').forEach(grp=>{ grp.style.display=(v==='all'||grp.dataset.cp===v)?'':'none'; });
+    cpBox[g.cp].appendChild(grp);
   });
 }
 function buildValid(){
@@ -1898,7 +2039,7 @@ function renderPlan(){
     const src=entryRow(e), decl=src.dataset.decl||'';
     h+='<div class="planRow"><span class="pn">'+n+'.</span><div class="pb"><strong>'+esc(rowName(src))+'</strong>'+
       (pass[e.uid]?' <span class="small" style="color:var(--blue);font-weight:700">'+pass[e.uid]+'</span>':'')+
-      (decl?' <span class="small">('+decl+')</span>':'');
+      '';
     if(e.copy){
       h+='<div class="small" style="margin-top:4px">Répétitions <select onchange="editCopy(\''+e.uid+'\',\'rep\',this.value)">'+repOptionsSel(e.rep)+'</select> '+
         'Distance <input type="number" step="12.5" value="'+e.dpr+'" style="width:70px" oninput="editCopy(\''+e.uid+'\',\'dpr\',this.value)"> m '+
@@ -1969,9 +2110,9 @@ function reqFmt(x){ return String(Math.round(x*10)/10).replace('.',','); }
 function reqState(p,t,v,total){
   const okP=p.dist>=100, okT=t.groups>=2, okV=v.n>=1, okD=total>=600, f=reqFmt;
   const items=[
-    {ok:okP,t:okP?'Échauffement : '+f(p.dist)+' m (100 m minimum)':'Échauffement : '+f(p.dist)+' m sur 100 m minimum. Il manque '+f(100-p.dist)+' m : coche un exercice dans « Bloc de préparation ».'},
-    {ok:okT,t:okT?'Transformation : '+t.groups+' déclinaisons différentes (2 minimum)':'Transformation : '+t.groups+(t.groups>1?' déclinaisons':' déclinaison')+' sur 2 minimum. Ouvre un autre bloc de transformation et coche un exercice.'},
-    {ok:okV,t:okV?'Validation : choisie':'Validation : à choisir dans « Bloc de validation ».'},
+    {ok:okP,t:okP?'Échauffement : '+f(p.dist)+' m (100 m minimum)':'Échauffement : '+f(p.dist)+' m sur 100 m minimum. Il manque '+f(100-p.dist)+' m : coche un exercice dans « Échauffement ».'},
+    {ok:okT,t:okT?'Transformation : '+t.groups+' déclinaisons différentes (2 minimum)':'Transformation : '+t.groups+(t.groups>1?' déclinaisons':' déclinaison')+' sur 2 minimum. Ouvre un autre exercice du « Corps de séance » et coche-le.'},
+    {ok:okV,t:okV?'Validation : choisie':'Validation : à choisir dans « Validation ».'},
     {ok:okD,t:okD?'Distance totale : '+f(total)+' m (600 m minimum)':'Distance totale : '+f(total)+' m sur 600 m minimum. Il manque '+f(600-total)+' m : ajoute des exercices ou des répétitions.'}
   ];
   const miss=[]; if(!okP) miss.push(f(100-p.dist)+' m d\'échauffement'); if(!okT) miss.push((2-t.groups)+(2-t.groups>1?' déclinaisons différentes':' déclinaison différente')+' en plus'); if(!okV) miss.push('la validation'); if(!okD) miss.push(f(600-total)+' m de distance au total');
@@ -1998,7 +2139,7 @@ function recompute(){
 }
 function reqGo(){
   const ok=document.getElementById('reqBar').classList.contains('ok');
-  document.getElementById(ok?'finalCard':'reqCard').scrollIntoView({behavior:'smooth',block:'start'});
+  const t=document.getElementById(ok?'finalCard':'reqCard'); openFold(t); t.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function collectSection(container){
   const out=[];
@@ -2046,7 +2187,7 @@ function printPlan(mode){
       let s='<h3>'+title+'</h3><ol start="'+num+'">';
       list.forEach(it=>{
         const distTxt = it.rep>1 ? it.rep+'×'+it.dpr+'m (total '+it.d+'m)' : it.d+'m';
-        s+='<li><strong>'+esc(it.n)+'</strong>'+(it.decl?' <span style="font-size:12px">('+it.decl+')</span>':'')+(it.pas?' — '+it.pas:'')+
+        s+='<li><strong>'+esc(it.n)+'</strong>'+(it.pas?' — '+it.pas:'')+
            ' — '+distTxt+(it.rec?' — récup '+it.rec:'')+
            (it.c?'<br><span style="color:#566F86;font-size:13px">'+esc(it.c)+'</span>':'')+'</li>';
         total+=it.d; num++;
@@ -2077,6 +2218,178 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
   window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(offlineStatus).catch(()=>{}); });
   navigator.serviceWorker.addEventListener('controllerchange',offlineStatus);
 }
+
+/* ---------- Carnet d'entraînement : performance + plan + bilan ---------- */
+function planSel(e){
+  if(carnetKind!=='perf') return '';
+  const p=curProf(), plans=p?p.plan.slice().sort((a,b)=>b.ts-a.ts):[], cur=e.data&&e.data.planId;
+  return '<div class="planSel"><span><b>Plan effectué :</b></span><select aria-label="Plan effectué" onchange="assocPlan(\''+e.id+'\',this.value)"><option value="">'+(plans.length?'Aucun (le plus récent sera utilisé)':'Aucun plan enregistré')+'</option>'+
+    plans.map(q=>'<option value="'+q.id+'"'+(q.id===cur?' selected':'')+'>Plan du '+new Date(q.ts).toLocaleDateString('fr-FR')+'</option>').join('')+'</select></div>';
+}
+function assocPlan(id,val){ const p=curProf(), e=p&&p.perf.find(x=>x.id===id); if(!e) return; e.data=e.data||{}; e.data.planId=val||null; dbSave(); toast(val?'Plan associé':'Association retirée'); }
+function carnetEnvoi(){
+  const p=curProf(); if(!p){ toast('Choisis d\'abord un profil (Réglages)'); return; }
+  const last=a=>a.slice().sort((x,y)=>y.ts-x.ts)[0], perf=last(p.perf), bil=last(p.bilan);
+  const plan=(perf&&perf.data&&perf.data.planId&&p.plan.find(q=>q.id===perf.data.planId))||last(p.plan);
+  if(!perf&&!plan&&!bil){ toast('Enregistre d\'abord une performance, un plan ou un bilan'); return; }
+  const dt=e=>new Date(e.ts).toLocaleDateString('fr-FR');
+  const sec=(t,e,miss)=>'<h3>'+t+(e?' ('+dt(e)+')':'')+'</h3>'+(e?cleanHTML(e.corps):'<p><em>'+miss+'</em></p>');
+  const h=sec('Performance du jour',perf,'Aucune performance enregistrée.')+sec('Plan d\'entraînement effectué',plan,'Aucun plan enregistré.')+sec('Bilan de l\'entraînement',bil,'Aucun bilan enregistré.')+
+    '<p class="small">Les valeurs sont déclaratives : l\'estimation AFL1 est indicative, la note officielle est celle de l\'enseignant.</p>';
+  openSheet('sheet4','Carnet d\'entraînement',p.name,h,{ts:perf?perf.ts:Date.now(),noTime:true});
+}
+function carnetRegroupe(){
+  const t5=document.getElementById('tab5'), cards=[...t5.querySelectorAll(':scope>.card')];
+  const by=t=>cards.find(c=>{ const h=c.querySelector(':scope>h2'); return h&&h.textContent.trim().startsWith(t); });
+  const prof=by('Mon profil'), evo=by('Mon évolution'), sea=by('Mes séances enregistrées'), net=by('Utiliser sans réseau'), sav=by('Sauvegarde et impression'), epr=document.getElementById('epreuveCard');
+  const set=document.createElement('div'); set.className='card'; set.id='settingsCard'; set.innerHTML='<h2>Réglages et sauvegarde</h2>';
+  [prof,net,sav].forEach(c=>{ c.classList.add('sub'); set.appendChild(c); });
+  const send=document.createElement('div'); send.innerHTML='<button class="printbtn" onclick="carnetEnvoi()">Envoyer mon carnet d\'entraînement</button><p class="small" style="margin:6px 0 0">Performance du jour + plan effectué + bilan, en un seul PDF.</p>';
+  sea.querySelector(':scope>h2').after(send);
+  t5.append(evo,sea,epr,set);
+  const fh=t5.querySelector(':scope>h1'); if(fh) fh.after(evo);
+}
+
+/* ---------- Mode Enseignant / Coach ---------- */
+let coach=[];
+const CKEY=NS+'coach';
+function coachLoad(){ try{ const r=localStorage.getItem(CKEY); if(r){ const a=JSON.parse(r); if(Array.isArray(a)) coach=a; } }catch(e){} }
+function coachSave(){ try{ localStorage.setItem(CKEY,JSON.stringify(coach)); }catch(e){} }
+const CSEG=[['v1','Vite 1'],['l1','Lent 1'],['v2','Vite 2'],['l2','Lent 2']];
+function cnum(x){ const v=parseFloat(String(x===undefined||x===null?'':x).replace(',','.')); return (isFinite(v)&&v>0)?v:null; }
+function cfq(cb,t){ return (cb&&t)?(cb/2)/(t/60):null; }
+function coachSegs(o){ return o.mode==='demi'?CSEG.slice(0,2):CSEG; }
+function coachCalc(o){
+  const t={},cb={},fq={}; CSEG.forEach(([k])=>{ t[k]=cnum(o.t[k]); cb[k]=cnum(o.cb[k]); fq[k]=cfq(cb[k],t[k]); });
+  const need=coachSegs(o), done=need.every(([k])=>t[k]!==null&&cb[k]!==null);
+  const r={t,cb,fq,done,pills:[],afl:null};
+  if(o.mode!=='demi'){
+    const P=(lab,v,dec,u,ok)=>{ if(v!==null) r.pills.push({txt:lab+' '+fsg(v,dec)+u,ok}); };
+    const lv={t:(t.l1!==null&&t.v2!==null)?t.l1-t.v2:null,cb:(cb.l1!==null&&cb.v2!==null)?cb.v2-cb.l1:null,f:(fq.l1!==null&&fq.v2!==null)?fq.v2-fq.l1:null};
+    const vv={t:(t.v1!==null&&t.v2!==null)?t.v2-t.v1:null,cb:(cb.v1!==null&&cb.v2!==null)?cb.v2-cb.v1:null,f:(fq.v1!==null&&fq.v2!==null)?fq.v2-fq.v1:null};
+    if(lv.t!==null) P('L1−V2 temps',lv.t,1,' s',lv.t>=3&&lv.t<=6);
+    if(lv.cb!==null) P('L1−V2 CB',lv.cb,0,' CB',Math.abs(lv.cb)<=2);
+    if(lv.f!==null) P('L1−V2 fréq.',lv.f,0,' cy/min',lv.f>=10);
+    if(vv.t!==null) P('V2−V1 temps',vv.t,1,' s',vv.t>=-1&&vv.t<=3);
+    if(vv.cb!==null) P('V2−V1 CB',vv.cb,0,' CB',Math.abs(vv.cb)<=2);
+    if(vv.f!==null) P('V2−V1 fréq.',vv.f,0,' cy/min',Math.abs(vv.f)<=2);
+    r.lv=lv; r.vv=vv;
+    if(t.v1!==null&&t.v2!==null&&cb.v1!==null&&cb.v2!==null){
+      const g=o.sexe==='F'; const pT=ptsOf(t.v1+t.v2,g?T_F:T_G), pC=ptsOf(cb.v1+cb.v2,g?CB_F:CB_G);
+      if(pT!==null&&pC!==null) r.afl=+(pT+pC).toFixed(2);
+    }
+  }
+  return r;
+}
+function coachDerivedHTML(o){
+  const r=coachCalc(o);
+  const fl=coachSegs(o).map(([k,l])=>l+' '+(r.fq[k]?r.fq[k].toFixed(0):'—')).join(' · ');
+  return '<div class="fq"><b>Fréquence (cy/min)</b> : '+fl+'</div>'+
+    ((r.pills.length||r.afl!==null)?'<div class="pills">'+r.pills.map(x=>'<span class="cpill '+(x.ok?'ok':'wa')+'">'+(x.ok?'✓ ':'⚠ ')+esc(x.txt)+'</span>').join('')+(r.afl!==null?'<span class="cpill ok">AFL1 indicatif : '+f1(r.afl)+' / 12</span>':'')+'</div>':
+    (o.mode==='demi'?'':'<p class="small" style="margin:6px 0 0">Les écarts s\'affichent dès que les temps et les CB sont saisis.</p>'));
+}
+function coachStatusHTML(o){ const d=coachCalc(o).done; return '<span class="cpill '+(d?'ok':'wa')+'">'+(d?'complet':'à compléter')+'</span>'; }
+function coachRefresh(id){ const o=coach.find(x=>x.id===id); if(!o) return; const a=document.getElementById('cd_'+id), b=document.getElementById('cs_'+id); if(a) a.innerHTML=coachDerivedHTML(o); if(b) b.innerHTML=coachStatusHTML(o); }
+function coachIn(id,grp,k,v){ const o=coach.find(x=>x.id===id); if(!o) return; if(grp==='nom') o.nom=v; else o[grp][k]=v; coachSave(); coachRefresh(id); if(grp==='t'&&!coachRun[id]) coachChronoUI(id); }
+function coachSet(id,k,v){ const o=coach.find(x=>x.id===id); if(!o) return; if(k==='mode') delete coachRun[id]; o[k]=v; coachSave(); coachRender(); }
+function coachAdd(){ coach.push({id:uid2(),nom:'',sexe:'G',mode:'complete',date:todayStr(),t:{},cb:{}}); coachSave(); coachRender(); }
+function coachDel(id){ coach=coach.filter(x=>x.id!==id); coachSave(); coachRender(); }
+function coachClear(){ if(!coach.length) return; if(typeof confirm==='function'&&!confirm('Effacer toutes les observations de cet appareil ?')) return; coach=[]; coachSave(); coachRender(); }
+function coachRender(){
+  const el=document.getElementById('coachList'); if(!el) return;
+  if(!coach.length) coach.push({id:uid2(),nom:'',sexe:'G',mode:'complete',date:todayStr(),t:{},cb:{}});
+  el.innerHTML=coach.map((o,i)=>{
+    const segs=coachSegs(o), h=segs.map(([k,l])=>'<th>'+l+'</th>').join('');
+    const row=(grp,lab,st)=>'<tr><th>'+lab+'</th>'+segs.map(([k,l])=>'<td><input type="number" inputmode="decimal" step="'+st+'" min="0" id="ci_'+o.id+'_'+grp+'_'+k+'" aria-label=""'+lab+' '+l+'" value="'+esc(o[grp][k]||'')+'" oninput="coachIn(\''+o.id+'\',\''+grp+'\',\''+k+'\',this.value)"></td>').join('')+'</tr>';
+    return '<div class="coachCard"><div class="top"><input type="text" maxlength="40" placeholder="Nom ou libellé (ex. Léa, Nage '+(i+1)+')" aria-label="Nom ou libellé" value="'+esc(o.nom||'')+'" oninput="coachIn(\''+o.id+'\',\'nom\',null,this.value)"><span id="cs_'+o.id+'"></span><button class="plink" onclick="coachDel(\''+o.id+'\')">Supprimer</button></div>'+
+      '<div class="opts" style="margin-top:8px"><label><input type="radio" name="cm_'+o.id+'" '+(o.mode!=='demi'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'mode\',\'complete\')"> Épreuve complète</label><label><input type="radio" name="cm_'+o.id+'" '+(o.mode==='demi'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'mode\',\'demi\')"> Demi-épreuve</label></div>'+
+      '<div class="opts"><label><input type="radio" name="cx_'+o.id+'" '+(o.sexe!=='F'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'sexe\',\'G\')"> Garçon</label><label><input type="radio" name="cx_'+o.id+'" '+(o.sexe==='F'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'sexe\',\'F\')"> Fille</label></div>'+
+      '<div class="cchrono" id="cc_'+o.id+'">'+coachChronoHTML(o)+'</div><table><thead><tr><th></th>'+h+'</tr></thead><tbody>'+row('t','Temps (s)','0.01')+row('cb','CB','1')+'</tbody></table><div id="cd_'+o.id+'"></div></div>';
+  }).join('');
+  coach.forEach(o=>coachRefresh(o.id));
+}
+
+/* ----- Chrono du mode Enseignant / Coach : mêmes étapes que le chrono de l'élève, un chrono par nageur/nageuse ----- */
+/* Chrono (Vite 1 → Lent 1) · Récup 15 s · Chrono (Vite 2 → Lent 2) */
+const coachRun={}; let coachTimer=null;
+const CLBL={idle:'Prêt : clique sur Chrono',run1a:'Vite 1 en cours…',run1b:'Lent 1 en cours…',afterCycle1:'Clique sur Récup',recup:'Récupération…',readyFor2:'Clique sur Chrono pour repartir',run2a:'Vite 2 en cours…',run2b:'Lent 2 en cours…'};
+function cfmt(ms){ return (ms/1000).toFixed(2); }
+function coachDisp(r){ if(!r) return '0.00'; if(r.ph==='recup') return String(Math.max(1,Math.ceil((r.end-Date.now())/1000))); return /^run/.test(r.ph)?cfmt(Date.now()-r.t0):'0.00'; }
+function coachChronoHTML(o){
+  const r=coachRun[o.id], segs=coachSegs(o), id=o.id;
+  const recorded=segs.filter(([k])=>cnum(o.t[k])!==null), complete=recorded.length===segs.length;
+  const chips=recorded.map(([k,l])=>'<span class="chip">'+l+' : '+f1(cnum(o.t[k]))+' s</span>').join('');
+  if(!r&&complete) return '<div class="chips">'+chips+'</div><p class="small" style="margin:8px 0 0">✓ Temps enregistrés : il reste les CB à saisir. <button class="plink" onclick="coachRedo(\''+id+'\')">Refaire le chrono</button></p>';
+  const ph=r?r.ph:'idle', cDis=(ph==='afterCycle1'||ph==='recup'), rDis=(ph!=='afterCycle1');
+  return '<div class="cdisp" id="ct_'+id+'">'+coachDisp(r)+'</div><div class="clbl" id="cl_'+id+'">'+CLBL[ph]+'</div>'+
+    '<div class="ccrow"><button class="big chrono" onclick="coachChrono(\''+id+'\')"'+(cDis?' disabled':'')+'>Chrono</button>'+
+    (o.mode==='demi'?'':'<button class="big recup" onclick="coachRecup(\''+id+'\')"'+(rDis?' disabled':'')+'>Récup</button>')+'</div>'+
+    '<div class="chips">'+chips+'</div>'+((r||recorded.length)?'<button class="plink" onclick="coachRedo(\''+id+'\')">Recommencer le chrono</button>':'');
+}
+function coachChronoUI(id){ const o=coach.find(x=>x.id===id), el=document.getElementById('cc_'+id); if(o&&el) el.innerHTML=coachChronoHTML(o); }
+function coachEnsureTimer(){ if(!coachTimer&&Object.keys(coachRun).length) coachTimer=setInterval(coachTick,50); }
+function coachTick(){
+  const ids=Object.keys(coachRun); if(!ids.length){ clearInterval(coachTimer); coachTimer=null; return; }
+  ids.forEach(id=>{ const r=coachRun[id]; if(r.ph==='recup'&&Date.now()>=r.end){ r.ph='readyFor2'; beep(); if(navigator.vibrate) try{ navigator.vibrate([120,60,120]); }catch(e){} coachChronoUI(id); return; }
+    const e=document.getElementById('ct_'+id); if(e) e.textContent=coachDisp(r); });
+}
+function coachChrono(id){
+  const o=coach.find(x=>x.id===id); if(!o) return; let r=coachRun[id]; const now=Date.now();
+  const rec=k=>{ o.t[k]=String(Math.round((now-r.t0)/10)/100); const i=document.getElementById('ci_'+id+'_t_'+k); if(i) i.value=o.t[k]; };
+  if(!r){ o.t={}; CSEG.forEach(([k])=>{ const i=document.getElementById('ci_'+id+'_t_'+k); if(i) i.value=''; }); r=coachRun[id]={ph:'run1a',t0:now}; }
+  else if(r.ph==='run1a'){ rec('v1'); r.ph='run1b'; r.t0=now; }
+  else if(r.ph==='run1b'){ rec('l1'); if(o.mode==='demi') delete coachRun[id]; else r.ph='afterCycle1'; }
+  else if(r.ph==='readyFor2'){ r.ph='run2a'; r.t0=now; }
+  else if(r.ph==='run2a'){ rec('v2'); r.ph='run2b'; r.t0=now; }
+  else if(r.ph==='run2b'){ rec('l2'); delete coachRun[id]; }
+  else return;
+  if(navigator.vibrate) try{ navigator.vibrate(25); }catch(e){}
+  coachSave(); coachRefresh(id); coachChronoUI(id); coachEnsureTimer();
+}
+function coachRecup(id){ const r=coachRun[id]; if(!r||r.ph!=='afterCycle1') return; r.ph='recup'; r.end=Date.now()+15000; coachChronoUI(id); coachEnsureTimer(); }
+function coachRedo(id){ const o=coach.find(x=>x.id===id); if(!o) return; delete coachRun[id]; o.t={}; coachSave(); coachRender(); }
+function csvCell(x){ const v=(x===null||x===undefined)?'':String(x); return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+function cn(x,d){ return (x===null||x===undefined||!isFinite(x))?'':String(+(+x).toFixed(d)).replace('.',','); }
+function coachCsv(){
+  const rows=coach.filter(o=>o.nom||Object.keys(o.t).length||Object.keys(o.cb).length);
+  if(!rows.length){ toast('Aucune observation à exporter'); return; }
+  const head=['Nom ou libellé','Sexe','Mode','Date','Complet'];
+  CSEG.forEach(([k,l])=>head.push(l+' temps (s)',l+' CB',l+' fréquence (cy/min)'));
+  head.push('Écart L1-V2 temps (s)','Écart L1-V2 CB','Écart L1-V2 fréquence (cy/min)','Écart V2-V1 temps (s)','Écart V2-V1 CB','Écart V2-V1 fréquence (cy/min)','AFL1 indicatif (/12)');
+  const lines=[head].concat(rows.map(o=>{ const r=coachCalc(o), a=[o.nom||'',o.sexe==='F'?'Fille':'Garçon',o.mode==='demi'?'Demi-épreuve':'Épreuve complète',o.date||'',r.done?'oui':'non'];
+    CSEG.forEach(([k])=>a.push(cn(r.t[k],2),cn(r.cb[k],0),cn(r.fq[k],1)));
+    const lv=r.lv||{},vv=r.vv||{}; a.push(cn(lv.t,2),cn(lv.cb,0),cn(lv.f,1),cn(vv.t,2),cn(vv.cb,0),cn(vv.f,1),cn(r.afl,2)); return a; }));
+  const csv='\uFEFF'+lines.map(l=>l.map(csvCell).join(';')).join('\r\n');
+  try{ const b=new Blob([csv],{type:'text/csv;charset=utf-8'}), u=URL.createObjectURL(b), a=document.createElement('a');
+    a.href=u; a.download='observations-natation-'+todayStr()+'.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); toast('Tableau exporté'); }
+  catch(e){ if(navigator.clipboard){ navigator.clipboard.writeText(csv); toast('Tableau copié : colle-le dans un tableur'); } }
+  return csv;
+}
+function coachInit(){ coachLoad(); const cc=document.getElementById('conseilsCoach'); if(cc){ cc.classList.remove('sub'); const host=document.querySelector('#tab6'); host.appendChild(cc); } }
+/* ---------- Cartes repliables ---------- */
+function openFold(el){ for(let n=el;n;n=n.parentElement){ if(n.classList&&n.classList.contains('fold')) n.classList.add('open'); } }
+function foldCard(card,open){
+  if(!card||card.classList.contains('fold')) return;
+  const h=[...card.children].find(c=>c.tagName==='H2'); if(!h) return;
+  const body=document.createElement('div'); body.className='foldBody';
+  [...card.children].forEach(c=>{ if(c!==h) body.appendChild(c); });
+  card.appendChild(body); card.classList.add('fold'); if(open) card.classList.add('open');
+  h.classList.add('foldH'); h.tabIndex=0; h.setAttribute('role','button');
+  const sync=()=>h.setAttribute('aria-expanded',card.classList.contains('open'));
+  const tg=()=>{ card.classList.toggle('open'); sync(); };
+  h.addEventListener('click',tg); h.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tg(); } }); sync();
+}
+(function foldInit(){
+  coachInit();
+  const q=id=>document.getElementById(id);
+  const card=t=>[...document.querySelectorAll('#tab2>.card,#tab5>.card')].find(c=>{ const h=c.querySelector(':scope>h2'); return h&&h.textContent.trim().startsWith(t); });
+  carnetRegroupe();
+  ['Démarche pour s','Mon diagnostic'].forEach(t=>foldCard(card(t)));
+  [...document.querySelectorAll('#settingsCard>.card.sub')].forEach(c=>foldCard(c));
+  ['reqCard','baremeCard','conseilsEleve','conseilsCoach'].forEach(id=>foldCard(q(id),id==='reqCard'));
+  [...document.querySelectorAll('#buildCard>.card.sub')].forEach(c=>{ if(c.id!=='reqCard') foldCard(c); });
+  foldCard(q('epreuveCard')); foldCard(q('settingsCard')); foldCard(q('buildCard'),true);
+})();
 </script>
 </body>
 </html>
