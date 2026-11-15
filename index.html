@@ -355,7 +355,6 @@ td input[type=number],td input[type=text]{min-height:42px}
 .ccrow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
 .clbl{font-weight:700;margin:2px 0 10px;min-height:22px}
 .cdisp{font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--blue)}
-.cchrono .big{padding:12px 22px;font-size:16px;min-width:0}
 
 /* Cartes moins arrondies (6 px) */
 :root{--r:6px}
@@ -399,24 +398,22 @@ main{padding-top:14px}
 .card.fold:not(.open)>.foldH:hover,.card.fold:not(.open)>.foldH:active{background:var(--hd);filter:brightness(1.1)}
 .card.fold>.foldBody{margin-top:10px;padding-top:0;border-top:none}
 .foldH::after{border-color:#fff}
-/* Chrono : turquoise → bleu, texte blanc */
-#chronoBox{background:linear-gradient(160deg,#0CC0DF 0%,#145DA0 100%);color:#fff;text-align:center;padding:0 14px 16px}
+/* Chrono : bleu très clair -> blanc, cercle bien visible */
+#chronoBox{background:linear-gradient(180deg,#C2E5F7 0%,#EAF6FD 45%,#FFFFFF 100%);text-align:center;padding:0 14px 16px;border:1px solid #0A7F9B}
 #chronoBox>h2{background:linear-gradient(135deg,#0A7F9B,#0B5E8F);text-align:left;margin-bottom:14px}
-#chronoBox #lbl,#chronoBox .opts label{color:#fff}
-#chronoBox .chip{background:rgba(255,255,255,.22);color:#fff}
-#chronoBox .big.chrono{background:#fff;color:#0B3D6B;box-shadow:0 5px 0 rgba(6,38,63,.35),0 10px 18px rgba(6,38,63,.3)}
-#chronoBox .big.chrono::before{content:"▶";margin-right:8px;color:#0CC0DF}
-#chronoBox .printbtn.sec{background:rgba(255,255,255,.16);color:#fff;border:2px solid rgba(255,255,255,.85);box-shadow:none}
+#chronoBox #disp{background:radial-gradient(circle at 30% 25%,#fff,#E6F6FC);border-color:#0CC0DF;box-shadow:0 10px 26px rgba(20,93,160,.28)}
+#chronoBox .big.chrono{background:linear-gradient(135deg,#0CC0DF,#43D8EF);color:#06263F;box-shadow:0 5px 0 #0A7F9B,0 10px 18px rgba(12,192,223,.4)}
+#chronoBox .big.chrono::before{content:"▶";margin-right:8px;color:#06263F}
 /* Mode Enseignant / Coach et Mon plan : bleu-vert */
 .tealCard,#finalCard{background:linear-gradient(180deg,#BFE5E8,#E3F4F5)}
 .tealCard>h2,#finalCard>h2{background:linear-gradient(135deg,#075560,#0B6E78);margin:0 -14px 10px;padding:12px 14px;border-radius:0;color:#fff}
 .tealCard .printbtn,#finalCard .printbtn:not(.sec){background:linear-gradient(135deg,#0B6E78,#17A8A8);color:#fff;box-shadow:0 5px 0 #075560,0 10px 18px rgba(11,110,120,.3)}
 #finalCard .printbtn.sec{background:#fff;color:#075560;border:2px solid #0B6E78;box-shadow:0 4px 0 rgba(7,85,96,.35)}
-#finalCard{border:none}
 /* Échauffement / Corps de séance / Validation : bleu ciel */
-#buildCard>.foldBody>.card.sub>h2{background:linear-gradient(135deg,#35A9E6,#9ADBFA);color:#06263F}
-#buildCard>.foldBody>.card.sub>.foldH::after{border-color:#06263F}
-#buildCard>.foldBody>.card.sub>h2 .small{color:#0B3D6B}
+#buildCard>.foldBody>.card.sub>h2{background:linear-gradient(135deg,#9AD8F8,#D2EEFC);color:var(--blue)}
+#buildCard>.foldBody>.card.sub>.foldH::after{border-color:var(--blue)}
+#buildCard>.foldBody>.card.sub>h2 .small{color:var(--blue);font-weight:600}
+#buildCard>.foldBody>.card.sub.fold>.foldH,#buildCard>.foldBody>.card.sub.fold.open>.foldH{color:var(--blue)}
 /* Boutons modernes et impactants */
 .printbtn{min-height:54px;border-radius:8px;background:linear-gradient(135deg,#145DA0,#1C8FD6);color:#fff;font-size:16px;letter-spacing:.02em;box-shadow:0 5px 0 #0B3D6B,0 10px 18px rgba(20,93,160,.3);transition:transform .08s,box-shadow .08s}
 .printbtn:active,.big:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(11,61,107,.6),0 3px 8px rgba(20,93,160,.25)}
@@ -424,7 +421,8 @@ main{padding-top:14px}
 .big{border-radius:8px;min-height:56px;font-size:17px;letter-spacing:.02em}
 .big.recup{background:linear-gradient(135deg,#E8541C,#FF8A3D);color:#fff;box-shadow:0 5px 0 #A8360A,0 10px 18px rgba(232,84,28,.35)}
 .big.chrono{box-shadow:0 5px 0 #0A7F9B,0 10px 18px rgba(12,192,223,.4)}
-.big:disabled{opacity:.45}
+.big:disabled{opacity:.55;cursor:not-allowed}
+.big.recup,.big.recup:disabled{background:linear-gradient(135deg,#E8541C,#FF8A3D);color:#fff}
 /* Résultats liés au chrono */
 #resultCard[style*="display: none"]~.perfLinked,#resultCard[style*="display:none"]~.perfLinked{display:none}
 #epreuveBlock>.card{margin-top:10px}
@@ -441,7 +439,32 @@ main{padding-top:14px}
 .req{display:flex;gap:10px;padding:10px 0;border-top:1px solid #E1EAF3;font-size:13.5px;cursor:pointer;text-align:left}.req:first-child{border-top:none}
 .req b{flex:none;width:18px}.req.ok b{color:#17622B}.req.ko b{color:#C0391B}
 /* En-tête : texte blanc bien lisible */
-.brand,.sub{color:#fff;text-shadow:0 1px 3px rgba(6,38,63,.35)}.sub{opacity:1}
+header .brand,header .sub{color:#fff;text-shadow:none}header .sub{opacity:1}
+
+/* Contour fin de couleur */
+.card{border:1px solid #0B5E8F}
+.card.sub{border:1px solid rgba(11,94,143,.45)}
+#buildCard>.foldBody>.card.sub{border:1px solid #5BB8EA}
+.tealCard,#finalCard{border:1px solid #0B6E78}
+#chronoBox{border:1px solid #0A7F9B}
+
+/* Titres d'onglets mis en avant */
+.t1{background:linear-gradient(135deg,#0B3D6B,#145DA0);color:#fff;border-left:8px solid #0CC0DF;border-radius:6px;padding:12px 16px;margin:2px 0 14px;font-size:24px;box-shadow:0 4px 12px rgba(11,61,107,.25)}
+/* Cartes : dégradé plus clair */
+.card{background:linear-gradient(180deg,#EAF4FB,#FAFDFF)}
+.tealCard,#finalCard{background:linear-gradient(180deg,#DDF2F4,#F5FBFC)}
+/* Chrono enseignant : même chrono que l'onglet Performance */
+.cchrono{text-align:center;margin:10px 0 4px}
+.cdispC{display:inline-flex;align-items:center;justify-content:center;width:204px;height:204px;border-radius:50%;font-size:52px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--blue);background:radial-gradient(circle at 30% 25%,#fff,#E6F6FC);border:8px solid #0CC0DF;box-shadow:0 10px 26px rgba(20,93,160,.28);transition:border-color .3s}
+.cchrono[data-seg=vite] .cdispC{border-color:var(--turq);animation:pulseT 1.6s infinite}
+.cchrono[data-seg=lent] .cdispC{border-color:var(--green);animation:pulseG 1.6s infinite}
+.cchrono[data-seg=recup] .cdispC{border-color:var(--blue)}
+.clbl{color:var(--ink);font-weight:700;min-height:22px;margin:12px 0}
+.cchrono .btnrow.cbtns{justify-content:space-between;gap:0;margin-top:4px}
+.cchrono .big{min-width:0;flex:0 0 42%;padding:14px 6px}
+.cchrono .big.chrono::before{content:"▶";margin-right:8px}
+.cred{margin-top:14px}.cred .printbtn{width:100%}
+.evoStats{display:grid;grid-template-columns:1fr 1fr}
 </style>
 </head>
 <body>
@@ -478,7 +501,7 @@ main{padding-top:14px}
       <button class="big recup" id="btnRecup" onclick="onRecup()" disabled>Récup</button>
     </div>
     <div class="chips" id="chips"></div>
-    <button class="printbtn sec" id="btnManual" onclick="openManual()">Je n'ai pas utilisé le chrono : je saisis mes résultats</button>
+    <button class="printbtn" id="btnManual" onclick="openManual()">Je n'ai pas utilisé le chrono : je saisis mes résultats</button>
   </div>
 
   <div class="card" id="resultCard" style="display:none">
@@ -488,7 +511,7 @@ main{padding-top:14px}
       <label class="small" for="dateManuel">Date de la performance</label>
       <input type="date" id="dateManuel" oninput="manualCheck(true)">
       <p class="small" style="margin-top:8px">Les valeurs sont déclaratives : ta fiche et ton carnet porteront la mention « saisie à la main ».</p>
-      <button class="plink" onclick="exitManual()">Revenir au chrono</button>
+      <button class="printbtn sec" onclick="exitManual()">Revenir au chrono</button>
     </div>
     <h3 style="margin-top:0">Efficacité · Fréquence · Récupération</h3>
     <div id="trio" class="trio"></div>
@@ -660,7 +683,7 @@ main{padding-top:14px}
       <p id="bBloc" class="msgbox ok hidden"></p>
     </div>
     <div id="bEvoWrap">
-      <h3>Je fais évoluer mon entraînement <span class="small">(2 choix maximum)</span></h3>
+      <h3>Je fais évoluer mon entraînement <span class="small">(un ou plusieurs choix)</span></h3>
       <div id="bEvo"></div>
     </div>
   </div>
@@ -673,7 +696,7 @@ main{padding-top:14px}
     <label class="small" style="margin-top:10px;display:block">…parce que mes résultats montrent que…</label>
     <div id="bChips" class="sugchips"></div>
     <textarea id="bConstat" rows="2"></textarea>
-    <label class="small" style="margin-top:10px;display:block">Ce que j'ai ressenti ou observé</label>
+    <label class="small" style="margin-top:10px;display:block">Ce que j'ai ressenti ou observé (facultatif)</label>
     <textarea id="bRessenti" rows="2" placeholder="Ex. j'ai senti que ma nage se désorganisait quand…"></textarea>
     <label class="small" style="margin-top:10px;display:block">Lors de la prochaine séance, je chercherai à…</label>
     <textarea id="bObjJ" rows="2"></textarea>
@@ -1298,6 +1321,7 @@ function evoCards(recs){
   const fv=d=>avg2(d.fq&&d.fq.v1,d.fq&&d.fq.v2);
   const defs=[
     {l:'Temps des vite (cumul)',f:vt,u:' s',dec:1,c:'#0B6E78',sc:'plus bas = mieux',good:(x,p)=>p===null?null:x<=p},
+    {l:'Cumul des CB des vite',f:d=>(d.cb&&isNum(d.cb.v1)&&isNum(d.cb.v2))?d.cb.v1+d.cb.v2:null,u:' CB',dec:0,c:'#7B3FC4',sc:'moins de CB = mieux',good:(x,p)=>p===null?null:x<=p},
     {l:'Écart lent/vite',f:d=>isNum(d.dt)?d.dt:null,u:' s',dec:1,c:'#1F5FA8',sc:'cible 3 à 6 s',good:x=>x>=3&&x<=6},
     {l:'Fréquence des vite',f:fv,u:' cy/min',dec:0,c:'#A24B00',sc:'repère : 30 et plus',good:x=>x>=30}];
   return '<div class="evoStats">'+defs.map(df=>{
@@ -1409,6 +1433,7 @@ function importFile(inp){
 
 /* ---------- Bilan prospectif : je prépare ma prochaine séance ---------- */
 const BEVO=[
+ {id:'e0',t:"Je conserve le même exercice",inf:"conserver le même exercice",ex:"Je poursuis le même exercice, car il répond encore à mon objectif. Ex. je refais le même exercice pour stabiliser ce que je viens d'apprendre."},
  {id:'e1',t:"Je complexifie mon exercice",inf:"complexifier mon exercice",ex:"Je conserve le même objectif, mais j'augmente la difficulté. Ex. passer de 12,5 m lent → 12,5 m vite à 25 m lent → 25 m vite."},
  {id:'e2',t:"Je simplifie mon exercice",inf:"simplifier mon exercice",ex:"Je réduis la difficulté pour mieux maîtriser ce que je cherche à apprendre. Ex. travailler sur 12,5 m pour mieux sentir le changement de fréquence."},
  {id:'e3',t:"Je change d'exercice",inf:"changer d'exercice",ex:"Je conserve mon objectif, mais je choisis une autre situation pour progresser. Ex. passer d'un exercice de contraste d'allure à un travail de fréquence progressive."},
@@ -1467,7 +1492,7 @@ function bWarn(m){ const w=document.getElementById('bWarn'); w.textContent=m; w.
 function buildBilan(){
   const q=document.querySelector.bind(document), g=id=>document.getElementById(id);
   g('bCompris').innerHTML=BCOMPRIS.map(t=>'<label class="chk-line"><input type="checkbox" class="bCompris" data-t="'+esc(t)+'"><span>'+esc(t)+'</span></label>').join('');
-  g('bEvo').innerHTML=BEVO.map(e=>'<label class="chk-line"><input type="checkbox" class="bEvo" value="'+e.id+'" onchange="bLimit(this,2)"><span><b>'+esc(e.t)+'</b><span class="ex">'+esc(e.ex)+'</span></span></label>').join('');
+  g('bEvo').innerHTML=BEVO.map(e=>'<label class="chk-line"><input type="checkbox" class="bEvo" value="'+e.id+'"><span><b>'+esc(e.t)+'</b><span class="ex">'+esc(e.ex)+'</span></span></label>').join('');
   g('bProbList').innerHTML=DIAG.map((gr,gi)=>'<details class="cpFold cp'+(gi+1)+'"><summary>'+esc(gr.t)+'</summary><div class="cpBody">'+gr.items.map(it=>'<label class="chk-line"><input type="radio" name="bProb" value="'+it.id+'" onchange="bBloc()"><span>'+it.q.map(x=>'« '+esc(x)+' »').join('<br>')+' <span class="mini sug hidden" data-sug="'+it.id+'">suggéré</span></span></label>').join('')+'</div></details>').join('');
   const bpl=g('bProbList'); if(!bpl.dataset.ev){ bpl.dataset.ev='1'; bpl.addEventListener('change',()=>openBProb()); }
   g('bIndList').innerHTML=IND7.map(t=>'<label class="chk-inline"><input type="checkbox" class="bInd" value="'+esc(t)+'" onchange="bLimit(this,2)"> '+esc(t)+'</label>').join('');
@@ -1540,11 +1565,11 @@ function bValid(n){
     const pr=bRadio('bPrio');
     if(!pr) return "Indique si ton problème précédent est toujours prioritaire.";
     if(pr==='non'&&!bRadio('bProb')) return "Choisis ton nouveau problème prioritaire.";
-    if(bRadio('bAtt')!=='oui'&&pr!=='non'&&!bEvoSel().length) return "Choisis au moins un ajustement de ton entraînement (2 maximum).";
+    if(bRadio('bAtt')!=='oui'&&pr!=='non'&&!bEvoSel().length) return "Choisis au moins un choix pour ton entraînement.";
   }
   if(n===3){
     const m=[]; if(!bv('bDecision')) m.push('ta décision'); if(!bv('bConstat')) m.push('« parce que mes résultats montrent que… »');
-    if(!bv('bRessenti')) m.push('ce que tu as ressenti ou observé'); if(!bv('bObjJ')) m.push('« je chercherai à… »');
+    if(!bv('bObjJ')) m.push('« je chercherai à… »');
     if(m.length) return 'Complète : '+m.join(', ')+'.';
   }
   return '';
@@ -2018,8 +2043,7 @@ function buildTransfo(){
   TRANSFO.forEach(g=>{
     const grp=document.createElement('div'); grp.className='grp'; grp.dataset.cp=g.cp;
     const det=document.createElement('details');
-    det.innerHTML='<summary>'+(g.cible?'<div class="small" style="color:var(--muted)">'+g.cible+'</div>':'')+
-      '<strong>'+g.theme+'</strong></summary>'+
+    det.innerHTML='<summary><strong>'+g.theme+'</strong></summary>'+
       '<div class="obs">Objectif : '+g.obj+'.</div><div class="obs">Indicateurs à observer : '+g.ind+'.</div>';
     det.dataset.decl=g.decl;
     g.ex.forEach(it=>{ const r=exRow(it); r.dataset.decl=g.decl; det.appendChild(r); });
@@ -2361,7 +2385,7 @@ function coachRender(){
     return '<div class="coachCard"><div class="top"><input type="text" maxlength="40" placeholder="Nom ou libellé (ex. Léa, Nage '+(i+1)+')" aria-label="Nom ou libellé" value="'+esc(o.nom||'')+'" oninput="coachIn(\''+o.id+'\',\'nom\',null,this.value)"><span id="cs_'+o.id+'"></span><button class="plink" onclick="coachDel(\''+o.id+'\')">Supprimer</button></div>'+
       '<div class="opts" style="margin-top:8px"><label><input type="radio" name="cm_'+o.id+'" '+(o.mode!=='demi'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'mode\',\'complete\')"> Épreuve complète</label><label><input type="radio" name="cm_'+o.id+'" '+(o.mode==='demi'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'mode\',\'demi\')"> Demi-épreuve</label></div>'+
       '<div class="opts"><label><input type="radio" name="cx_'+o.id+'" '+(o.sexe!=='F'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'sexe\',\'G\')"> Garçon</label><label><input type="radio" name="cx_'+o.id+'" '+(o.sexe==='F'?'checked':'')+' onchange="coachSet(\''+o.id+'\',\'sexe\',\'F\')"> Fille</label></div>'+
-      '<div class="cchrono" id="cc_'+o.id+'">'+coachChronoHTML(o)+'</div><table><thead><tr><th></th>'+h+'</tr></thead><tbody>'+row('t','Temps (s)','0.01')+row('cb','CB','1')+'</tbody></table><div id="cd_'+o.id+'"></div></div>';
+      '<div class="cchrono" id="cc_'+o.id+'" data-seg="'+coachSegAttr(o)+'">'+coachChronoHTML(o)+'</div><table><thead><tr><th></th>'+h+'</tr></thead><tbody>'+row('t','Temps (s)','0.01')+row('cb','CB','1')+'</tbody></table><div id="cd_'+o.id+'"></div><div class="cred" id="cr_'+o.id+'">'+coachRedoHTML(o)+'</div></div>';
   }).join('');
   coach.forEach(o=>coachRefresh(o.id));
 }
@@ -2372,18 +2396,19 @@ const coachRun={}; let coachTimer=null;
 const CLBL={idle:'Prêt : clique sur Chrono',run1a:'Vite 1 en cours…',run1b:'Lent 1 en cours…',afterCycle1:'Clique sur Récup',recup:'Récupération…',readyFor2:'Clique sur Chrono pour repartir',run2a:'Vite 2 en cours…',run2b:'Lent 2 en cours…'};
 function cfmt(ms){ return (ms/1000).toFixed(2); }
 function coachDisp(r){ if(!r) return '0.00'; if(r.ph==='recup') return String(Math.max(1,Math.ceil((r.end-Date.now())/1000))); return /^run/.test(r.ph)?cfmt(Date.now()-r.t0):'0.00'; }
+function coachSegAttr(o){ const r=coachRun[o.id]; if(!r) return ''; return r.ph==='recup'?'recup':(/^run.a$/.test(r.ph)?'vite':(/^run.b$/.test(r.ph)?'lent':'')); }
 function coachChronoHTML(o){
   const r=coachRun[o.id], segs=coachSegs(o), id=o.id;
-  const recorded=segs.filter(([k])=>cnum(o.t[k])!==null), complete=recorded.length===segs.length;
+  const recorded=segs.filter(([k])=>cnum(o.t[k])!==null), complete=recorded.length===segs.length, done=(!r&&complete);
   const chips=recorded.map(([k,l])=>'<span class="chip">'+l+' : '+f1(cnum(o.t[k]))+' s</span>').join('');
-  if(!r&&complete) return '<div class="chips">'+chips+'</div><p class="small" style="margin:8px 0 0">✓ Temps enregistrés : il reste les CB à saisir. <button class="plink" onclick="coachRedo(\''+id+'\')">Refaire le chrono</button></p>';
-  const ph=r?r.ph:'idle', cDis=(ph==='afterCycle1'||ph==='recup'), rDis=(ph!=='afterCycle1');
-  return '<div class="cdisp" id="ct_'+id+'">'+coachDisp(r)+'</div><div class="clbl" id="cl_'+id+'">'+CLBL[ph]+'</div>'+
-    '<div class="ccrow"><button class="big chrono" onclick="coachChrono(\''+id+'\')"'+(cDis?' disabled':'')+'>Chrono</button>'+
-    (o.mode==='demi'?'':'<button class="big recup" onclick="coachRecup(\''+id+'\')"'+(rDis?' disabled':'')+'>Récup</button>')+'</div>'+
-    '<div class="chips">'+chips+'</div>'+((r||recorded.length)?'<button class="plink" onclick="coachRedo(\''+id+'\')">Recommencer le chrono</button>':'');
+  const ph=r?r.ph:'idle', cDis=(ph==='afterCycle1'||ph==='recup'||done), rDis=(ph!=='afterCycle1'||done);
+  return '<div class="cdispC" id="ct_'+id+'">'+coachDisp(r)+'</div><div class="clbl" id="cl_'+id+'">'+(done?'✓ Temps enregistrés : il reste les CB à saisir':CLBL[ph])+'</div>'+
+    '<div class="btnrow cbtns"><button class="big chrono" onclick="coachChrono(\''+id+'\')"'+(cDis?' disabled':'')+'>Chrono</button>'+
+    (o.mode==='demi'?'':'<button class="big recup" onclick="coachRecup(\''+id+'\')"'+(rDis?' disabled':'')+'>Récup</button>')+'</div><div class="chips">'+chips+'</div>';
 }
-function coachChronoUI(id){ const o=coach.find(x=>x.id===id), el=document.getElementById('cc_'+id); if(o&&el) el.innerHTML=coachChronoHTML(o); }
+function coachRedoHTML(o){ const rec=coachSegs(o).some(([k])=>cnum(o.t[k])!==null); return (coachRun[o.id]||rec)?'<button class="printbtn sec" onclick="coachRedo(\''+o.id+'\')">Refaire le chrono</button>':''; }
+function coachChronoUI(id){ const o=coach.find(x=>x.id===id), el=document.getElementById('cc_'+id); if(!o||!el) return;
+  el.innerHTML=coachChronoHTML(o); el.dataset.seg=coachSegAttr(o); const rd=document.getElementById('cr_'+id); if(rd) rd.innerHTML=coachRedoHTML(o); }
 function coachEnsureTimer(){ if(!coachTimer&&Object.keys(coachRun).length) coachTimer=setInterval(coachTick,50); }
 function coachTick(){
   const ids=Object.keys(coachRun); if(!ids.length){ clearInterval(coachTimer); coachTimer=null; return; }
