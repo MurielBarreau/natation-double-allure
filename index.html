@@ -383,6 +383,65 @@ th,td{padding:6px}
 main{padding-top:14px}
 .coachCard{padding:10px 12px;margin:8px 0}
 @media (min-width:700px){.card{padding:14px 16px}}
+
+/* ===== Cartes en dégradé : fond dégradé + bandeau de titre plus foncé ===== */
+:root{--hd:linear-gradient(135deg,#0A7F9B,#0B5E8F)}
+.card{background:linear-gradient(180deg,#C9E0F4,#EDF5FC);border:none;padding:0 14px 12px;overflow:hidden}
+.card>h2{margin:0 -14px 10px;padding:12px 14px;background:var(--hd);color:#fff;border-radius:0}
+.card>h2 small{display:block;font-size:12px;font-weight:600;opacity:.92;margin-top:2px}
+.card>h2::after{display:none}
+.card.sub{padding:0 12px 10px;background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.4));border:1px solid rgba(11,61,107,.18)}
+.card.sub>h2{margin:0 -12px 8px;padding:11px 12px}
+.card.fold>.foldH{margin:0 -14px;padding:11px 14px;min-height:46px;color:#fff;border-radius:0}
+.card.sub.fold>.foldH{margin:0 -12px;padding:10px 12px}
+.card.fold.open>.foldH{color:#fff}
+.card.fold:not(.open){padding-bottom:0}
+.card.fold:not(.open)>.foldH:hover,.card.fold:not(.open)>.foldH:active{background:var(--hd);filter:brightness(1.1)}
+.card.fold>.foldBody{margin-top:10px;padding-top:0;border-top:none}
+.foldH::after{border-color:#fff}
+/* Chrono : turquoise → bleu, texte blanc */
+#chronoBox{background:linear-gradient(160deg,#0CC0DF 0%,#145DA0 100%);color:#fff;text-align:center;padding:0 14px 16px}
+#chronoBox>h2{background:linear-gradient(135deg,#0A7F9B,#0B5E8F);text-align:left;margin-bottom:14px}
+#chronoBox #lbl,#chronoBox .opts label{color:#fff}
+#chronoBox .chip{background:rgba(255,255,255,.22);color:#fff}
+#chronoBox .big.chrono{background:#fff;color:#0B3D6B;box-shadow:0 5px 0 rgba(6,38,63,.35),0 10px 18px rgba(6,38,63,.3)}
+#chronoBox .big.chrono::before{content:"▶";margin-right:8px;color:#0CC0DF}
+#chronoBox .printbtn.sec{background:rgba(255,255,255,.16);color:#fff;border:2px solid rgba(255,255,255,.85);box-shadow:none}
+/* Mode Enseignant / Coach et Mon plan : bleu-vert */
+.tealCard,#finalCard{background:linear-gradient(180deg,#BFE5E8,#E3F4F5)}
+.tealCard>h2,#finalCard>h2{background:linear-gradient(135deg,#075560,#0B6E78);margin:0 -14px 10px;padding:12px 14px;border-radius:0;color:#fff}
+.tealCard .printbtn,#finalCard .printbtn:not(.sec){background:linear-gradient(135deg,#0B6E78,#17A8A8);color:#fff;box-shadow:0 5px 0 #075560,0 10px 18px rgba(11,110,120,.3)}
+#finalCard .printbtn.sec{background:#fff;color:#075560;border:2px solid #0B6E78;box-shadow:0 4px 0 rgba(7,85,96,.35)}
+#finalCard{border:none}
+/* Échauffement / Corps de séance / Validation : bleu ciel */
+#buildCard>.foldBody>.card.sub>h2{background:linear-gradient(135deg,#35A9E6,#9ADBFA);color:#06263F}
+#buildCard>.foldBody>.card.sub>.foldH::after{border-color:#06263F}
+#buildCard>.foldBody>.card.sub>h2 .small{color:#0B3D6B}
+/* Boutons modernes et impactants */
+.printbtn{min-height:54px;border-radius:8px;background:linear-gradient(135deg,#145DA0,#1C8FD6);color:#fff;font-size:16px;letter-spacing:.02em;box-shadow:0 5px 0 #0B3D6B,0 10px 18px rgba(20,93,160,.3);transition:transform .08s,box-shadow .08s}
+.printbtn:active,.big:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(11,61,107,.6),0 3px 8px rgba(20,93,160,.25)}
+.printbtn.sec{background:#fff;color:#145DA0;border:2px solid #145DA0;box-shadow:0 4px 0 rgba(11,61,107,.3)}
+.big{border-radius:8px;min-height:56px;font-size:17px;letter-spacing:.02em}
+.big.recup{background:linear-gradient(135deg,#E8541C,#FF8A3D);color:#fff;box-shadow:0 5px 0 #A8360A,0 10px 18px rgba(232,84,28,.35)}
+.big.chrono{box-shadow:0 5px 0 #0A7F9B,0 10px 18px rgba(12,192,223,.4)}
+.big:disabled{opacity:.45}
+/* Résultats liés au chrono */
+#resultCard[style*="display: none"]~.perfLinked,#resultCard[style*="display:none"]~.perfLinked{display:none}
+#epreuveBlock>.card{margin-top:10px}
+/* Bulle des exigences : orange-rouge, puis verte */
+.reqBar{display:flex;flex-direction:column-reverse;padding:0;border:none;background:none;box-shadow:none}
+.reqHead{display:flex;align-items:center;gap:10px;border-radius:8px;padding:13px 16px;color:#fff;font-weight:800;font-size:15px;box-shadow:0 6px 18px rgba(0,0,0,.22);cursor:pointer;min-height:50px}
+.reqBar.ko .reqHead{background:linear-gradient(135deg,#D6361A,#F2742B)}
+.reqBar.ok .reqHead{background:linear-gradient(135deg,#1E9E4A,#47C96F)}
+.reqHead b{flex:1}.reqHead .ri{font-size:18px}
+.reqHead .rc{width:10px;height:10px;border-right:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-135deg);transition:transform .2s;margin:4px 4px 0 0}
+.reqBar.open .rc{transform:rotate(45deg);margin:0 4px 4px 0}
+.reqPanel{display:none;background:#fff;border-radius:8px;margin:0 0 6px;padding:2px 12px;box-shadow:0 6px 18px rgba(0,0,0,.18);color:var(--ink)}
+.reqBar.open .reqPanel{display:block}
+.req{display:flex;gap:10px;padding:10px 0;border-top:1px solid #E1EAF3;font-size:13.5px;cursor:pointer;text-align:left}.req:first-child{border-top:none}
+.req b{flex:none;width:18px}.req.ok b{color:#17622B}.req.ko b{color:#C0391B}
+/* En-tête : texte blanc bien lisible */
+.brand,.sub{color:#fff;text-shadow:0 1px 3px rgba(6,38,63,.35)}.sub{opacity:1}
 </style>
 </head>
 <body>
@@ -403,6 +462,7 @@ main{padding-top:14px}
 <div id="tab1">
   <h1 class="t1">Performance</h1>
   <div class="card chronoBox" id="chronoBox">
+    <h2>Chrono<small>Vite 1 · Lent 1 · récup 15 s · Vite 2 · Lent 2</small></h2>
     <div class="opts">
       <label><input type="radio" name="sexePerf" value="G" checked> Garçon</label>
       <label><input type="radio" name="sexePerf" value="F"> Fille</label>
@@ -422,7 +482,7 @@ main{padding-top:14px}
   </div>
 
   <div class="card" id="resultCard" style="display:none">
-    <h2>Résultats</h2>
+    <h2>Résultats de l'épreuve</h2>
     <div id="manualBox" class="manualBox hidden">
       <p><b>Saisie à la main</b> : entre le temps (en secondes) et les CB de chaque segment.</p>
       <label class="small" for="dateManuel">Date de la performance</label>
@@ -445,17 +505,10 @@ main{padding-top:14px}
     </table>
     <div id="manualWarn"></div>
 
-    <div id="epreuveBlock">
-      <h3>Indicateurs écarts Lent 1 − Vite 2</h3>
-      <table id="tabLV">
-        <tr><th>Indicateur</th><th>Résultat</th><th>Cible</th><th>Bloc conseillé</th></tr>
-        <tr id="lv_t"><td>Écart de temps (s)</td><td id="lv_t_v"></td><td>Entre 3 et 6 s d'écart</td><td id="lv_t_c" class="small"></td></tr>
-        <tr id="lv_cb"><td>Écart de CB</td><td id="lv_cb_v"></td><td>Entre -2 et +2 CB</td><td id="lv_cb_c" class="small"></td></tr>
-        <tr id="lv_f"><td>Écart de fréquence</td><td id="lv_f_v"></td><td>Vite 2 : +10 cy/min mini vs Lent 1</td><td id="lv_f_c" class="small"></td></tr>
-      </table>
-      <div id="synth_lv" class="msgbox"></div>
+  </div>
 
-      <h3>Indicateurs écarts Vite 2 − Vite 1</h3>
+  <div id="epreuveBlock" class="perfLinked">
+    <div class="card"><h2>Comparaison Vite 2 / Vite 1</h2>
       <table id="tabVV">
         <tr><th>Indicateur</th><th>Résultat</th><th>Cible</th><th>Bloc conseillé</th></tr>
         <tr id="vv_t"><td>Écart de temps (s)</td><td id="vv_t_v"></td><td>Entre -1 et +3 s</td><td id="vv_t_c" class="small"></td></tr>
@@ -464,7 +517,19 @@ main{padding-top:14px}
       </table>
       <div id="synth_vv" class="msgbox"></div>
     </div>
+    <div class="card"><h2>Comparaison Lent 1 / Vite 2</h2>
+      <table id="tabLV">
+        <tr><th>Indicateur</th><th>Résultat</th><th>Cible</th><th>Bloc conseillé</th></tr>
+        <tr id="lv_t"><td>Écart de temps (s)</td><td id="lv_t_v"></td><td>Entre 3 et 6 s d'écart</td><td id="lv_t_c" class="small"></td></tr>
+        <tr id="lv_cb"><td>Écart de CB</td><td id="lv_cb_v"></td><td>Entre -2 et +2 CB</td><td id="lv_cb_c" class="small"></td></tr>
+        <tr id="lv_f"><td>Écart de fréquence</td><td id="lv_f_v"></td><td>Vite 2 : +10 cy/min mini vs Lent 1</td><td id="lv_f_c" class="small"></td></tr>
+      </table>
+      <div id="synth_lv" class="msgbox"></div>
+    </div>
+  </div>
 
+  <div class="card perfLinked" id="perfSave">
+    <h2>Enregistrer ma performance</h2>
     <div id="manualMsg"></div>
     <label class="small">Nom de l'élève</label>
     <input type="text" id="eleveNom1" placeholder="Prénom Nom">
@@ -472,10 +537,10 @@ main{padding-top:14px}
     <button class="printbtn" onclick="partagerPerf()">Partager</button>
     <button class="printbtn sec" onclick="resetChrono()">Nouvel essai</button>
   </div>
-<div class="card" id="coachEntry">
+<div class="card tealCard" id="coachEntry">
   <h2>Mode Enseignant / Coach</h2>
   <p class="small" style="margin:0 0 4px">Chronomètre et relève les temps et les CB de plusieurs nageurs ou nageuses, puis exporte en tableau.</p>
-  <button class="printbtn sec" onclick="showTab(6)">Ouvrir le mode Enseignant / Coach</button>
+  <button class="printbtn" onclick="showTab(6)">Ouvrir le mode Enseignant / Coach</button>
 </div>
 </div>
 <!-- /TAB 1 -->
@@ -520,32 +585,25 @@ main{padding-top:14px}
 
   <div class="card" id="buildCard">
     <h2>Construction de mon plan d'entraînement</h2>
-  <div class="card sub" id="reqCard">
-    <h2>Exigences de construction du plan d'entraînement</h2>
-    <div class="status" id="status"></div>
-    <div class="bar" aria-hidden="true"><span id="distBar"></span></div>
-    <p class="small" style="margin-top:8px">Ces exigences doivent toutes être remplies pour obtenir ta fiche d'entraînement (PDF, impression, partage). Elles se mettent à jour à chaque exercice coché.</p>
-  </div>
-
-  <div class="card sub">
+  <div class="card sub" id="blkPrep">
     <h2>Échauffement <span class="small">(100m minimum d'échauffement)</span></h2>
     <div class="obs">Ce que tu vas observer : ta perception de l'effort et la qualité de ta nage.</div>
     <div id="prep"></div>
   </div>
 
-  <div class="card sub">
+  <div class="card sub" id="blkTransfo">
     <h2>Corps de séance <span class="small">(2 déclinaisons différentes minimum, au choix)</span></h2>
     <div id="transfo"></div>
   </div>
 
-  <div class="card sub">
+  <div class="card sub" id="blkValid">
     <h2>Validation <span class="small">(obligatoire)</span></h2>
     <div id="valid"></div>
   </div>
 
   </div>
 
-  <div class="card planCard" id="finalCard">
+  <div class="card planCard tealCard" id="finalCard">
     <h2>Mon plan d'entraînement</h2>
     <p class="small">Voici l'ordre de ta séance. La préparation 🔒 reste en premier et la validation 🔒 en dernier. Déplace tes exercices de transformation avec ▲ ▼, et utilise « Refaire cet exercice » pour le refaire plus tard dans la séance, après un autre exercice.</p>
     <div id="planList"></div>
@@ -556,7 +614,7 @@ main{padding-top:14px}
     <button class="printbtn sec" onclick="partagerPlan()">Partager</button>
   </div>
 
-  <div id="reqBar" class="reqBar" role="status" onclick="reqGo()"></div>
+  <div id="reqBar" class="reqBar" role="status"></div>
 </div>
 <!-- /TAB 2 -->
 
@@ -2126,21 +2184,20 @@ function recompute(){
   const total=p.dist+t.dist+v.dist;
   const r=reqState(p,t,v,total), okD=r.okD;
   const tag=(ok,text)=>'<span class="tag '+(ok?'ok':'ko')+'">'+text+'</span>';
-  document.getElementById('status').innerHTML=
-    tag(r.okP,'Échauffement : '+p.dist+'m / 100m min')+tag(r.okT,'Transformation : '+t.groups+'/2 déclinaisons différentes')+tag(r.okV,'Validation : '+v.n+'/1')+tag(okD,'Distance : '+total+'m / 600m min');
-  const pb=document.getElementById('distBar'); if(pb){ pb.style.width=Math.min(100,Math.round(total/6))+'%'; pb.className=okD?'full':''; }
-  const rl=document.getElementById('reqList'); if(rl) rl.innerHTML=r.items.map(i=>'<div class="req '+(i.ok?'ok':'ko')+'"><b>'+(i.ok?'✓':'⚠')+'</b><span>'+i.t+'</span></div>').join('');
   const rb=document.getElementById('reqBar'), n=r.items.filter(i=>i.ok).length;
-  if(rb){ rb.className='reqBar '+(r.all?'ok':'ko');
-    rb.innerHTML=r.all?'✓ Exigences remplies : tu peux obtenir ta fiche<span class="go">Aller à ma fiche</span>':'⚠ Exigences : '+n+'/4 remplies · il manque '+r.miss.join(' ; ')+'<span class="go">Voir les exigences</span>'; }
+  if(rb){ const op=rb.classList.contains('open'); rb.className='reqBar '+(r.all?'ok':'ko')+(op?' open':'');
+    rb.innerHTML='<div class="reqHead" onclick="reqToggle()"><span class="ri">'+(r.all?'✓':'⚠')+'</span><b>'+(r.all?'Plan conforme : tu peux obtenir ta fiche':(4-n)+(4-n>1?' exigences à remplir':' exigence à remplir'))+'</b><i class="rc"></i></div>'+
+      '<div class="reqPanel">'+r.items.map((i,k)=>'<div class="req '+(i.ok?'ok':'ko')+'" onclick="reqLine('+k+')"><b>'+(i.ok?'✓':'✗')+'</b><span>'+i.t+'</span></div>').join('')+(r.all?'<div class="req ok" onclick="reqLine(3)"><b>→</b><span>Aller à mon plan d\'entraînement</span></div>':'')+'</div>'; }
   const w=document.getElementById('planWarn');
   if(w&&!w.classList.contains('hidden')){ if(r.all) w.classList.add('hidden'); else w.innerHTML='<b>Ta fiche ne peut pas encore être créée.</b> Il manque : '+r.miss.join(' ; ')+'.'; }
   return r;
 }
-function reqGo(){
-  const ok=document.getElementById('reqBar').classList.contains('ok');
-  const t=document.getElementById(ok?'finalCard':'reqCard'); openFold(t); t.scrollIntoView({behavior:'smooth',block:'start'});
+function reqToggle(){ document.getElementById('reqBar').classList.toggle('open'); }
+function reqLine(k){
+  const t=document.getElementById(['blkPrep','blkTransfo','blkValid','finalCard'][k]); if(!t) return;
+  document.getElementById('reqBar').classList.remove('open'); openFold(t); t.scrollIntoView({behavior:'smooth',block:'start'});
 }
+function reqGo(){ reqLine(3); }
 function collectSection(container){
   const out=[];
   container.querySelectorAll('.exrow').forEach(r=>{
