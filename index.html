@@ -593,6 +593,15 @@ td.ko{background:var(--gKo);color:#fff;font-weight:800}
   .stat *,.tp *{color:#000!important}
   #resTable td,#tabVV td,#tabLV td{background:#fff!important;color:#000!important}
 }
+
+/* Résultats visibles dès l'ouverture ; comparaisons et enregistrement dès qu'il y a des données */
+#resultCard[style*="display: none"]~.perfLinked,#resultCard[style*="display:none"]~.perfLinked{display:revert}
+#tab1:not(.hasRes) .perfLinked{display:none}
+#chronoBox #disp{width:176px;height:176px;font-size:46px}
+#chronoBox>h2{margin-bottom:10px}
+/* Chrono Coach : mêmes couleurs que le chrono de l'élève (le cercle garde sa bordure, seul le halo change) */
+.cchrono[data-seg=vite] .cdispC,.cchrono[data-seg=lent] .cdispC,.cchrono[data-seg=recup] .cdispC{border-color:#0CC0DF}
+.sendRow{display:flex;flex-direction:column;gap:8px;margin:0 0 6px}
 </style>
 </head>
 <body>
@@ -642,7 +651,7 @@ td.ko{background:var(--gKo);color:#fff;font-weight:800}
     <button class="printbtn" id="btnManual" onclick="openManual()">Je n'ai pas utilisé le chrono : je saisis mes résultats</button>
   </div>
 
-  <div class="card" id="resultCard" style="display:none">
+  <div class="card" id="resultCard">
     <h2>Résultats de l'épreuve</h2>
     <div id="manualBox" class="manualBox hidden">
       <p><b>Saisie à la main</b> : entre le temps (en secondes) et les CB de chaque segment.</p>
@@ -653,7 +662,7 @@ td.ko{background:var(--gKo);color:#fff;font-weight:800}
     </div>
     <h3 style="margin-top:0">Efficacité · Fréquence · Récupération</h3>
     <div id="trio" class="trio"></div>
-    <p class="small" id="resHelp">Tu renseignes les CB des Vite 1, Lent 1, Vite 2, Lent 2.</p>
+    <p class="small" id="resHelp">Les temps s'inscrivent pendant le chrono. Entre les CB dès que tu peux.</p>
     <table id="resTable">
       <thead><tr><th></th><th>Vite 1</th><th class="c-lent1">Lent 1</th><th class="c-2">Vite 2</th><th class="c-2">Lent 2</th></tr></thead>
       <tbody>
@@ -862,12 +871,6 @@ td.ko{background:var(--gKo);color:#fff;font-weight:800}
 <!-- TAB 5 : CARNET -->
 <div id="tab5" class="hidden">
   <h1 class="t1">Carnet</h1>
-  <div class="card tealCard" id="carnetSend">
-    <h2>Mon carnet d'entraînement</h2>
-    <p class="small" style="margin:0 0 4px">Performance du jour, plan effectué et bilan : un seul document.</p>
-    <button class="printbtn" onclick="carnetPdf()">Enregistrer en PDF</button>
-    <button class="printbtn blue" onclick="carnetShare()">Partager mon carnet</button>
-  </div>
   <div class="card" id="epreuveCard">
     <h2>Épreuve</h2>
     <div class="card sub" id="baremeCard"><h2>Barème AFL1 – Crawl (Cumul des 2x20m vite)</h2>
@@ -940,7 +943,9 @@ td.ko{background:var(--gKo);color:#fff;font-weight:800}
   </div>
   <div class="card"><h2>Mon évolution</h2><div id="evo"></div></div>
   <div class="card">
-    <h2>Mes séances enregistrées</h2>
+    <h2>Carnet d'entraînement</h2>
+    <div class="sendRow"><button class="printbtn" onclick="carnetPdf()">Enregistrer en PDF</button><button class="printbtn sec" onclick="carnetShare()">Partager mon carnet</button></div>
+    <p class="small" style="margin:2px 0 10px">Performance du jour, plan effectué et bilan, en un seul document.</p>
     <div class="seg" id="seg"><button data-k="perf" class="on" onclick="setKind('perf')">Performances</button><button data-k="plan" onclick="setKind('plan')">Plans</button><button data-k="bilan" onclick="setKind('bilan')">Bilans</button></div>
     <button class="printbtn sec" id="btnAddPerf" onclick="saisirDepuisCarnet()">Ajouter une performance</button>
     <div id="entries"></div>
@@ -1037,6 +1042,8 @@ const btnC=document.getElementById('btnChrono'), btnR=document.getElementById('b
 function setMode(isDemi){
   modeDemi=isDemi;
   document.querySelectorAll('input[name=modeEpreuve]').forEach(r=>{ r.checked=(r.value==='demi')===isDemi; });
+  document.querySelectorAll('.c-2').forEach(el=>el.style.display=modeDemi?'none':'');
+  { const eb=document.getElementById('epreuveBlock'); if(eb) eb.style.display=modeDemi?'none':''; }
   if(manual) showManual();
   if(typeof buildValid==='function'){ buildValid(); recompute(); }
 }
@@ -1044,7 +1051,13 @@ function majMode(){ setMode(document.querySelector('input[name=modeEpreuve]:chec
 function fmt(ms){return (ms/1000).toFixed(2);}
 function startTimer(){segStart=performance.now(); timerId=setInterval(()=>{disp.textContent=fmt(performance.now()-segStart);},50);}
 function stopTimer(){clearInterval(timerId);}
+function perfLive(){
+  const any=Object.values(T).some(v=>v!==null)||['cbV1','cbL1','cbV2','cbL2'].some(id=>{ const e=document.getElementById(id); return e&&e.value!==''; });
+  const t=document.getElementById('tab1'); if(t) t.classList.toggle('hasRes',any);
+}
 function renderChips(){
+  if(!manual){ [['tV1','vite1'],['tL1','lent1'],['tV2','vite2'],['tL2','lent2']].forEach(([id,k])=>{ const e=document.getElementById(id); if(e) e.textContent=(T[k]===null||T[k]===undefined)?'':fmt(T[k]); }); if(typeof majDerives==='function') majDerives(); }
+  perfLive();
   const c=document.getElementById('chips'); c.innerHTML='';
   [['Vite 1','vite1'],['Lent 1','lent1'],['Vite 2','vite2'],['Lent 2','lent2']].forEach(([label,k])=>{
     if(T[k]!==null){ const d=document.createElement('div'); d.className='chip'; d.textContent=label+' : '+fmt(T[k])+'s'; c.appendChild(d); }
@@ -1071,7 +1084,7 @@ function onRecup(){
 }
 function resetChrono(){
   phase='idle'; T={vite1:null,lent1:null,vite2:null,lent2:null}; disp.textContent='0.00'; lbl.textContent='Prêt — clique sur Chrono'; setSeg('Prêt — clique sur Chrono');
-  btnR.disabled=true; document.getElementById('resultCard').style.display='none'; renderChips();
+  btnR.disabled=true; document.getElementById('epreuveBlock').style.display=''; renderChips();
   ['cbV1','cbL1','cbV2','cbL2'].forEach(id=>{ const e=document.getElementById(id); if(e){ e.value=''; e.style.background=''; e.title=''; } });
   if(manual){
     MSEG.forEach(([k])=>{ const e=document.getElementById('ti'+k); if(e) e.value=''; });
@@ -1079,7 +1092,7 @@ function resetChrono(){
     document.getElementById('manualMsg').innerHTML=''; document.getElementById('manualMsg').className='';
     showManual();
   }
-  majManualBtn();
+  majManualBtn(); perfLive();
 }
 
 /* ---------- Saisie à la main (sans chrono) ---------- */
@@ -1101,7 +1114,7 @@ function exitManual(){
   manual=false; retourBilan=false;
   document.getElementById('chronoBox').classList.remove('manual');
   document.getElementById('manualBox').classList.add('hidden');
-  document.getElementById('resHelp').textContent="Tu renseignes les CB des Vite 1, Lent 1, Vite 2, Lent 2.";
+  document.getElementById('resHelp').textContent="Les temps s'inscrivent pendant le chrono. Entre les CB dès que tu peux.";
   ['manualMsg','manualWarn'].forEach(id=>{ const e=document.getElementById(id); e.innerHTML=''; e.className=''; });
   resetChrono();
 }
@@ -1205,6 +1218,7 @@ function clearDerived(){
 }
 function majDerives(){
   if(manual) clearDerived();
+  perfLive();
   const cbV1=document.getElementById('cbV1').value, cbL1=document.getElementById('cbL1').value;
   const cbV2=document.getElementById('cbV2').value, cbL2=document.getElementById('cbL2').value;
   const fqV1=freqCalc(cbV1,T.vite1), fqL1=freqCalc(cbL1,T.lent1);
@@ -1276,7 +1290,7 @@ function majDerives(){
     fre:(df!==null&&df2!==null&&fqV1&&fqV2)?(df>=10&&rangeOk(df2,-2,2)&&fqV1>=30&&fqV2>=30):null,
     rec:(dt!==null&&dt2!==null)?(rangeOk(dt2,-1,3)&&dt>=3):null
   });
-  if(!manual) applyDiagAuto();
+  if(!manual&&phase==='done') applyDiagAuto();
 }
 function openDiagGroups(){ document.querySelectorAll('#diagList .cpFold').forEach(d=>{ if(d.querySelector('input:checked')) d.open=true; }); }
 function applyDiagAuto(){
@@ -2463,9 +2477,9 @@ function carnetEnvoi(){
 function carnetRegroupe(){
   const t5=document.getElementById('tab5'), cards=[...t5.querySelectorAll(':scope>.card')];
   const by=t=>cards.find(c=>{ const h=c.querySelector(':scope>h2'); return h&&h.textContent.trim().startsWith(t); });
-  const evo=by('Mon évolution'), sea=by('Mes séances enregistrées'), epr=document.getElementById('epreuveCard'), set=document.getElementById('settingsCard');
+  const evo=by('Mon évolution'), sea=by('Carnet d\'entraînement'), epr=document.getElementById('epreuveCard'), set=document.getElementById('settingsCard');
   t5.append(evo,sea,epr,set);
-  const fh=t5.querySelector(':scope>h1'); if(fh){ fh.after(evo); const cs=document.getElementById('carnetSend'); if(cs) fh.after(cs); }
+  const fh=t5.querySelector(':scope>h1'); if(fh) fh.after(evo);
 }
 function showPane(bar,panes,i){ bar.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',k===i)); panes.forEach((p,k)=>p.classList.toggle('on',k===i)); }
 function epreuveTabs(){
@@ -2657,6 +2671,7 @@ function foldCard(card,open){
 }
 (function foldInit(){
   coachInit();
+  { const rc=document.getElementById('resultCard'), h3=rc&&rc.querySelector(':scope>h3'), tr=document.getElementById('trio'), mw=document.getElementById('manualWarn'); if(rc&&h3&&tr&&mw) mw.after(h3,tr); }
   const q=id=>document.getElementById(id);
   const card=t=>[...document.querySelectorAll('#tab2>.card,#tab5>.card')].find(c=>{ const h=c.querySelector(':scope>h2'); return h&&h.textContent.trim().startsWith(t); });
   carnetRegroupe();
