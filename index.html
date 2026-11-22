@@ -509,7 +509,7 @@ table td,table th{font-size:15px}
 .segTabs button.done:not(.on){border-color:#1E9E4A;color:#146B32}
 .epPane,.blkPane{display:none}.epPane.on,.blkPane.on{display:block}
 .blkReq{margin:0 0 8px;font-weight:700;color:var(--ink)}
-.stp{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#0A5FB4;font-size:14px;font-weight:800;margin-right:10px;flex:none}
+.stepNo{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#fff;color:#0A5FB4;font-size:14px;font-weight:800;margin-right:10px;flex:none}
 .card.fold>.foldH{display:flex;align-items:center}
 .card.fold>.foldH::after{margin-left:auto}
 /* Réglages : trois gros boutons */
@@ -518,6 +518,81 @@ table td,table th{font-size:15px}
 .setBtn:nth-child(2){border-color:#08787F}.setBtn:nth-child(3){border-color:#E8541C}
 .setBtn .si{width:30px;height:30px;flex:none;color:#0A5FB4}.setBtn:nth-child(2) .si{color:#08787F}.setBtn:nth-child(3) .si{color:#E8541C}
 .setBtn b{display:block;font-size:16px}.setBtn small{display:block;font-size:13px;color:var(--muted)}
+
+/* Bilan : étapes bien lisibles */
+.stepper{gap:6px;margin:4px 0 12px}
+.stepper .stp{font-size:14px;font-weight:800;color:var(--ink);gap:6px;padding:4px 0}
+.stepper .stp i{width:54px;height:54px;border-width:3px;border-color:#9BB9D3}
+.stepper .stp svg{width:28px;height:28px;stroke-width:2.4}
+.stepper .stp.on{color:#0A5FB4}
+.stepper .stp.on i{background:linear-gradient(135deg,#0A5FB4,#1AA3EA);border-color:#0A5FB4;box-shadow:none}
+.stepper .stp.done i{background:linear-gradient(135deg,#1E9E4A,#47C96F);border-color:#1E9E4A;color:#fff}
+.stepper .stp.done{color:#146B32}
+.bar{height:14px}
+
+/* ===== Données lisibles et impactantes : dégradés de couleur ===== */
+:root{--gOk:linear-gradient(135deg,#1E9E4A,#47C96F);--gKo:linear-gradient(135deg,#E8541C,#FF9040);--gBlue:linear-gradient(135deg,#0A5FB4,#0E9ADB);--gNavy:linear-gradient(135deg,#0B3D6B,#145DA0)}
+/* En-têtes de tableaux */
+th{background:var(--gBlue);color:#fff;border-color:rgba(255,255,255,.25)}
+table{border-radius:6px}
+/* Résultats du chrono : Vite en turquoise, Lent en vert */
+#resTable{border:none}
+#resTable thead th{font-size:15px;padding:10px 4px}
+#resTable thead th:first-child{background:transparent}
+#resTable thead th:nth-child(2),#resTable thead th:nth-child(4){background:linear-gradient(135deg,#0A7F9B,#0CC0DF)}
+#resTable thead th:nth-child(3),#resTable thead th:nth-child(5){background:linear-gradient(135deg,#146B32,#47C96F)}
+#resTable tbody th{background:var(--gNavy);color:#fff;font-size:13px;text-align:left;padding:10px 8px}
+#resTable td{font-size:23px;font-weight:800;color:var(--ink);padding:10px 4px;background:linear-gradient(180deg,#fff,#EAF4FB)}
+#resTable td:nth-child(2),#resTable td:nth-child(4){background:linear-gradient(180deg,#E3F8FC,#F7FDFE)}
+#resTable td:nth-child(3),#resTable td:nth-child(5){background:linear-gradient(180deg,#E4F6E8,#F7FCF8)}
+#resTable td input{font-size:21px;font-weight:800;min-height:48px;background:#fff}
+/* Les trois pastilles : vert ou orange plein */
+.tp{border:none;border-radius:6px;padding:12px 6px;background:linear-gradient(180deg,#E9F1F7,#F8FAFC);color:var(--muted)}
+.tp.ok{background:var(--gOk);color:#fff}
+.tp.ko{background:var(--gKo);color:#fff}
+.tp.ok b,.tp.ko b{color:#fff;font-size:15px}
+.tp span{font-size:13px;font-weight:800}
+.tp.ok::before,.tp.ko::before{display:block;font-size:28px;font-weight:800;line-height:1;margin-bottom:4px}
+.tp.ok::before{content:"✓"}.tp.ko::before{content:"⚠"}
+/* Comparaisons : le résultat saute aux yeux */
+#tabVV,#tabLV{border:none}
+#tabVV th,#tabLV th{font-size:13.5px}
+#tabVV td,#tabLV td{font-size:14px;color:var(--ink)}
+#tabVV tr.ok>td,#tabLV tr.ok>td{background:linear-gradient(90deg,#E3F6E8,#F7FCF8)}
+#tabVV tr.ko>td,#tabLV tr.ko>td{background:linear-gradient(90deg,#FFE8D8,#FFF7F0)}
+#tabVV tr.ok>td:nth-child(2),#tabLV tr.ok>td:nth-child(2){background:var(--gOk);color:#fff;font-weight:800;font-size:16px}
+#tabVV tr.ko>td:nth-child(2),#tabLV tr.ko>td:nth-child(2){background:var(--gKo);color:#fff;font-weight:800;font-size:16px}
+/* Messages de synthèse */
+.msgbox{font-size:15.5px;border-radius:6px}
+.msgbox.ok{background:linear-gradient(135deg,#DDF5E3,#F4FBF6);border-left:8px solid #1E9E4A;color:#143507}
+.msgbox.ko{background:linear-gradient(135deg,#FFE5D3,#FFF6EE);border-left:8px solid #E8541C;color:#5A2200}
+/* Cases ok / hors cible dans les tableaux du Bilan */
+td.ok{background:var(--gOk);color:#fff;font-weight:800}
+td.ko{background:var(--gKo);color:#fff;font-weight:800}
+/* Pastilles et étiquettes */
+.mini.ok,.tag.ok,.cpill.ok{background:var(--gOk);color:#fff}
+.mini.ko,.tag.ko,.cpill.wa{background:var(--gKo);color:#fff}
+.mini.sug{background:var(--gBlue);color:#fff}
+.mini,.cpill{font-weight:800}
+.cpill{font-size:13.5px;padding:5px 11px}
+.chip{background:var(--gBlue);color:#fff;font-weight:800}
+/* Cartes d'évolution : fond plein en dégradé, chiffres blancs */
+.stat{background:linear-gradient(160deg,rgba(0,0,0,.2),rgba(255,255,255,.16)),var(--c);color:#fff;border:none;border-top:none;border-radius:6px}
+.stat .sl,.stat .sv,.stat .sc{color:#fff}
+.stat .sl{font-size:12.5px}.stat .sc{opacity:.9}
+.stat .sv{font-size:30px}.stat .sv span{color:#fff}
+.stat .sd{display:inline-block;background:rgba(255,255,255,.95);border-radius:999px;padding:2px 10px;font-size:13px}
+.stat svg polyline{stroke:#fff}
+/* Plan d'entraînement : numéros en pastille */
+.pn{display:flex;align-items:center;justify-content:center;width:30px;height:30px;min-width:30px;border-radius:50%;background:var(--gBlue);color:#fff;font-size:14px}
+.pb b{color:var(--blue)}
+/* Impression : pas de fond, texte noir */
+@media print{
+  th{background:#EEE!important;color:#000!important}
+  td.ok,td.ko,.tp,.cpill,.chip,.mini,.tag,.stat,.msgbox{background:#fff!important;color:#000!important;border:1px solid #999!important}
+  .stat *,.tp *{color:#000!important}
+  #resTable td,#tabVV td,#tabLV td{background:#fff!important;color:#000!important}
+}
 </style>
 </head>
 <body>
@@ -2590,7 +2665,7 @@ function foldCard(card,open){
   ['conseilsCoach'].forEach(id=>foldCard(q(id)));
   q('buildCard').dataset.acc='t2'; q('epreuveCard').dataset.acc='t5'; q('settingsCard').dataset.acc='t5';
   foldCard(q('epreuveCard')); foldCard(q('settingsCard')); foldCard(q('coachHist')); foldCard(q('buildCard'),true);
-  [['#tab2>.card.fold>h2','1 2 3'],['#tab2>#finalCard>h2','4']].forEach(([sel,nums])=>{ const n=nums.split(' '); document.querySelectorAll(sel).forEach((h,i)=>{ if(!h.querySelector('.stp')) h.insertAdjacentHTML('afterbegin','<span class="stp">'+(n[i]||n[0])+'</span>'); }); });
+  [['#tab2>.card.fold>h2','1 2 3'],['#tab2>#finalCard>h2','4']].forEach(([sel,nums])=>{ const n=nums.split(' '); document.querySelectorAll(sel).forEach((h,i)=>{ if(!h.querySelector('.stepNo')) h.insertAdjacentHTML('afterbegin','<span class="stepNo">'+(n[i]||n[0])+'</span>'); }); });
   document.addEventListener('toggle',e=>{ const d=e.target; if(!d.open||!d.matches) return;
     if(d.matches('#transfo details.cpFold')) d.parentElement.querySelectorAll(':scope>details.cpFold').forEach(o=>{ if(o!==d) o.open=false; });
     else if(d.matches('#transfo .grp>details')){ const sc=d.closest('.cpBody')||document.getElementById('transfo'); sc.querySelectorAll('.grp>details').forEach(o=>{ if(o!==d) o.open=false; }); } },true);
